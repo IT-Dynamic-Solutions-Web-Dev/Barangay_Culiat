@@ -132,31 +132,19 @@ Since the system uses role-based access, you'll need to create an admin account.
    )
    ```
 
-### Option 2: Create Admin User via MongoDB
+### Option 2: Use the Database Seed Script (Easiest)
 
-1. Connect to MongoDB:
-   ```bash
-   mongosh
-   ```
-2. Switch to the barangay_culiat database:
-   ```javascript
-   use barangay_culiat
-   ```
-3. Insert an admin user (password: "admin123" - **change this!**):
-   ```javascript
-   db.users.insertOne({
-     firstName: "Admin",
-     lastName: "User",
-     email: "admin@barangay.com",
-     password: "$2a$10$YourHashedPasswordHere",
-     role: "admin",
-     isActive: true,
-     createdAt: new Date(),
-     updatedAt: new Date()
-   })
-   ```
+Run the seed script to automatically create sample users and data:
+```bash
+cd backend
+npm run seed
+```
 
-**Note**: The password needs to be hashed. It's easier to use Option 1.
+This will create:
+- Admin user: `admin@barangay.com` / `admin123`
+- Resident users with sample reports and announcements
+
+**Note**: The seed script will clear all existing data in the database.
 
 ## Testing the System
 
