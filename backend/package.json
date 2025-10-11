@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "seed": "node seed.js",
+    "start": "node -r dotenv/config server.js dotenv_config_path=.env.production",
+    "dev": "node -r dotenv/config server.js dotenv_config_path=.env.local",
+    "dev:watch": "nodemon -r dotenv/config server.js dotenv_config_path=.env.local",
+    "seed": "node -r dotenv/config seed.js dotenv_config_path=.env.local",
+    "seed:prod": "node -r dotenv/config seed.js dotenv_config_path=.env.production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
