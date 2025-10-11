@@ -1,0 +1,24 @@
+{
+  "name": "barangay-culiat-web-system",
+  "version": "1.0.0",
+  "description": "Barangay Culiat Web System - A MERN stack application for barangay services",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install",
+    "install-all": "npm run install-backend && npm run install-frontend",
+    "dev-backend": "cd backend && npm run dev",
+    "dev-frontend": "cd frontend && npm run dev",
+    "start-backend": "cd backend && npm start",
+    "build-frontend": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "barangay",
+    "mern",
+    "mongodb",
+    "express",
+    "react",
+    "nodejs"
+  ],
+  "author": "IT Dynamic Solutions Web Dev",
+  "license": "ISC"
+}
