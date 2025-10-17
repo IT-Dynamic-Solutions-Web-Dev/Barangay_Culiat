@@ -1,26 +1,88 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import "tailwindcss";
+
+:root {
+  /* === Primary Colors === */
+  --color-primary: #b30000;
+  --color-primary-glow: #e60000;
+
+  /* === Text Colors === */
+  --color-text: #262626;
+  --color-text-light: #ffffff;
+  --color-text-secondary: #6c6c6c;
+
+  /* === Secondary Colors === */
+  --color-secondary: #e6e6e6;
+  --color-secondary-glow: #f9fafb;
+
+  /* === Error Colors === */
+  --color-error-primary: #ffe9e9;
+  --color-error-text: #991b1b;
+  --color-error-text-secondary: #ed4e4e;
+  --color-error-desc: #9b1c1c;
+}
+
+@layer components {
+  .btn-primary {
+    border-radius: calc(infinity * 1px);
+    background-color: var(--color-violet-800);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-red-700);
+    box-shadow: var(--shadow-md);
+    padding: 0.5rem 1rem !important;
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-violet-300);
+      }
+    }
+  }
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f0f2f5;
 }
 
-a {
+nav .navlink {
+  position: relative;
+  padding-bottom: 2px; /* Space for the underline */
   text-decoration: none;
+  color: var(--color-text);
 }
 
-button {
-  font-family: inherit;
+nav .navlink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  border-radius: 10px;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease-in-out;
 }
 
-#root {
-  min-height: 100vh;
+nav .navlink.active {
+  color: var(--color-primary);
+}
+nav .navlink:hover {
+  color: var(--color-primary);
+}
+
+nav .navlink.active::after {
+  width: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+nav .navlink:hover::after {
+  width: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+nav .navlink #showServices:hover ~ .navlink::after {
+  width: 100%;
+  transition: width 0.3s ease-in-out;
 }

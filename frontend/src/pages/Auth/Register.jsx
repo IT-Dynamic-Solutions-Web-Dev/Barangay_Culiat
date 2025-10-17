@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    address: '',
-    phoneNumber: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    address: "",
+    phoneNumber: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -26,19 +26,19 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     setLoading(true);
     const { confirmPassword, ...userData } = formData;
     const result = await register(userData);
-    
+
     if (result.success) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     } else {
       setError(result.message);
     }
@@ -50,9 +50,9 @@ const Register = () => {
       <div style={styles.card}>
         <h1 style={styles.title}>Barangay Culiat</h1>
         <h2 style={styles.subtitle}>Register</h2>
-        
+
         {error && <div style={styles.error}>{error}</div>}
-        
+
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.row}>
             <div style={styles.formGroup}>
@@ -66,7 +66,7 @@ const Register = () => {
                 style={styles.input}
               />
             </div>
-            
+
             <div style={styles.formGroup}>
               <label style={styles.label}>Last Name</label>
               <input
@@ -79,7 +79,7 @@ const Register = () => {
               />
             </div>
           </div>
-          
+
           <div style={styles.formGroup}>
             <label style={styles.label}>Email</label>
             <input
@@ -91,7 +91,7 @@ const Register = () => {
               style={styles.input}
             />
           </div>
-          
+
           <div style={styles.formGroup}>
             <label style={styles.label}>Password</label>
             <input
@@ -104,7 +104,7 @@ const Register = () => {
               style={styles.input}
             />
           </div>
-          
+
           <div style={styles.formGroup}>
             <label style={styles.label}>Confirm Password</label>
             <input
@@ -116,7 +116,7 @@ const Register = () => {
               style={styles.input}
             />
           </div>
-          
+
           <div style={styles.formGroup}>
             <label style={styles.label}>Address</label>
             <input
@@ -127,7 +127,7 @@ const Register = () => {
               style={styles.input}
             />
           </div>
-          
+
           <div style={styles.formGroup}>
             <label style={styles.label}>Phone Number</label>
             <input
@@ -138,14 +138,17 @@ const Register = () => {
               style={styles.input}
             />
           </div>
-          
+
           <button type="submit" disabled={loading} style={styles.button}>
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
-        
+
         <p style={styles.text}>
-          Already have an account? <Link to="/login" style={styles.link}>Login</Link>
+          Already have an account?{" "}
+          <Link to="/login" style={styles.link}>
+            Login
+          </Link>
         </p>
       </div>
     </div>
@@ -154,81 +157,81 @@ const Register = () => {
 
 const styles = {
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#f0f2f5',
-    padding: '1rem',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#f0f2f5",
+    padding: "1rem",
   },
   card: {
-    backgroundColor: 'white',
-    padding: '2rem',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    width: '100%',
-    maxWidth: '500px',
+    backgroundColor: "white",
+    padding: "2rem",
+    borderRadius: "8px",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+    width: "100%",
+    maxWidth: "500px",
   },
   title: {
-    textAlign: 'center',
-    color: '#1a73e8',
-    marginBottom: '0.5rem',
+    textAlign: "center",
+    color: "#1a73e8",
+    marginBottom: "0.5rem",
   },
   subtitle: {
-    textAlign: 'center',
-    color: '#333',
-    marginBottom: '1.5rem',
+    textAlign: "center",
+    color: "#333",
+    marginBottom: "1.5rem",
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
   },
   row: {
-    display: 'flex',
-    gap: '1rem',
+    display: "flex",
+    gap: "1rem",
   },
   formGroup: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     flex: 1,
   },
   label: {
-    marginBottom: '0.5rem',
-    color: '#333',
-    fontWeight: '500',
+    marginBottom: "0.5rem",
+    color: "#333",
+    fontWeight: "500",
   },
   input: {
-    padding: '0.75rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '1rem',
+    padding: "0.75rem",
+    border: "1px solid #ddd",
+    borderRadius: "4px",
+    fontSize: "1rem",
   },
   button: {
-    padding: '0.75rem',
-    backgroundColor: '#1a73e8',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    marginTop: '0.5rem',
+    padding: "0.75rem",
+    backgroundColor: "#1a73e8",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    fontSize: "1rem",
+    cursor: "pointer",
+    marginTop: "0.5rem",
   },
   error: {
-    backgroundColor: '#fee',
-    color: '#c33',
-    padding: '0.75rem',
-    borderRadius: '4px',
-    marginBottom: '1rem',
+    backgroundColor: "#fee",
+    color: "#c33",
+    padding: "0.75rem",
+    borderRadius: "4px",
+    marginBottom: "1rem",
   },
   text: {
-    textAlign: 'center',
-    marginTop: '1rem',
-    color: '#666',
+    textAlign: "center",
+    marginTop: "1rem",
+    color: "#666",
   },
   link: {
-    color: '#1a73e8',
-    textDecoration: 'none',
+    color: "#1a73e8",
+    textDecoration: "none",
   },
 };
 
