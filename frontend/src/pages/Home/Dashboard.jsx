@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { announcementAPI } from '../services/api';
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { announcementAPI } from "../../services/api";
 
 const Dashboard = () => {
   const { user, logout, isAdmin } = useAuth();
@@ -9,28 +9,28 @@ const Dashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
+  // useEffect(() => {
+  //   fetchAnnouncements();
+  // }, []);
 
-  const fetchAnnouncements = async () => {
-    try {
-      const response = await announcementAPI.getPublished();
-      setAnnouncements(response.data.data);
-    } catch (error) {
-      console.error('Error fetching announcements:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchAnnouncements = async () => {
+  //   try {
+  //     const response = await announcementAPI.getPublished();
+  //     setAnnouncements(response.data.data);
+  //   } catch (error) {
+  //     console.error("Error fetching announcements:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="bg-black">
       <nav style={styles.nav}>
         <h2 style={styles.navTitle}>Barangay Culiat</h2>
         <div style={styles.navRight}>
@@ -47,41 +47,54 @@ const Dashboard = () => {
         <div style={styles.sidebar}>
           <h3 style={styles.sidebarTitle}>Menu</h3>
           <ul style={styles.menu}>
-            <li style={styles.menuItem} onClick={() => navigate('/dashboard')}>
+            <li style={styles.menuItem} onClick={() => navigate("/dashboard")}>
               📊 Dashboard
             </li>
-            <li style={styles.menuItem} onClick={() => navigate('/announcements')}>
+            <li
+              style={styles.menuItem}
+              onClick={() => navigate("/announcements")}
+            >
               📢 Announcements
             </li>
-            <li style={styles.menuItem} onClick={() => navigate('/reports')}>
-              📝 {isAdmin ? 'All Reports' : 'My Reports'}
+            <li style={styles.menuItem} onClick={() => navigate("/reports")}>
+              📝 {isAdmin ? "All Reports" : "My Reports"}
             </li>
             {isAdmin && (
               <>
-                <li style={styles.menuItem} onClick={() => navigate('/admin/announcements')}>
+                <li
+                  style={styles.menuItem}
+                  onClick={() => navigate("/admin/announcements")}
+                >
                   ⚙️ Manage Announcements
                 </li>
-                <li style={styles.menuItem} onClick={() => navigate('/admin/reports')}>
+                <li
+                  style={styles.menuItem}
+                  onClick={() => navigate("/admin/reports")}
+                >
                   ⚙️ Manage Reports
                 </li>
               </>
             )}
-            <li style={styles.menuItem} onClick={() => navigate('/profile')}>
+            <li style={styles.menuItem} onClick={() => navigate("/profile")}>
               👤 Profile
             </li>
           </ul>
         </div>
 
         <div style={styles.main}>
-          <h1 style={styles.pageTitle}>Welcome to Barangay Culiat Web System</h1>
-          
+          <h1 style={styles.pageTitle}>
+            Welcome to Barangay Culiat Web System
+          </h1>
+
           <div style={styles.welcomeCard}>
             <h2>Hello, {user?.firstName}!</h2>
             <p>Welcome to the Barangay Culiat online services portal.</p>
             {isAdmin ? (
               <p>As an admin, you can manage reports and announcements.</p>
             ) : (
-              <p>As a resident, you can submit reports and view announcements.</p>
+              <p>
+                As a resident, you can submit reports and view announcements.
+              </p>
             )}
           </div>
 
@@ -110,7 +123,7 @@ const Dashboard = () => {
               </div>
             )}
             <button
-              onClick={() => navigate('/announcements')}
+              onClick={() => navigate("/announcements")}
               style={styles.viewAllButton}
             >
               View All Announcements
@@ -121,19 +134,19 @@ const Dashboard = () => {
             <h2 style={styles.sectionTitle}>Quick Actions</h2>
             <div style={styles.actionButtons}>
               <button
-                onClick={() => navigate('/reports/new')}
+                onClick={() => navigate("/reports/new")}
                 style={styles.actionButton}
               >
                 📝 Submit New Report
               </button>
               <button
-                onClick={() => navigate('/reports')}
+                onClick={() => navigate("/reports")}
                 style={styles.actionButton}
               >
                 📋 View My Reports
               </button>
               <button
-                onClick={() => navigate('/announcements')}
+                onClick={() => navigate("/announcements")}
                 style={styles.actionButton}
               >
                 📢 View Announcements
@@ -148,144 +161,144 @@ const Dashboard = () => {
 
 const styles = {
   container: {
-    minHeight: '100vh',
-    backgroundColor: '#f0f2f5',
+    minHeight: "100vh",
+    backgroundColor: "#f0f2f5",
   },
   nav: {
-    backgroundColor: '#1a73e8',
-    color: 'white',
-    padding: '1rem 2rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: "#1a73e8",
+    color: "white",
+    padding: "1rem 2rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   navTitle: {
     margin: 0,
   },
   navRight: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
   },
   userName: {
-    fontSize: '0.9rem',
+    fontSize: "0.9rem",
   },
   logoutButton: {
-    padding: '0.5rem 1rem',
-    backgroundColor: 'white',
-    color: '#1a73e8',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
+    padding: "0.5rem 1rem",
+    backgroundColor: "white",
+    color: "#1a73e8",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
   },
   content: {
-    display: 'flex',
-    minHeight: 'calc(100vh - 70px)',
+    display: "flex",
+    minHeight: "calc(100vh - 70px)",
   },
   sidebar: {
-    width: '250px',
-    backgroundColor: 'white',
-    padding: '1.5rem',
-    boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
+    width: "250px",
+    backgroundColor: "white",
+    padding: "1.5rem",
+    boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
   },
   sidebarTitle: {
-    marginBottom: '1rem',
-    color: '#333',
+    marginBottom: "1rem",
+    color: "#333",
   },
   menu: {
-    listStyle: 'none',
+    listStyle: "none",
     padding: 0,
     margin: 0,
   },
   menuItem: {
-    padding: '0.75rem',
-    marginBottom: '0.5rem',
-    cursor: 'pointer',
-    borderRadius: '4px',
-    transition: 'background-color 0.2s',
+    padding: "0.75rem",
+    marginBottom: "0.5rem",
+    cursor: "pointer",
+    borderRadius: "4px",
+    transition: "background-color 0.2s",
   },
   main: {
     flex: 1,
-    padding: '2rem',
+    padding: "2rem",
   },
   pageTitle: {
-    color: '#333',
-    marginBottom: '1.5rem',
+    color: "#333",
+    marginBottom: "1.5rem",
   },
   welcomeCard: {
-    backgroundColor: 'white',
-    padding: '2rem',
-    borderRadius: '8px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-    marginBottom: '2rem',
+    backgroundColor: "white",
+    padding: "2rem",
+    borderRadius: "8px",
+    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+    marginBottom: "2rem",
   },
   section: {
-    marginBottom: '2rem',
+    marginBottom: "2rem",
   },
   sectionTitle: {
-    color: '#333',
-    marginBottom: '1rem',
+    color: "#333",
+    marginBottom: "1rem",
   },
   announcementList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-    marginBottom: '1rem',
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    marginBottom: "1rem",
   },
   announcementCard: {
-    backgroundColor: 'white',
-    padding: '1.5rem',
-    borderRadius: '8px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+    backgroundColor: "white",
+    padding: "1.5rem",
+    borderRadius: "8px",
+    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
   },
   announcementHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '0.5rem',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "0.5rem",
   },
   badge: {
-    backgroundColor: '#1a73e8',
-    color: 'white',
-    padding: '0.25rem 0.75rem',
-    borderRadius: '12px',
-    fontSize: '0.85rem',
+    backgroundColor: "#1a73e8",
+    color: "white",
+    padding: "0.25rem 0.75rem",
+    borderRadius: "12px",
+    fontSize: "0.85rem",
   },
   announcementContent: {
-    color: '#666',
-    marginBottom: '0.5rem',
+    color: "#666",
+    marginBottom: "0.5rem",
   },
   date: {
-    color: '#999',
-    fontSize: '0.85rem',
+    color: "#999",
+    fontSize: "0.85rem",
   },
   viewAllButton: {
-    padding: '0.75rem 1.5rem',
-    backgroundColor: '#1a73e8',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
+    padding: "0.75rem 1.5rem",
+    backgroundColor: "#1a73e8",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
   },
   quickActions: {
-    backgroundColor: 'white',
-    padding: '2rem',
-    borderRadius: '8px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+    backgroundColor: "white",
+    padding: "2rem",
+    borderRadius: "8px",
+    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
   },
   actionButtons: {
-    display: 'flex',
-    gap: '1rem',
-    flexWrap: 'wrap',
+    display: "flex",
+    gap: "1rem",
+    flexWrap: "wrap",
   },
   actionButton: {
-    padding: '1rem 1.5rem',
-    backgroundColor: '#fff',
-    color: '#1a73e8',
-    border: '2px solid #1a73e8',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: '1rem',
+    padding: "1rem 1.5rem",
+    backgroundColor: "#fff",
+    color: "#1a73e8",
+    border: "2px solid #1a73e8",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "1rem",
   },
 };
 
