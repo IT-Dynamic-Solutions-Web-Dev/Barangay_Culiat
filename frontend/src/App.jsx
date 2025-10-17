@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
-import Login from "./pages/Auth/Login";
+import Login from "./tailadminsrc/pages/AuthPages/SignIn";
 import Register from "./pages/Auth/Register";
 import Dashboard from "./pages/Home/Dashboard";
 import Reports from "./pages/Reports/Reports";
