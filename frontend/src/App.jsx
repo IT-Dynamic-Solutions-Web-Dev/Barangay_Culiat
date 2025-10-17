@@ -1,42 +1,52 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import PrivateRoute from './components/PrivateRoute';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Reports from './pages/Reports';
-import NewReport from './pages/NewReport';
-import Announcements from './pages/Announcements';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import Dashboard from "./pages/Home/Dashboard";
+import Reports from "./pages/Reports/Reports";
+import NewReport from "./pages/Reports/NewReport";
+import Announcements from "./pages/Announcement/Announcements";
+import MainLayout from "./components/MainLayout";
+import Home from "./pages/Home/Home";
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
             path="/dashboard"
             element={
               <PrivateRoute>
-                <Dashboard />
+                <MainLayout>
+                  <Dashboard />
+                </MainLayout>
               </PrivateRoute>
             }
           />
           <Route
-            path="/reports"
+            path="/"
             element={
-              <PrivateRoute>
-                <Reports />
-              </PrivateRoute>
+              <MainLayout>
+                <Home />
+              </MainLayout>
             }
           />
           <Route
             path="/reports/new"
             element={
               <PrivateRoute>
-                <NewReport />
+                <MainLayout>
+                  <NewReport />
+                </MainLayout>
               </PrivateRoute>
             }
           />
@@ -44,7 +54,9 @@ function App() {
             path="/announcements"
             element={
               <PrivateRoute>
-                <Announcements />
+                <MainLayout>
+                  <Announcements />
+                </MainLayout>
               </PrivateRoute>
             }
           />
