@@ -59,7 +59,7 @@ nav .navlink::after {
   bottom: 0;
   left: 0;
   width: 0;
-  height: 3px;
+  height: 2px;
   border-radius: 10px;
   background-color: var(--color-primary);
   transition: width 0.3s ease-in-out;
@@ -83,6 +83,28 @@ nav .navlink:hover::after {
 }
 
 nav .navlink #showServices:hover ~ .navlink::after {
+  width: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+nav .login-btn {
+  position: relative;
+  padding-bottom: 2px; /* Space for the underline */
+}
+
+nav .login-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 10px;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease-in-out;
+}
+
+nav .login-btn:hover::after {
   width: 100%;
   transition: width 0.3s ease-in-out;
 }
