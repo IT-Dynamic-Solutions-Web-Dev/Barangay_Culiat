@@ -54,7 +54,13 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/dashboard" className="flex items-center gap-4">
-            <div className="p-[1.5rem] rounded-full bg-gray-300"></div>
+            <div className=" rounded-full bg-gray-300">
+              <img
+                src="/images/logo/brgy-culiat-logo.png"
+                alt="brgy-culiat-logo"
+                className="h-14 w-14 rounded-full object-fill object-center"
+              />
+            </div>
             <p className="flex flex-col text-xl font-bold tracking-wide leading-4.5">
               Barangay Culiat{" "}
               <span className="font-medium text-sm text-gray-600 tracking-tighter">
@@ -183,7 +189,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className="text-[var(--color-primary)] font-medium hover:underline"
+                  className="login-btn text-[var(--color-primary)] font-medium"
                 >
                   Login
                 </Link>
