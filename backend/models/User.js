@@ -22,13 +22,13 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: 6,
+    // minlength: 6,
     select: false,
   },
   role: {
-    type: String,
-    enum: ['admin', 'resident'],
-    default: 'resident',
+    type: Number,
+    default: 74934, // Default to Resident
+    enum: [74932, 74933, 74934] // Valid role codes (SuperAdmin, Admin, Resident)
   },
   address: {
     type: String,
