@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../../../tailadminsrc/components/ui/button/Button";
 {
   /* Get in Touch Section */
 }
@@ -248,25 +249,30 @@ const GetInTouch = () => {
               </div>
 
               {/* Submit Button */}
-              <button
+
+              <Button
                 type="submit"
-                className="w-full bg-[#b30000] text-white text-sm py-2 rounded-lg font-medium hover:bg-[#9a0000] transition-colors flex items-center justify-center space-x-2"
+                variant="secondary"
+                size="sm"
+                className="w-full font-medium"
+                startIcon={
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
+                  </svg>
+                }
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  />
-                </svg>
                 <span>Send Message</span>
-              </button>
+              </Button>
             </form>
           </div>
         </div>
