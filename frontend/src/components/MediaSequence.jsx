@@ -6,9 +6,14 @@ const MediaSequence = () => {
 
   const mediaList = [
     { type: "video", src: "/videos/brgy-culiat-hall.mp4" },
-    { type: "image", src: "/images/brgy-signboard.jpg", duration: 4000 },
     { type: "video", src: "/videos/qc-drone-shot.mp4" },
-    { type: "image", src: "/images/community-center.jpg", duration: 3000 },
+    {
+      type: "image",
+      src: "/images/brgy/elderly-community.jpg",
+      duration: 4000,
+    },
+    { type: "image", src: "/images/brgy/paunang-handog.jpg", duration: 4000 },
+    { type: "image", src: "/images/brgy/feeding-program.jpg", duration: 3000 },
   ];
 
   useEffect(() => {
