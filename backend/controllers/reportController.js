@@ -1,4 +1,5 @@
 const Report = require('../models/Report');
+const ROLES = require('../config/roles');
 
 // @desc    Create a new report
 // @route   POST /api/reports
@@ -102,7 +103,10 @@ exports.getReport = async (req, res) => {
     }
 
     // Check privacy - only admin or report owner can view
-    if (report.isPrivate && req.user.role !== 'admin' && report.reportedBy._id.toString() !== req.user._id.toString()) {
+    if (report.isPrivate && 
+        req.user.role !== ROLES.Admin && 
+        req.user.role !== ROLES.SuperAdmin && 
+        report.reportedBy._id.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Not authorized to view this report',
@@ -174,7 +178,9 @@ exports.addComment = async (req, res) => {
     }
 
     // Check if user has access to this report
-    if (req.user.role !== 'admin' && report.reportedBy.toString() !== req.user._id.toString()) {
+    if (req.user.role !== ROLES.Admin && 
+        req.user.role !== ROLES.SuperAdmin && 
+        report.reportedBy.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Not authorized to comment on this report',
