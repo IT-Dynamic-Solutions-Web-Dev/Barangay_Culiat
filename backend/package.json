@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r dotenv/config server.js dotenv_config_path=.env.production",
+    "dev": "node -r dotenv/config server.js dotenv_config_path=.env.local",
+    "dev:watch": "nodemon -r dotenv/config server.js dotenv_config_path=.env.local",
+    "seed": "node -r dotenv/config seed.js dotenv_config_path=.env.local",
+    "seed:prod": "node -r dotenv/config seed.js dotenv_config_path=.env.production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
