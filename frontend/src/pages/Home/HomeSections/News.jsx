@@ -58,10 +58,10 @@ const News = () => {
         {/* Mobile: All cards same size in single column */}
         <div className="lg:hidden space-y-4">
           {/* Featured Article */}
-          <div className="bg-gradient-to-br from-red-100 via-orange-50 to-yellow-50 rounded-lg overflow-hidden relative shadow-lg cursor-pointer hover:shadow-xl transition-shadow group h-[280px]">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#b30000]/20 to-transparent"></div>
+          <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-indigo-50 rounded-lg overflow-hidden relative shadow-lg cursor-pointer hover:shadow-xl transition-shadow group h-[280px]">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent"></div>
             <div className="absolute top-3 left-3 z-10">
-              <span className="bg-[#b30000] text-white px-2.5 py-1 rounded-full text-xs font-semibold">
+              <span className="bg-secondary text-white px-2.5 py-1 rounded-full text-xs font-semibold">
                 FEATURED
               </span>
             </div>
@@ -109,10 +109,10 @@ const News = () => {
         {/* Desktop: Original grid layout */}
         <div className="hidden lg:grid lg:grid-cols-3 gap-6">
           {/* Featured Article */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-red-100 via-orange-50 to-yellow-50 rounded-lg overflow-hidden relative shadow-lg cursor-pointer hover:shadow-xl transition-shadow group min-h-[320px]">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#b30000]/20 to-transparent"></div>
+          <div className="lg:col-span-2 bg-gradient-to-br from-blue-100 via-blue-50 to-indigo-50 rounded-lg overflow-hidden relative shadow-lg cursor-pointer hover:shadow-xl transition-shadow group min-h-[320px]">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent"></div>
             <div className="absolute top-4 left-4 z-10">
-              <span className="bg-[#b30000] text-white px-3 py-1 rounded-full text-xs font-semibold">
+              <span className="bg-secondary text-white px-3 py-1 rounded-full text-xs font-semibold">
                 FEATURED
               </span>
             </div>
