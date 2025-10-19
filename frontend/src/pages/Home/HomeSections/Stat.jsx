@@ -1,10 +1,11 @@
 import React from "react";
+import { CountingNumber } from "@/components/ui/shadcn-io/counting-number";
 
 const stats = [
-  { number: "45,892", label: "Total Population" },
-  { number: "25,892", label: "Registered Voters" },
-  { number: "48,932", label: "Total Residents" },
-  { number: "45,893", label: "Active Documents" },
+  { number: 45892, label: "Total People live in our town" },
+  { number: 25892, label: "Registered Voters" },
+  { number: 48932, label: "Total Residents" },
+  { number: 32, label: "Square Kilometers Area Covers" },
 ];
 
 const Stat = () => {
@@ -21,7 +22,11 @@ const Stat = () => {
                 <div className="w-8 h-8 bg-white rounded-full"></div>
               </div>
               <h3 className="text-2xl font-bold text-[#262626] mb-1">
-                {stat.number}
+                <CountingNumber
+                  number={stat.number}
+                  inView={true}
+                  transition={{ stiffness: 100, damping: 30 }}
+                />
               </h3>
               <p className="text-sm text-[#6c6c6c]">{stat.label}</p>
             </div>
