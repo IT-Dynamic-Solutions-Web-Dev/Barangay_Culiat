@@ -1,10 +1,14 @@
 import React from "react";
 
 const services = [
-  "Barangay ID",
-  "Business Permit",
   "Certificate of Indigency",
+  "Certificate of Residency",
+  "Barangay Clearance",
   "Community Tax Certificate",
+  "Business Permit",
+  "Building Permit",
+  "Complaint Certificate",
+  "Certificate of Good Moral",
 ];
 {
   /* Online Services Section */
@@ -45,30 +49,13 @@ const Services = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className="bg-white h-48 flex flex-col justify-evenly rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer border border-gray-100 group relative"
+              className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer border border-gray-100"
             >
               <div className="w-12 h-12 bg-secondary rounded-lg  flex items-center justify-center"></div>
               <h3 className="font-semibold text-[#262626] ">{service}</h3>
               <p className="text-sm text-[#6c6c6c] leading-3.5">
                 Online certificate for residents and programs.
               </p>
-              <button className="absolute group/btn bottom-3 left-1/2 -translate-x-1/2 bg-neutral-active p-3 pb-2 group-hover:opacity-100 group-hover:translate-y-0 opacity-0 translate-y-6 text-sm rounded-full text-text-color w-fit cursor-pointer  text-left transition-all duration-300">
-                <span className="text-xl font-bold group-hover/btn:translate-x-2 inline-flex items-center transition-transform duration-300">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </span>
-              </button>
             </div>
           ))}
         </div>
