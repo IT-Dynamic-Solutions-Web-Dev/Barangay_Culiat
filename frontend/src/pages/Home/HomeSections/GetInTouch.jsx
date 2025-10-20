@@ -30,7 +30,7 @@ const GetInTouch = () => {
             <div className="space-y-6">
               {/* Address */}
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-[#b30000] rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
                   {/* <MapPin className="text-white" size={24} /> */}
                 </div>
                 <div>
@@ -46,7 +46,7 @@ const GetInTouch = () => {
 
               {/* Phone Numbers */}
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-[#b30000] rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -76,7 +76,7 @@ const GetInTouch = () => {
 
               {/* Email */}
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-[#b30000] rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -104,7 +104,7 @@ const GetInTouch = () => {
 
               {/* Office Hours */}
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-[#b30000] rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
                   {/* <Clock className="text-white" size={24} /> */}
                 </div>
                 <div>
@@ -129,30 +129,30 @@ const GetInTouch = () => {
               <div className="grid grid-cols-2 gap-3">
                 <a
                   href="#"
-                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-[#b30000] transition-colors"
+                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-[#b30000]" /> */}
+                  {/* <FileText size={16} className="text-secondary" /> */}
                   <span>Transparency Report</span>
                 </a>
                 <a
                   href="#"
-                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-[#b30000] transition-colors"
+                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-[#b30000]" /> */}
+                  {/* <FileText size={16} className="text-secondary" /> */}
                   <span>Privacy Policy</span>
                 </a>
                 <a
                   href="#"
-                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-[#b30000] transition-colors"
+                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-[#b30000]" /> */}
+                  {/* <FileText size={16} className="text-secondary" /> */}
                   <span>Feedback Form</span>
                 </a>
                 <a
                   href="#"
-                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-[#b30000] transition-colors"
+                  className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-[#b30000]" /> */}
+                  {/* <FileText size={16} className="text-secondary" /> */}
                   <span>FAQ</span>
                 </a>
               </div>
@@ -170,22 +170,22 @@ const GetInTouch = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-[#262626] mb-2">
-                    First Name <span className="text-[#b30000]">*</span>
+                    First Name <span className="text-secondary">*</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Enter your first name"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#b30000] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#262626] mb-2">
-                    Last Name <span className="text-[#b30000]">*</span>
+                    Last Name <span className="text-secondary">*</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Enter your last name"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#b30000] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all"
                   />
                 </div>
               </div>
@@ -193,21 +193,21 @@ const GetInTouch = () => {
               {/* Email Address */}
               <div>
                 <label className="block text-sm font-medium text-[#262626] mb-2">
-                  Email Address <span className="text-[#b30000]">*</span>
+                  Email Address <span className="text-secondary">*</span>
                 </label>
                 <input
                   type="email"
                   placeholder="Enter your email address"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#b30000] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all"
                 />
               </div>
 
               {/* Subject */}
               <div>
                 <label className="block text-sm font-medium text-[#262626] mb-2">
-                  Subject <span className="text-[#b30000]">*</span>
+                  Subject <span className="text-secondary">*</span>
                 </label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#b30000] focus:border-transparent outline-none transition-all bg-white">
+                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all bg-white">
                   <option>Select a subject</option>
                   <option>Document Request</option>
                   <option>General Inquiry</option>
@@ -220,12 +220,12 @@ const GetInTouch = () => {
               {/* Message */}
               <div>
                 <label className="block text-sm font-medium text-[#262626] mb-2">
-                  Message <span className="text-[#b30000]">*</span>
+                  Message <span className="text-secondary">*</span>
                 </label>
                 <textarea
                   rows={5}
                   placeholder="Write your message here..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#b30000] focus:border-transparent outline-none transition-all resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all resize-none"
                 ></textarea>
               </div>
 
@@ -234,15 +234,15 @@ const GetInTouch = () => {
                 <input
                   type="checkbox"
                   id="privacy"
-                  className="mt-1 w-4 h-4 text-[#b30000] border-gray-300 rounded focus:ring-[#b30000]"
+                  className="mt-1 w-4 h-4 text-secondary border-gray-300 rounded focus:ring-secondary"
                 />
                 <label htmlFor="privacy" className="text-sm text-[#6c6c6c]">
                   I agree to the{" "}
-                  <a href="#" className="text-[#b30000] hover:underline">
+                  <a href="#" className="text-secondary hover:underline">
                     privacy policy
                   </a>{" "}
                   and{" "}
-                  <a href="#" className="text-[#b30000] hover:underline">
+                  <a href="#" className="text-secondary hover:underline">
                     terms of service
                   </a>
                 </label>

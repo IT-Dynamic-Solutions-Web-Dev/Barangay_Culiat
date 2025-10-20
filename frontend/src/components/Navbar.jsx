@@ -1,13 +1,13 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [showServices, setShowServices] = useState(false);
-  // const [isScrolldown, setisScrolldown] = useState(true);
-  // const [lastScrollY, setLastScrollY] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
   const timeoutRef = useRef(null);
 
@@ -27,55 +27,58 @@ const Navbar = () => {
     }, 250);
   };
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const currentScrollY = window.scrollY;
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
 
-  //     setTimeout(() => {
-  //       if (currentScrollY < 80) {
-  //         setisScrolldown(true);
-  //       } else {
-  //         setisScrolldown(false);
-  //       }
-  //     }, 200);
+      // if (currentScrollY < lastScrollY || currentScrollY < 380) {
+      //   setIsVisible(true);
+      // } else {
+      //   setIsVisible(false);
+      // }
 
-  //     setLastScrollY(currentScrollY);
-  //   };
+      setLastScrollY(currentScrollY);
+    };
 
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, [lastScrollY]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   return (
-    <nav className={`sticky top-0 left-0 w-full z-[100] h-auto `}>
-      <div className={`relative w-full mx-auto lg:px-6 xl:px-8 bg-light `}>
-        <div className="flex justify-between items-center h-16  text-text-color px-2 lg:px-4 ">
+    <nav
+      className={`sticky top-0 left-0 w-full z-[100] transition-[height,opacity] ease-in duration-200 ${
+        isVisible ? "h-[4em] opacity-100" : "h-0 opacity-0 overflow-hidden"
+      }`}
+    >
+      <div className="w-full mx-auto md:px-6 lg:px-8  shadow-md bg-secondary">
+        <div className="flex justify-between items-center h-16  text-text-color-light px-4 ">
           {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2 sm:gap-3">
-            <div className="rounded-full bg-light">
+          <Link to="/dashboard" className="flex items-center gap-4">
+            <div className="rounded-full ">
               <img
                 src="/images/logo/brgy-culiat-logo.png"
                 alt="Barangay Culiat Logo"
-                className="sm:h-12 sm:w-12 h-10 w-10 rounded-full object-cover"
+                className="h-12 w-12 rounded-full object-cover"
               />
             </div>
-            <p className="flex flex-col text-md sm:text-lg font-bold tracking-wide leading-4 ">
-              <span className="sm:block hidden">Barangay Culiat</span>
-              <span className="sm:hidden block">Brgy. Culiat</span>
-              <span className="font-semibold text-xs text-secondary">
+            <p className="sm:flex flex-col hidden text-lg font-semibold tracking-wide leading-5">
+              Barangay Culiat
+              <span className="font-normal text-sm text-accent">
                 E-Services
               </span>
             </p>
           </Link>
 
           {/* Desktop Nav Links */}
-          <div
-            className={`hidden md:flex space-x-6 items-center font-medium relative `}
-          >
+          <div className="hidden md:flex space-x-6 items-center relative">
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `navlink text-sm  transition ${isActive && "active"}`
+                `navlink text-sm font-medium transition ${
+                  isActive
+                    ? "text-accent active"
+                    : "hover:text-accent text-text-color-light"
+                }`
               }
             >
               Home
@@ -87,9 +90,8 @@ const Navbar = () => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button className=" text-sm flex items-center cursor-pointer hover:text-secondary">
-                <div className="navlink"> Services</div>
-
+              <button className="navlink text-sm font-medium flex items-center hover:text-accent">
+                Services
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className={`ml-1 w-3 h-3 transform transition-transform ${
@@ -108,46 +110,50 @@ const Navbar = () => {
                 </svg>
               </button>
 
-              <div
-                className={`absolute left-0 top-[34px]  mt-2  w-56 bg-text-color-light text-text-color  border-secondary/60 shadow-lg rounded-md  z-[250] mix-blend-normal transition-heght duration-300 ${
-                  showServices ? "h-auto py-2 border" : "h-0 overflow-hidden"
-                }`}
-              >
-                {[
-                  { label: "Barangay ID", path: "/services/barangay-id" },
-                  {
-                    label: "Business Permit",
-                    path: "/services/business-permit",
-                  },
-                  {
-                    label: "Certificate of Indigency",
-                    path: "/services/indigency",
-                  },
-                  {
-                    label: "Community Tax Certificate",
-                    path: "/services/cedula",
-                  },
-                ].map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    className="block px-4 py-2 text-sm hover:bg-secondary-glow hover:text-text-color-light transition mix-blend-normal "
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
-              </div>
+              {showServices && (
+                <div className="absolute left-0 mt-2 w-56 bg-text-color-light text-text-color border border-secondary/60 shadow-lg rounded-md py-2 z-[200]">
+                  {[
+                    { label: "Barangay ID", path: "/services/barangay-id" },
+                    {
+                      label: "Business Permit",
+                      path: "/services/business-permit",
+                    },
+                    {
+                      label: "Certificate of Indigency",
+                      path: "/services/indigency",
+                    },
+                    { label: "Cedula", path: "/services/cedula" },
+                  ].map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      className="block px-4 py-2 text-sm hover:bg-secondary-glow hover:text-text-color-light transition"
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <NavLink to="/announcements" className="navlink  text-sm ">
+            <NavLink
+              to="/announcements"
+              className="navlink hover:text-accent text-sm font-medium"
+            >
               Announcements
             </NavLink>
 
-            <NavLink to="/reports" className="navlink  text-sm ">
+            <NavLink
+              to="/reports"
+              className="navlink hover:text-accent text-sm font-medium"
+            >
               Report
             </NavLink>
 
-            <NavLink to="/about" className="navlink  text-sm ">
+            <NavLink
+              to="/about"
+              className="navlink hover:text-accent text-sm font-medium"
+            >
               About
             </NavLink>
           </div>
@@ -163,12 +169,15 @@ const Navbar = () => {
               </button>
             ) : (
               <>
-                <Link to="/login" className="font-medium hover:underline ">
+                <Link
+                  to="/login"
+                  className="text-text-color-light font-medium hover:underline"
+                >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-secondary text-text-color-light font-medium px-4 py-2 rounded-md hover:bg-secondary-glow transition"
+                  className="bg-primary text-text-color-light font-medium px-4 py-2 rounded-md hover:bg-primary-glow transition"
                 >
                   Register
                 </Link>
@@ -177,7 +186,7 @@ const Navbar = () => {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden focus:outline-none text-text-color cursor-pointer "
+              className="md:hidden focus:outline-none text-text-color-light"
             >
               <svg
                 className="w-6 h-6"
@@ -209,7 +218,7 @@ const Navbar = () => {
       {/* Mobile dropdown */}
 
       <div
-        className={`absolute top-[100%] w-full md:hidden bg-secondary px-4 space-y-2  overflow-hidden transition-all duration-600 ${
+        className={`md:hidden bg-secondary px-4 space-y-2 border-t border-accent/40 overflow-hidden transition-all duration-600 ${
           isOpen ? "h-auto py-4" : "h-0"
         }`}
       >
@@ -222,7 +231,7 @@ const Navbar = () => {
         </NavLink>
         <div>
           <button
-            className="  flex items-center text-text-color-light cursor-pointer hover:text-accent"
+            className="  flex items-center text-text-color-light hover:text-accent"
             onClick={() => setShowServices(!showServices)}
           >
             Services
@@ -259,7 +268,7 @@ const Navbar = () => {
                 label: "Certificate of Indigency",
                 path: "/services/indigency",
               },
-              { label: "Community Tax Certificate", path: "/services/cedula" },
+              { label: "Cedula", path: "/services/cedula" },
             ].map((item) => (
               <NavLink
                 key={item.path}

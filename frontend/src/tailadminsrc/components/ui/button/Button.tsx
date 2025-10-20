@@ -35,9 +35,9 @@ const Button: React.FC<ButtonProps> = ({
     outline:
       "bg-transparent text-text-color-light outline outline-light hover:bg-light hover:text-text-color focus:bg-light focus:text-text-color transition-all",
     outlineprimary:
-      "bg-transparent text-text-color-light outline outline-light hover:bg-primary hover:text-text-color-light hover:outline-primary focus:outline-primary focus:bg-primary focus:text-text-color-light transition-all",
+      "bg-transparent text-text-color-light outline outline-light hover:bg-secondary hover:text-text-color-light hover:outline-secondary focus:outline-secondary focus:bg-secondary focus:text-text-color-light transition-all",
     secondary:
-      "bg-primary text-text-color-light hover:bg-primary-glow  transition-all",
+      "bg-secondary text-text-color-light hover:bg-secondary-light  transition-all",
   };
 
   return (
