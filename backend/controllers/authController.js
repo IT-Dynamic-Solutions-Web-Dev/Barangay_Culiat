@@ -1,11 +1,18 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const ROLES = require('../config/roles');
 
 // Generate JWT Token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
+};
+
+// Helper function to get role name from role code
+const getRoleName = (roleCode) => {
+  const roleEntry = Object.entries(ROLES).find(([name, code]) => code === roleCode);
+  return roleEntry ? roleEntry[0] : 'Unknown';
 };
 
 // @desc    Register a new user
@@ -45,7 +52,7 @@ exports.register = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.role,
+        role: getRoleName(user.role),
         token,
       },
     });
@@ -103,7 +110,7 @@ exports.login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.role,
+        role: getRoleName(user.role),
         token,
       },
     });
@@ -161,6 +168,54 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error updating profile',
+      error: error.message,
+    });
+  }
+};
+
+exports.adminRegister = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password, role, address, phoneNumber } = req.body;
+
+    // Check if user already exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already exists with this email',
+      });
+    }
+
+    // Create user
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      address,
+      phoneNumber,
+    });
+
+    // Generate token
+    const token = generateToken(user._id);
+
+    res.status(201).json({
+      success: true,
+      message: 'New Super Admin/Admin registered successfully',
+      data: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: getRoleName(user.role),
+        token,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error registering user',
       error: error.message,
     });
   }

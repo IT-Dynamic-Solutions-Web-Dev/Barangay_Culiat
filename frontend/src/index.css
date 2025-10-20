@@ -1,88 +1,182 @@
 @import "tailwindcss";
 
-:root {
-  /* === Primary Colors === */
-  --color-primary: #b30000;
-  --color-primary-glow: #e60000;
+@theme {
+   --color-primary: #b30000; /* main red */
+   --color-primary-dark: #990000; /* hover / active */
+   --color-primary-glow: #e60000; /* accent glow or gradient */
 
-  /* === Text Colors === */
-  --color-text: #262626;
-  --color-text-light: #ffffff;
-  --color-text-secondary: #6c6c6c;
+   --color-secondary: #002366; /* deep blue base */
+   --color-secondary-light: #233b84; /* hover or subtle tone */
+   --color-secondary-glow: #334b9f; /* lighter accent tone */
 
-  /* === Secondary Colors === */
-  --color-secondary: #e6e6e6;
-  --color-secondary-glow: #f9fafb;
+   --color-accent: #ffd700; /* golden yellow */
+   --color-accent-light: #ffea70; /* highlight or hover */
 
-  /* === Error Colors === */
-  --color-error-primary: #ffe9e9;
-  --color-error-text: #991b1b;
-  --color-error-text-secondary: #ed4e4e;
-  --color-error-desc: #9b1c1c;
+   --color-text-color: #262626; /* dark text on light bg */
+   --color-text-color-light: #ffffff; /* white text on dark bg */
+   --color-text-secondary: #6c6c6c; /* muted gray text */
+   --color-neutral: #f5f5f5; /* light gray background */
+   --color-neutral-active: #e9e9e9; /* light gray background */
+   --color-neutral-dark: #2c2c2c; /* dark gray text or bg */
+
+   --color-error-primary: #ffe9e9;
+   --color-error-text: #991b1b;
+   --color-error-text-secondary: #ed4e4e;
+   --color-error-desc: #9b1c1c;
 }
 
 @layer components {
-  .btn-primary {
-    border-radius: calc(infinity * 1px);
-    background-color: var(--color-violet-800);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-red-700);
-    box-shadow: var(--shadow-md);
-    padding: 0.5rem 1rem !important;
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-violet-300);
+   .btn-primary {
+      border-radius: calc(infinity * 1px);
+      background-color: var(--color-violet-800);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-red-700);
+      box-shadow: var(--shadow-md);
+      padding: 0.5rem 1rem !important;
+      &:hover {
+         @media (hover: hover) {
+            background-color: var(--color-violet-300);
+         }
       }
-    }
-  }
+   }
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f0f2f5;
+   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   background-color: #f0f2f5;
+   overflow-x: hidden;
+}
+
+.navbar-bg {
+   background-color: var(--color-primary);
+   background-image: radial-gradient(
+         circle at 5% 15%,
+         var(--color-accent) 0%,
+         transparent 60%
+      ),
+      /* 🔴 Red (Primary) */
+         radial-gradient(
+            circle at 30% 70%,
+            var(--color-primary) 0%,
+            transparent 65%
+         ),
+      /* 🔵 Blue (Secondary) */
+         radial-gradient(
+            circle at 85% 35%,
+            var(--color-secondary-light) 0%,
+            transparent 65%
+         );
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+   backdrop-filter: blur(2px);
+   transition: background 0.3s ease-in-out;
 }
 
 nav .navlink {
-  position: relative;
-  padding-bottom: 2px; /* Space for the underline */
-  text-decoration: none;
-  color: var(--color-text);
+   position: relative;
+   padding-bottom: 2px; /* Space for the underline */
+   text-decoration: none;
+   color: var(--color-text);
 }
 
 nav .navlink::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  border-radius: 10px;
-  background-color: var(--color-primary);
-  transition: width 0.3s ease-in-out;
+   content: "";
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 0;
+   height: 2px;
+   border-radius: 10px;
+   background-color: var(--color-accent);
+   transition: width 0.3s ease-in-out;
 }
 
 nav .navlink.active {
-  color: var(--color-primary);
+   color: var(--color-accent);
 }
 nav .navlink:hover {
-  color: var(--color-primary);
+   color: var(--color-accent);
 }
 
 nav .navlink.active::after {
-  width: 100%;
-  transition: width 0.3s ease-in-out;
+   width: 100%;
+   transition: width 0.3s ease-in-out;
 }
 
 nav .navlink:hover::after {
-  width: 100%;
-  transition: width 0.3s ease-in-out;
+   width: 100%;
+   transition: width 0.3s ease-in-out;
 }
 
 nav .navlink #showServices:hover ~ .navlink::after {
-  width: 100%;
-  transition: width 0.3s ease-in-out;
+   width: 100%;
+   transition: width 0.3s ease-in-out;
+}
+
+nav .login-btn {
+   position: relative;
+   padding-bottom: 2px; /* Space for the underline */
+}
+
+nav .login-btn::after {
+   content: "";
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 0;
+   height: 2px;
+   border-radius: 10px;
+   background-color: var(--color-accent);
+   transition: width 0.3s ease-in-out;
+}
+
+nav .login-btn:hover::after {
+   width: 100%;
+   transition: width 0.3s ease-in-out;
+}
+
+@keyframes waveMove {
+   0% {
+      background-position: 0 0, 100% 0, center;
+   }
+   50% {
+      background-position: 20px 10px, 80% 10px, center;
+   }
+   100% {
+      background-position: 0 0, 100% 0, center;
+   }
+}
+
+/* .navbar-bg {
+  animation: waveMove 10s ease-in-out infinite;
+} */
+
+/* Custom Scrollbar Styles */
+.custom-scrollbar::-webkit-scrollbar {
+   width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+   background: #f5f5f5;
+   border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+   background: #b30000;
+   border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+   background: #990000;
+}
+
+/* Firefox */
+.custom-scrollbar {
+   scrollbar-width: thin;
+   scrollbar-color: #b30000 #f5f5f5;
 }
