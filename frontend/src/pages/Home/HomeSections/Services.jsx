@@ -51,10 +51,10 @@ const Services = () => {
               key={index}
               className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer border border-gray-100"
             >
-              <div className="w-12 h-12 bg-[#b30000] rounded-lg mb-4 flex items-center justify-center"></div>
-              <h3 className="font-semibold text-[#262626] mb-2">{service}</h3>
-              <p className="text-sm text-[#6c6c6c]">
-                Online certificate for residents and programs
+              <div className="w-12 h-12 bg-secondary rounded-lg  flex items-center justify-center"></div>
+              <h3 className="font-semibold text-[#262626] ">{service}</h3>
+              <p className="text-sm text-[#6c6c6c] leading-3.5">
+                Online certificate for residents and programs.
               </p>
             </div>
           ))}

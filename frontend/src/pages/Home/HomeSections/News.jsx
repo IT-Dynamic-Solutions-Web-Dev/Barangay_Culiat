@@ -21,10 +21,10 @@ const News = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Featured Article */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-red-100 via-orange-50 to-yellow-50 rounded-lg overflow-hidden h-full relative shadow-lg cursor-pointer hover:shadow-xl transition-shadow group">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#b30000]/20 to-transparent"></div>
-            <div className="absolute top-4 left-4">
-              <span className="bg-[#b30000] text-white px-3 py-1 rounded-full text-xs font-semibold">
+          <div className="bg-gradient-to-br from-blue-100 via-blue-50 to-indigo-50 rounded-lg overflow-hidden relative shadow-lg cursor-pointer hover:shadow-xl transition-shadow group h-[280px]">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent"></div>
+            <div className="absolute top-3 left-3 z-10">
+              <span className="bg-secondary text-white px-2.5 py-1 rounded-full text-xs font-semibold">
                 FEATURED
               </span>
             </div>
@@ -62,21 +62,15 @@ const News = () => {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 flex items-start space-x-4 hover:bg-gray-100 transition-colors cursor-pointer border border-gray-200">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex-shrink-0 flex items-center justify-center">
-                {/* <FileText className="text-white" size={20} /> */}
-              </div>
-              <div className="flex-1">
-                <span className="text-xs text-[#6c6c6c] mb-1 block">
-                  October 10, 2024
-                </span>
-                <h4 className="font-semibold text-[#262626] mb-1 text-sm">
-                  New Online Document Processing
-                </h4>
-                <p className="text-xs text-[#6c6c6c]">
-                  E-services portal now accepting certificate requests
-                </p>
-              </div>
+        {/* Desktop: Original grid layout */}
+        <div className="hidden lg:grid lg:grid-cols-3 gap-6">
+          {/* Featured Article */}
+          <div className="lg:col-span-2 bg-gradient-to-br from-blue-100 via-blue-50 to-indigo-50 rounded-lg overflow-hidden relative shadow-lg cursor-pointer hover:shadow-xl transition-shadow group min-h-[320px]">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent"></div>
+            <div className="absolute top-4 left-4 z-10">
+              <span className="bg-secondary text-white px-3 py-1 rounded-full text-xs font-semibold">
+                FEATURED
+              </span>
             </div>
 
             <div className="bg-gray-50 rounded-lg p-4 flex items-start space-x-4 hover:bg-gray-100 transition-colors cursor-pointer border border-gray-200">
