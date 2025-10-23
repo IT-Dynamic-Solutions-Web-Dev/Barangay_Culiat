@@ -59,7 +59,7 @@ const MediaSequence = () => {
   const currentMedia = mediaList[currentIndex];
 
   return (
-    <div className="absolute inset-0 w-full h-full">
+    <div className="absolute w-full h-full">
       {currentMedia.type === "video" ? (
         <video
           ref={videoRef}

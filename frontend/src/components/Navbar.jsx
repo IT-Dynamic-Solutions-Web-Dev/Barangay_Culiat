@@ -1,20 +1,16 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link, NavLink } from "react-router-dom";
+// import { useAuth } from "../context/AuthContext";
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [showServices, setShowServices] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const navigate = useNavigate();
+  const [isScrolldown, setisScrolldown] = useState(true);
+  // const [lastScrollY, setLastScrollY] = useState(0);
+  const location = useLocation();
   const timeoutRef = useRef(null);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   const handleMouseEnter = () => {
     clearTimeout(timeoutRef.current);
@@ -27,74 +23,91 @@ const Navbar = () => {
     }, 250);
   };
 
+  const isHome = location.pathname === "/";
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // if (currentScrollY < lastScrollY || currentScrollY < 380) {
-      //   setIsVisible(true);
-      // } else {
-      //   setIsVisible(false);
-      // }
+      if (isHome && currentScrollY < 250) {
+        setisScrolldown(false);
+      } else {
+        setisScrolldown(true);
+      }
 
-      setLastScrollY(currentScrollY);
+      // setLastScrollY(currentScrollY);
     };
+
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, [isHome, location.pathname]);
 
   return (
-    <nav
-      className={`sticky top-0 left-0 w-full z-[100] transition-[height,opacity] ease-in duration-200 ${
-        isVisible ? "h-[4em] opacity-100" : "h-0 opacity-0 overflow-hidden"
-      }`}
-    >
-      <div className="w-full mx-auto md:px-6 lg:px-8  shadow-md bg-secondary">
-        <div className="flex justify-between items-center h-16  text-text-color-light px-4 ">
+    <nav className={`fixed top-0 left-0 w-full z-[100] h-auto `}>
+      <div
+        className={`relative w-full py-2 backdrop-blur-[2px]  ${
+          isScrolldown && "bg-light shadow-md"
+        } transition-background duration-300`}
+      >
+        <div
+          className={`flex justify-between max-w-6xl mx-auto items-center h-16 px-2  ${
+            isScrolldown ? "text-text-color" : "text-text-color-light"
+          }`}
+        >
           {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-4">
-            <div className="rounded-full ">
+          <Link to="/dashboard" className="flex items-center gap-2 sm:gap-3">
+            <div className="rounded-full bg-light">
               <img
                 src="/images/logo/brgy-culiat-logo.png"
                 alt="Barangay Culiat Logo"
-                className="h-12 w-12 rounded-full object-cover"
+                className="sm:h-12 sm:w-12 h-10 w-10 rounded-full object-cover"
               />
             </div>
-            <p className="sm:flex flex-col hidden text-lg font-semibold tracking-wide leading-5">
-              Barangay Culiat
-              <span className="font-normal text-sm text-accent">
+            <p className="flex flex-col text-md sm:text-xl font-bold tracking-wide">
+              <span className="sm:block hidden">Barangay Culiat</span>
+              <span className="sm:hidden block">Brgy. Culiat</span>
+              <span className="font-semibold text-sm text-secondary-text">
                 E-Services
               </span>
             </p>
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex space-x-6 items-center relative">
+          <div
+            className={`hidden md:flex space-x-6 items-center font-semibold relative `}
+          >
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `navlink text-sm font-medium transition ${
-                  isActive
-                    ? "text-accent active"
-                    : "hover:text-accent text-text-color-light"
-                }`
+                `navlink text-md  transition ${isActive && "active"}`
               }
             >
               Home
             </NavLink>
 
+            <NavLink
+              to="/services"
+              className={({ isActive }) =>
+                `navlink text-md  transition ${isActive && "active"}`
+              }
+            >
+              Services
+            </NavLink>
+
             {/* Services dropdown */}
-            <div
+            {/* <div
               className="relative"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button className="navlink text-sm font-medium flex items-center hover:text-accent">
-                Services
+              <button className=" text-md flex items-center cursor-pointer hover:text-secondary-text">
+                <div className="navlink"> Services</div>
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`ml-1 w-3 h-3 transform transition-transform ${
+                  className={`ml-1 w-3 h-3 transform transition-[transform, background] duration-150 ${
                     showServices ? "rotate-180" : "rotate-0"
                   }`}
                   fill="none"
@@ -110,56 +123,52 @@ const Navbar = () => {
                 </svg>
               </button>
 
-              {showServices && (
-                <div className="absolute left-0 mt-2 w-56 bg-text-color-light text-text-color border border-secondary/60 shadow-lg rounded-md py-2 z-[200]">
-                  {[
-                    { label: "Barangay ID", path: "/services/barangay-id" },
-                    {
-                      label: "Business Permit",
-                      path: "/services/business-permit",
-                    },
-                    {
-                      label: "Certificate of Indigency",
-                      path: "/services/indigency",
-                    },
-                    { label: "Cedula", path: "/services/cedula" },
-                  ].map((item) => (
-                    <NavLink
-                      key={item.path}
-                      to={item.path}
-                      className="block px-4 py-2 text-sm hover:bg-secondary-glow hover:text-text-color-light transition"
-                    >
-                      {item.label}
-                    </NavLink>
-                  ))}
-                </div>
-              )}
-            </div>
+              <div
+                className={`absolute left-0 top-[34px]  mt-2  w-64  bg-text-color-light text-text-color  border-text-color/60 shadow-lg rounded-md  z-[250] mix-blend-normal transition-heght duration-300 ${
+                  showServices ? "py-2 border" : "hidden overflow-hidden"
+                }`}
+              >
+                {[
+                  { label: "Barangay ID", path: "/services/barangay-id" },
+                  {
+                    label: "Business Permit",
+                    path: "/services/business-permit",
+                  },
+                  {
+                    label: "Certificate of Indigency",
+                    path: "/services/indigency",
+                  },
+                  {
+                    label: "Community Tax Certificate",
+                    path: "/services/cedula",
+                  },
+                ].map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className="block px-4 py-2 text-sm hover:bg-neutral font-normal transition  "
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+              </div>
+            </div> */}
 
-            <NavLink
-              to="/announcements"
-              className="navlink hover:text-accent text-sm font-medium"
-            >
+            <NavLink to="/announcements" className="navlink  text-md ">
               Announcements
             </NavLink>
 
-            <NavLink
-              to="/reports"
-              className="navlink hover:text-accent text-sm font-medium"
-            >
+            <NavLink to="/reports" className="navlink  text-md ">
               Report
             </NavLink>
 
-            <NavLink
-              to="/about"
-              className="navlink hover:text-accent text-sm font-medium"
-            >
+            <NavLink to="/about" className="navlink  text-md ">
               About
             </NavLink>
           </div>
 
           {/* Auth Buttons */}
-          <div className="flex space-x-3 items-center text-sm">
+          {/* <div className="flex space-x-3 items-center text-sm">
             {user ? (
               <button
                 onClick={handleLogout}
@@ -169,69 +178,76 @@ const Navbar = () => {
               </button>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  className="text-text-color-light font-medium hover:underline"
-                >
+                <Link to="/login" className="font-medium hover:underline ">
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-primary text-text-color-light font-medium px-4 py-2 rounded-md hover:bg-primary-glow transition"
+                  className="bg-secondary text-text-color-light font-medium px-4 py-2 rounded-md hover:bg-secondary-glow transition"
                 >
                   Register
                 </Link>
               </>
-            )}
-            {/* Mobile menu toggle */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden focus:outline-none text-text-color-light"
+            )} */}
+          {/* Mobile menu toggle */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden focus:outline-none text-text-color-light mix-blend-difference cursor-pointer "
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
+              {isOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
         </div>
       </div>
+      {/* </div> */}
 
       {/* Mobile dropdown */}
 
       <div
-        className={`md:hidden bg-secondary px-4 space-y-2 border-t border-accent/40 overflow-hidden transition-all duration-600 ${
-          isOpen ? "h-auto py-4" : "h-0"
-        }`}
+        className={`absolute top-[100%] w-full md:hidden bg-light shadow-md px-4 space-y-3  overflow-hidden transition-all duration-600 ${
+          isOpen
+            ? "max-h-[400px]  py-4 border-t border-text-color/30"
+            : "max-h-0"
+        }
+        `}
       >
         <NavLink
           to="/"
           onClick={() => setIsOpen(false)}
-          className="block text-text-color-light hover:text-accent"
+          className="block text-text-color"
         >
           Home
         </NavLink>
-        <div>
+        <NavLink
+          to="/services"
+          onClick={() => setIsOpen(false)}
+          className="block text-text-color"
+        >
+          Services
+        </NavLink>
+        {/* <div>
           <button
-            className="  flex items-center text-text-color-light hover:text-accent"
+            className="  flex items-center text-text-color cursor-pointer"
             onClick={() => setShowServices(!showServices)}
           >
             Services
@@ -254,7 +270,7 @@ const Navbar = () => {
           </button>
 
           <div
-            className={` w-56 text-text-color-light ${
+            className={` w-56 text-text-color ${
               showServices ? "h-auto py-2" : "h-0 overflow-hidden"
             }`}
           >
@@ -268,36 +284,36 @@ const Navbar = () => {
                 label: "Certificate of Indigency",
                 path: "/services/indigency",
               },
-              { label: "Cedula", path: "/services/cedula" },
+              { label: "Community Tax Certificate", path: "/services/cedula" },
             ].map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
-                className="block px-4 py-2 text-sm hover:text-accent transition"
+                className="block px-4 py-2 text-sm transition"
               >
                 {item.label}
               </NavLink>
             ))}
           </div>
-        </div>
-        <NavLink
-          to="/reports"
-          onClick={() => setIsOpen(false)}
-          className="block text-text-color-light hover:text-accent"
-        >
-          Reports
-        </NavLink>
+          </div> */}
         <NavLink
           to="/announcements"
           onClick={() => setIsOpen(false)}
-          className="block text-text-color-light hover:text-accent"
+          className="block text-text-color"
         >
           Announcements
         </NavLink>
         <NavLink
-          to="/announcements"
+          to="/reports"
           onClick={() => setIsOpen(false)}
-          className="block text-text-color-light hover:text-accent"
+          className="block text-text-color"
+        >
+          Reports
+        </NavLink>
+        <NavLink
+          to="/about"
+          onClick={() => setIsOpen(false)}
+          className="block text-text-color"
         >
           About
         </NavLink>
