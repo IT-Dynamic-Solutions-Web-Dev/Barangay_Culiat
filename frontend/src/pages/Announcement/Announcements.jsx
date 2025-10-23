@@ -1,233 +1,177 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { announcementAPI } from "../../services/api";
+import React, { useState } from "react";
+import { CalendarDays, MapPin, Filter } from "lucide-react";
+// import Header from "../../components/Header";
+import { Link } from "react-router";
 
-const Announcements = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const [announcements, setAnnouncements] = useState([]);
-  const [loading, setLoading] = useState(true);
+const announcements = [
+  {
+    id: 1,
+    title: "Libreng Bakuna Program",
+    date: "October 25, 2025",
+    location: "Barangay Culiat Covered Court",
+    description:
+      "Join our free vaccination drive for senior citizens and children. Protect your loved ones — vaccines save lives!",
+    image: "/images/events/vaccination.jpg",
+    category: "Health Program",
+    slug: "libreng-bakuna-program",
+  },
+  {
+    id: 2,
+    title: "Barangay Clean-Up Drive",
+    date: "November 3, 2025",
+    location: "Sitio Veterans, Culiat",
+    description:
+      "Be part of our community clean-up activity to promote a cleaner and greener barangay environment.",
+    image: "/images/events/cleanup.jpg",
+    category: "Community Activity",
+    slug: "barangay-cleanup-drive",
+  },
+  {
+    id: 3,
+    title: "Youth Leadership Seminar",
+    date: "November 10, 2025",
+    location: "Barangay Hall Function Room",
+    description:
+      "Empowering the youth with leadership and teamwork skills. Open to all ages 15–25.",
+    image: "/images/events/youth-seminar.jpg",
+    category: "Education & Training",
+    slug: "youth-leadership-seminar",
+  },
+  {
+    id: 4,
+    title: "Blood Donation Campaign",
+    date: "December 2, 2025",
+    location: "Barangay Covered Court",
+    description:
+      "Give the gift of life! Participate in our blood donation campaign in partnership with Red Cross.",
+    image: "/images/events/blood-donation.jpg",
+    category: "Health Program",
+    slug: "blood-donation-campaign",
+  },
+];
 
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
+const categories = [
+  "All",
+  "Health Program",
+  "Community Activity",
+  "Education & Training",
+];
 
-  const fetchAnnouncements = async () => {
-    try {
-      const response = await announcementAPI.getPublished();
-      setAnnouncements(response.data.data);
-    } catch (error) {
-      console.error("Error fetching announcements:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const Announcement = () => {
+  const [activeFilter, setActiveFilter] = useState("All");
 
-  const getPriorityColor = (priority) => {
-    const colors = {
-      normal: "#4caf50",
-      important: "#ff9800",
-      urgent: "#f44336",
-    };
-    return colors[priority] || "#999";
-  };
+  const filteredAnnouncements =
+    activeFilter === "All"
+      ? announcements
+      : announcements.filter((a) => a.category === activeFilter);
 
   return (
-    <div style={styles.container}>
-      <nav style={styles.nav}>
-        <h2 style={styles.navTitle}>Barangay Culiat</h2>
-        <div style={styles.navRight}>
-          <span style={styles.userName}>
-            {user?.firstName} {user?.lastName}
-          </span>
-          <button onClick={() => logout()} style={styles.logoutButton}>
-            Logout
-          </button>
+    <section id="announcements" className="min-h-screen bg-neutral py-16 mt-10">
+      {/* <Header variant="black" /> */}
+
+      {/* Page Header */}
+      <div
+        className="max-w-6xl mx-auto rounded-lg overflow-hidden mb-6"
+        style={{
+          background:
+            "linear-gradient(90deg,var(--color-primary), var(--color-primary-glow))",
+          color: "var(--color-text-color-light)",
+        }}
+      >
+        <div className="px-6 py-8">
+          <h1 className="text-2xl md:text-3xl font-bold">
+            {" "}
+            Barangay Announcements
+          </h1>
+          <p className="mt-1 text-sm opacity-90">
+            Stay updated with our latest barangay events, programs, and notices.
+          </p>
         </div>
-      </nav>
+      </div>
 
-      <div style={styles.content}>
-        <button
-          onClick={() => navigate("/dashboard")}
-          style={styles.backButton}
-        >
-          ← Back to Dashboard
-        </button>
+      {/* Filter Bar */}
+      <div className="max-w-6xl mx-auto px-4 mb-8 flex flex-wrap justify-center gap-3">
+        <div className="flex items-center gap-2 text-gray-700">
+          <Filter className="w-4 h-4" />
+          <span className="text-sm font-medium">Filter by Category:</span>
+        </div>
+        <div className="flex flex-wrap justify-center gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveFilter(cat)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                activeFilter === cat
+                  ? "bg-primary text-white shadow-md"
+                  : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        <h1>Barangay Announcements</h1>
-        <p style={styles.subtitle}>
-          Stay updated with the latest announcements and news from Barangay
-          Culiat.
-        </p>
-
-        {loading ? (
-          <p>Loading announcements...</p>
-        ) : announcements.length === 0 ? (
-          <div style={styles.emptyState}>
-            <p>No announcements available at this time.</p>
-          </div>
-        ) : (
-          <div style={styles.announcementList}>
-            {announcements.map((announcement) => (
-              <div key={announcement._id} style={styles.announcementCard}>
-                <div style={styles.header}>
-                  <div>
-                    <h2 style={styles.title}>{announcement.title}</h2>
-                    <div style={styles.meta}>
-                      <span style={styles.category}>
-                        {announcement.category}
-                      </span>
-                      <span
-                        style={{
-                          ...styles.priorityBadge,
-                          backgroundColor: getPriorityColor(
-                            announcement.priority
-                          ),
-                        }}
-                      >
-                        {announcement.priority}
-                      </span>
-                      <span style={styles.date}>
-                        {new Date(
-                          announcement.publishDate || announcement.createdAt
-                        ).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div style={styles.content}>
-                  <p style={styles.announcementContent}>
-                    {announcement.content}
-                  </p>
-                </div>
-                {announcement.expiryDate && (
-                  <div style={styles.footer}>
-                    <span style={styles.expiry}>
-                      Valid until:{" "}
-                      {new Date(announcement.expiryDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                )}
+      {/* Announcements Grid */}
+      <div className="max-w-6xl mx-auto px-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {filteredAnnouncements.length > 0 ? (
+          filteredAnnouncements.map((item) => (
+            <Link
+              to={`/announcements/${item.slug}`}
+              key={item.id}
+              className="bg-white shadow-sm flex flex-col border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all duration-300"
+            >
+              <div className="relative h-48 w-full">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
-            ))}
+
+              <div className="p-6 flex flex-col justify-between flex-1">
+                <p className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide">
+                  {item.category}
+                </p>
+                <h3 className="text-lg font-bold text-text-color mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-text-secondary mb-4 leading-snug">
+                  {item.description}
+                </p>
+
+                <div className="flex flex-wrap gap-3 text-sm text-gray-500">
+                  <span className="flex items-center gap-1">
+                    <CalendarDays className="w-4 h-4 text-primary" />
+                    {item.date}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-4 h-4 text-primary" />
+                    {item.location}
+                  </span>
+                </div>
+                <p className="text-xs pt-4 text-primary font-medium">
+                  Read more →
+                </p>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-10 text-gray-500">
+            No announcements available for this category.
           </div>
         )}
       </div>
-    </div>
+
+      {/* Footer */}
+      <div className="text-center text-sm text-text-secondary mt-12">
+        <p>
+          For more details, visit the Barangay Hall or follow our official
+          social media pages.
+        </p>
+      </div>
+    </section>
   );
 };
 
-const styles = {
-  container: {
-    minHeight: "100vh",
-    backgroundColor: "#f0f2f5",
-  },
-  nav: {
-    backgroundColor: "#1a73e8",
-    color: "white",
-    padding: "1rem 2rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  navTitle: {
-    margin: 0,
-  },
-  navRight: {
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-  },
-  userName: {
-    fontSize: "0.9rem",
-  },
-  logoutButton: {
-    padding: "0.5rem 1rem",
-    backgroundColor: "white",
-    color: "#1a73e8",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  content: {
-    padding: "2rem",
-    maxWidth: "1000px",
-    margin: "0 auto",
-  },
-  backButton: {
-    padding: "0.5rem 1rem",
-    backgroundColor: "white",
-    color: "#1a73e8",
-    border: "1px solid #1a73e8",
-    borderRadius: "4px",
-    cursor: "pointer",
-    marginBottom: "1rem",
-  },
-  subtitle: {
-    color: "#666",
-    marginBottom: "2rem",
-  },
-  emptyState: {
-    textAlign: "center",
-    padding: "3rem",
-    backgroundColor: "white",
-    borderRadius: "8px",
-  },
-  announcementList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1.5rem",
-  },
-  announcementCard: {
-    backgroundColor: "white",
-    padding: "2rem",
-    borderRadius: "8px",
-    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-  },
-  header: {
-    marginBottom: "1rem",
-  },
-  title: {
-    color: "#333",
-    marginBottom: "0.5rem",
-  },
-  meta: {
-    display: "flex",
-    gap: "1rem",
-    alignItems: "center",
-  },
-  category: {
-    textTransform: "capitalize",
-    color: "#666",
-    fontSize: "0.9rem",
-  },
-  priorityBadge: {
-    color: "white",
-    padding: "0.25rem 0.75rem",
-    borderRadius: "12px",
-    fontSize: "0.85rem",
-    textTransform: "capitalize",
-  },
-  date: {
-    color: "#999",
-    fontSize: "0.85rem",
-  },
-  announcementContent: {
-    lineHeight: "1.6",
-    color: "#444",
-    whiteSpace: "pre-wrap",
-  },
-  footer: {
-    marginTop: "1rem",
-    paddingTop: "1rem",
-    borderTop: "1px solid #eee",
-  },
-  expiry: {
-    color: "#999",
-    fontSize: "0.85rem",
-    fontStyle: "italic",
-  },
-};
-
-export default Announcements;
+export default Announcement;
