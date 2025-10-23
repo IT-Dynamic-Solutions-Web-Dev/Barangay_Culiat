@@ -69,6 +69,8 @@ JWT_SECRET=your_secure_jwt_secret_key
 NODE_ENV=development
 ```
 
+Note: There is a detailed backend README available at `backend/README.md` with additional setup, scripts, seed instructions and troubleshooting tips. Check that file for environment-specific guidance.
+
 3. **Frontend Setup**
 ```bash
 cd ../frontend
@@ -107,6 +109,17 @@ npm run dev
 - `POST /api/auth/login` - Login user
 - `GET /api/auth/me` - Get current user (protected)
 - `PUT /api/auth/profile` - Update user profile (protected)
+
+### Logs / Auditing
+- `GET /api/logs` - Get audit logs (admin/superadmin only)
+- `POST /api/logs` - Create log entry (admin/superadmin only). The backend also writes logs automatically for key actions such as account creation and barangay ID request lifecycle events.
+
+### Barangay ID Requests
+- `POST /api/barangay-id-requests` - Create barangay ID request (resident)
+- `GET /api/barangay-id-requests` - List requests (admin)
+- `GET /api/barangay-id-requests/:id` - Get a single request (admin/resident)
+- `PUT /api/barangay-id-requests/:id/status` - Update request status (admin)
+- `DELETE /api/barangay-id-requests/:id` - Delete request (admin)
 
 ### Reports
 - `POST /api/reports` - Create new report (protected)
