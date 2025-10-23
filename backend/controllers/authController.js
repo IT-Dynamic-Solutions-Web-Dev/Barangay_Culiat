@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const ROLES = require('../config/roles');
+const Logs = require('../models/Logs');
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -43,7 +44,7 @@ exports.register = async (req, res) => {
 
     // Generate token
     const token = generateToken(user._id);
-
+    
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
@@ -56,6 +57,17 @@ exports.register = async (req, res) => {
         token,
       },
     });
+    // create audit log for account creation (logged in as self)
+    try {
+      await Logs.create({
+        action: 'CREATE_ACCOUNT',
+        description: `User registered: ${user._id} (${user.email})`,
+        performedBy: user._id,
+        performedByRole: getRoleName(user.role),
+      });
+    } catch (logErr) {
+      console.error('Failed to create CREATE_ACCOUNT log:', logErr);
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -212,6 +224,19 @@ exports.adminRegister = async (req, res) => {
         token,
       },
     });
+    // create audit log for admin-created account (performed sa req.user kung available)
+    try {
+      const performerId = req.user?._id || null;
+      const performerRole = req.user ? getRoleName(req.user.role) : undefined;
+      await Logs.create({
+        action: 'CREATE_ACCOUNT',
+        description: `Admin registration: ${user._id} (${user.email}) by ${performerId || 'system'}`,
+        performedBy: performerId || user._id,
+        performedByRole: performerRole || getRoleName(user.role),
+      });
+    } catch (logErr) {
+      console.error('Failed to create CREATE_ACCOUNT log for adminRegister:', logErr);
+    }
   } catch (error) {
     res.status(500).json({
       success: false,

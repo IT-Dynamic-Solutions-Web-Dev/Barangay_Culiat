@@ -66,6 +66,19 @@ All API responses follow this format:
 }
 ```
 
+Note: Successful account creation will generate a `CREATE_ACCOUNT` log entry. Admin-created accounts (via the admin register endpoint) will also log the admin who performed the action.
+
+Example log entry created on account registration:
+```json
+{
+  "action": "CREATE_ACCOUNT",
+  "description": "User registered: <user_id> (email@example.com)",
+  "performedBy": "<user_id or admin_id>",
+  "performedByRole": "Resident|Admin|SuperAdmin",
+  "timestamp": "date"
+}
+```
+
 ### Login
 - **URL**: `/auth/login`
 - **Method**: `POST`
@@ -271,6 +284,207 @@ All API responses follow this format:
 ```
 
 ---
+
+## Barangay ID Request Endpoints
+
+Endpoints for residents to request a Barangay ID and for admins to manage those requests.
+
+### Create Barangay ID Request
+- **URL**: `/barangay-id-requests`
+- **Method**: `POST`
+- **Auth**: Required (Resident)
+- **Body** (example):
+```json
+{
+  "firstName": "string",
+  "middleName": "string (optional)",
+  "lastName": "string",
+  "suffix": "string (optional)",
+  "completeAddress": "string",
+  "sex": "Male|Female|Other",
+  "placeOfBirth": "string",
+  "dateOfBirth": "YYYY-MM-DD",
+  "citizenship": "string",
+  "civilStatus": "Single|Married|Widowed|Divorced|Separated",
+  "emergencyFirstName": "string",
+  "emergencyMiddleName": "string (optional)",
+  "emergencyLastName": "string",
+  "emergencySuffix": "string (optional)",
+  "emergencyRelationship": "string",
+  "emergencyContactNumber": "string"
+}
+```
+- **Success Response** (201):
+```json
+{
+  "success": true,
+  "message": "Barangay ID request submitted successfully",
+  "data": { ... }
+}
+```
+
+### Get All Barangay ID Requests
+- **URL**: `/barangay-id-requests`
+- **Method**: `GET`
+- **Auth**: Required (Admin only)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "count": 10,
+  "data": [ ... ]
+}
+```
+
+### Get Single Barangay ID Request
+- **URL**: `/barangay-id-requests/:id`
+- **Method**: `GET`
+- **Auth**: Required (Admin only)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "request_id",
+    "firstName": "string",
+    "middleName": "string",
+    "lastName": "string",
+    "suffix": "string",
+    "completeAddress": "string",
+    "sex": "Male|Female|Other",
+    "placeOfBirth": "string",
+    "dateOfBirth": "date",
+    "citizenship": "string",
+    "civilStatus": "string",
+  "barangayIdNumber": "BID-2025-XXXXXX",
+  "emergencyFirstName": "string",
+  "emergencyMiddleName": "string",
+  "emergencyLastName": "string",
+  "emergencySuffix": "string",
+  "emergencyRelationship": "string",
+  "emergencyContactNumber": "string",
+    "status": "Pending|Approved|Rejected",
+    "requestedAt": "date",
+    "reviewedAt": "date (optional)"
+  }
+}
+```
+
+### Update Barangay ID Request Status
+- **URL**: `/barangay-id-requests/:id/status`
+- **Method**: `PUT`
+- **Auth**: Required (Admin only)
+- **Body**:
+```json
+{
+  "status": "Pending|Approved|Rejected"
+}
+```
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "message": "Barangay ID request marked as Approved",
+  "data": { ... }
+}
+```
+
+### Delete Barangay ID Request
+- **URL**: `/barangay-id-requests/:id`
+- **Method**: `DELETE`
+- **Auth**: Required (Admin only)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "message": "Barangay ID request deleted successfully"
+}
+```
+
+### Notes & Error Codes
+- `400` - Bad Request (validation errors when creating requests)
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (resident trying to access admin-only endpoints)
+- `404` - Barangay ID request not found
+- `500` - Internal Server Error
+
+Image/photo uploads and proof-of-residency fields are currently commented in the model and not enforced by the controller; they may be added later.
+
+---
+
+## Logs Endpoints
+
+These endpoints allow administrators to view and manage system logs. Access is restricted to `SuperAdmin` and `Admin` roles.
+
+### Get All Logs
+- **URL**: `/logs`
+- **Method**: `GET`
+- **Auth**: Required (Admin/SuperAdmin)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "count": 10,
+  "data": [ { /* log objects */ } ]
+}
+```
+
+### Get Single Log
+- **URL**: `/logs/:id`
+- **Method**: `GET`
+- **Auth**: Required (Admin/SuperAdmin)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "log_id",
+    "action": "CREATE_ACCOUNT|REPORT|USER_ACTION|BACKUP_DATABASE|DELETE_DATABASE|OTHER",
+    "description": "string",
+    "performedBy": { "_id": "user_id", "firstName": "string", "lastName": "string", "email": "string" },
+    "timestamp": "date"
+  }
+}
+```
+
+### Create Log
+- **URL**: `/logs`
+- **Method**: `POST`
+- **Auth**: Required (Admin/SuperAdmin)
+- **Body**:
+```json
+{
+  "action": "CREATE_ACCOUNT|REPORT|USER_ACTION|BACKUP_DATABASE|DELETE_DATABASE|OTHER",
+  "description": "string",
+  "performedBy": "user_id"
+}
+```
+- **Success Response** (201):
+```json
+{
+  "success": true,
+  "message": "Log created",
+  "data": { /* created log */ }
+}
+```
+
+### Delete Log
+- **URL**: `/logs/:id`
+- **Method**: `DELETE`
+- **Auth**: Required (Admin/SuperAdmin)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "message": "Log deleted successfully"
+}
+```
+
+### Error codes
+- `401` - Unauthorized
+- `403` - Forbidden (insufficient role)
+- `404` - Log not found
+- `500` - Internal Server Error
 
 ## Announcement Endpoints
 
