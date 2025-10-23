@@ -4,6 +4,7 @@ import { Modal } from "../tailadminsrc/components/ui/modal/index";
 const PolicyPopup = () => {
   const [showPopup, setShowPopup] = useState(false);
 
+  // Show popup after delay if not seen in last 10 mins
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -11,26 +12,21 @@ const PolicyPopup = () => {
     const policyData = storedData ? JSON.parse(storedData) : null;
     const now = Date.now();
 
-    // If no token or expired (older than 10 mins)
     if (!policyData || now - policyData.timestamp > 10 * 60 * 1000) {
-      const timer = setTimeout(() => {
-        setShowPopup(true);
-      }, 5000); // show after 5 seconds
-
+      const timer = setTimeout(() => setShowPopup(true), 4000);
       return () => clearTimeout(timer);
     }
   }, []);
 
-  // Disable background scroll when popup is visible
+  // Prevent background scroll when popup is visible
   useEffect(() => {
     document.body.style.overflow = showPopup ? "hidden" : "";
   }, [showPopup]);
 
   const handleClose = () => {
-    const now = Date.now();
     localStorage.setItem(
       "policyData",
-      JSON.stringify({ seen: true, timestamp: now })
+      JSON.stringify({ seen: true, timestamp: Date.now() })
     );
     setShowPopup(false);
   };
@@ -41,47 +37,63 @@ const PolicyPopup = () => {
     <Modal
       isOpen={showPopup}
       onClose={handleClose}
-      className="max-w-3xl w-[90%] mx-auto p-8 md:p-10 md:text-base text-sm text-text-color dark:text-gray-100 shadow-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
+      className="max-w-3xl w-[92%] mx-auto rounded-2xl shadow-2xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 px-8 py-10 md:p-12 transition-all duration-300"
     >
-      <div className="space-y-6">
-        <h2 className="md:text-3xl text-xl font-bold text-center ">
+      <div className="space-y-8">
+        {/* Title */}
+        <h2 className="text-center text-2xl md:text-3xl font-extrabold text-text-color dark:text-white tracking-tight">
           Barangay Culiat Web Policy
         </h2>
 
-        <p className="md:text-base text-sm leading-relaxed text-gray-600 dark:text-gray-300">
-          By using the Barangay Culiat Web System, you agree to our terms of
-          service and privacy policy. The platform ensures that all personal
-          information provided is handled securely and confidentially in
-          accordance with barangay data protection guidelines.
+        {/* Intro */}
+        <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
+          Welcome to the Barangay Culiat Web System. By continuing to use this
+          platform, you acknowledge and agree to our policies ensuring secure,
+          transparent, and responsible data handling in accordance with local
+          data privacy standards.
         </p>
 
-        <div className="space-y-4">
+        {/* Sections */}
+        <div className="space-y-6">
           <section>
-            <h3 className="md:text-xl text-base font-semibold ">
+            <h3 className="text-lg md:text-xl font-semibold text-text-color dark:text-white mb-2">
               1. Information We Collect
             </h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              We may collect your name, contact information, and system usage
-              data to ensure smooth barangay operations and communication.
+            <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">
+              We may collect your name, contact details, and relevant barangay
+              service data to support communication and community service
+              management within Barangay Culiat.
             </p>
           </section>
 
           <section>
-            <h3 className="md:text-xl text-base font-semibold ">
+            <h3 className="text-lg md:text-xl font-semibold text-text-color dark:text-white mb-2">
               2. Data Protection
             </h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Your personal information is protected under barangay data
-              security measures. Only authorized personnel can access it for
-              legitimate purposes.
+            <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">
+              All personal data is securely stored and accessible only to
+              authorized barangay personnel. We comply with barangay-level and
+              national data privacy laws to safeguard user information.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-lg md:text-xl font-semibold text-text-color dark:text-white mb-2">
+              3. User Responsibility
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">
+              Users must ensure the accuracy of the information they provide.
+              Misuse, sharing, or unauthorized access to the system is strictly
+              prohibited and may result in administrative actions.
             </p>
           </section>
         </div>
 
-        <div className="text-center pt-6">
+        {/* Action Button */}
+        <div className="text-center pt-4">
           <button
             onClick={handleClose}
-            className="px-6 py-2 rounded-md bg-[#ffd700] text-gray-900 font-medium hover:bg-yellow-400 transition-all duration-200"
+            className="px-8 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm md:text-base shadow-md hover:shadow-lg transition-all duration-300 hover:bg-primary/90"
           >
             I Understand
           </button>

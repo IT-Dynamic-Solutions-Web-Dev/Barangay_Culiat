@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../../tailadminsrc/components/ui/button/Button";
+import { MapPin, Clock, FileText } from "lucide-react";
 {
   /* Get in Touch Section */
 }
@@ -31,7 +32,7 @@ const GetInTouch = () => {
               {/* Address */}
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
-                  {/* <MapPin className="text-white" size={24} /> */}
+                  <MapPin className="text-white" size={24} />
                 </div>
                 <div>
                   <h4 className="font-semibold text-[#262626] mb-1">Address</h4>
@@ -105,7 +106,7 @@ const GetInTouch = () => {
               {/* Office Hours */}
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
-                  {/* <Clock className="text-white" size={24} /> */}
+                  <Clock className="text-white" size={24} />
                 </div>
                 <div>
                   <h4 className="font-semibold text-[#262626] mb-1">
@@ -131,28 +132,28 @@ const GetInTouch = () => {
                   href="#"
                   className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-secondary" /> */}
+                  <FileText size={16} className="text-secondary" />
                   <span>Transparency Report</span>
                 </a>
                 <a
                   href="#"
                   className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-secondary" /> */}
+                  <FileText size={16} className="text-secondary" />
                   <span>Privacy Policy</span>
                 </a>
                 <a
                   href="#"
                   className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-secondary" /> */}
+                  <FileText size={16} className="text-secondary" />
                   <span>Feedback Form</span>
                 </a>
                 <a
                   href="#"
                   className="flex items-center space-x-2 text-sm text-[#6c6c6c] hover:text-secondary transition-colors"
                 >
-                  {/* <FileText size={16} className="text-secondary" /> */}
+                  <FileText size={16} className="text-secondary" />
                   <span>FAQ</span>
                 </a>
               </div>

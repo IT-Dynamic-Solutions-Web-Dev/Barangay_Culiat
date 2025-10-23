@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode; // Button text or content
@@ -34,7 +34,7 @@ const Button: React.FC<ButtonProps> = ({
       "bg-neutral text-text-color shadow-theme-xs hover:bg-neutral-active disabled:bg-text-secondary",
     outline:
       "bg-transparent text-text-color-light outline outline-light hover:bg-light hover:text-text-color focus:bg-light focus:text-text-color transition-all",
-    outlineprimary:
+    outlinesecondary:
       "bg-transparent text-text-color-light outline outline-light hover:bg-secondary hover:text-text-color-light hover:outline-secondary focus:outline-secondary focus:bg-secondary focus:text-text-color-light transition-all",
     secondary:
       "bg-secondary text-text-color-light hover:bg-secondary-light  transition-all",

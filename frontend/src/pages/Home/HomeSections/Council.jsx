@@ -20,7 +20,7 @@ const Council = () => {
         </div>
 
         {/* Barangay Captain */}
-        <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-lg p-8 mb-12 text-center border border-yellow-100">
+        <div className=" rounded-lg p-8 mb-12 text-center ">
           <h3 className="text-lg font-semibold text-[#262626] mb-6">
             Barangay Captain
           </h3>
