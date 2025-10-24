@@ -1,6 +1,6 @@
 import React from "react";
 import { FileText } from "lucide-react";
-import DatePicker from "../../../tailadminsrc/components/form/date-picker";
+import DatePicker from "../../../../tailadminsrc/components/form/date-picker";
 
 const DOCUMENT_TYPES = [
   "Certificate of Indigency",
