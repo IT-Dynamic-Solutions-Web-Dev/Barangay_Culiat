@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../../tailadminsrc/components/ui/button/Button";
+import Button from "../../../../tailadminsrc/components/ui/button/Button";
 import { MapPin, Clock, FileText } from "lucide-react";
 {
   /* Get in Touch Section */

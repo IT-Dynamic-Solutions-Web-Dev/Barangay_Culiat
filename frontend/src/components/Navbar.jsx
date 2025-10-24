@@ -1,10 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
-  // const { user, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [isScrolldown, setisScrolldown] = useState(true);
@@ -57,7 +57,7 @@ const Navbar = () => {
           }`}
         >
           {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2 sm:gap-3">
+          <Link to="/login" className="flex items-center gap-2 sm:gap-3">
             <div className="rounded-full bg-light">
               <img
                 src="/images/logo/brgy-culiat-logo.png"

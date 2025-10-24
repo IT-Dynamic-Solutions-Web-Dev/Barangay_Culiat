@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { User, MapPin, Phone, Home } from "lucide-react";
-import DatePicker from "../../../tailadminsrc/components/form/date-picker";
+import DatePicker from "../../../../tailadminsrc/components/form/date-picker";
 
 export default function PersonalInfoTab({
   formData,
