@@ -1,5 +1,5 @@
 import React from "react";
-import { CountingNumber } from "../../../components/ui/shadcn-io/counting-number/index";
+import { CountingNumber } from "../../../../components/ui/shadcn-io/counting-number/index";
 
 const stats = [
   { number: 45892, label: "Total Population" },

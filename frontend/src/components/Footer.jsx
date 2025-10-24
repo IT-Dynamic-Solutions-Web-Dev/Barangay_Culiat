@@ -213,7 +213,7 @@ const Footer = () => {
               Visit our barangay hall for in-person services and assistance.
             </p>
             <a 
-              href="https://www.google.com/maps/place/14%C2%B040'04.4%22N+121%C2%B003'23.4%22E/@14.667275,121.055835,19z/data=!3m1!4b1!4m4!3m3!8m2!3d14.667889!4d121.056500"
+              href="https://www.google.com/maps/place/Culiat+Barangay+Hall/@14.667987,121.05667,17z/data=!4m6!3m5!1s0x3397b7475e1333fb:0xb01b3d6a168686a5!8m2!3d14.6679865!4d121.0566701!16s%2Fg%2F11c3tsgbjt?hl=en&entry=ttu&g_ep=EgoyMDI1MTAyMC4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-secondary px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
