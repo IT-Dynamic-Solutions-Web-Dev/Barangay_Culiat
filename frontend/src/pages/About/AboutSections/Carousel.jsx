@@ -69,7 +69,7 @@ const Carousel = () => {
    };
 
    return (
-      <section className="py- px-4 bg-neutral">
+      <section className="py-8 px-4 bg-neutral">
          <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8">
                <h2 className="text-3xl font-bold text-[#262626] mb-4">

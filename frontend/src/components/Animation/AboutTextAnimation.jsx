@@ -1,18 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
-// TextChangeShadcnComponent.jsx
-// A text change animation with per-word class styling.
-
 const DEFAULT_WORDS = [
-   { text: "#DangalNgLungsod", className: "" },
+   { text: "LearnAboutUs", className: "" },
    {
-      text: "#TatakBarangayCuliat",
+      text: "KnowOurMission",
       className: "",
    },
-   { text: "#KalingaSaTao", className: "" },
-   { text: "#KalidadsaSerbisyo", className: "" },
+   { text: "KnowOurVision", className: "" },
+   { text: "LearnOurGoals", className: "" },
+   { text: "DiscoverWhoWeAre", className: "" },
 ];
 
 export default function TextChangeShadcn({
