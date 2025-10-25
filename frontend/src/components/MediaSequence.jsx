@@ -1,20 +1,27 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 
 const MediaSequence = () => {
   const videoRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const mediaList = [
-    { type: "video", src: "/videos/brgy-culiat-hall.mp4" },
-    { type: "video", src: "/videos/qc-drone-shot.mp4" },
-    {
-      type: "image",
-      src: "/images/brgy/elderly-community.jpg",
-      duration: 4000,
-    },
-    { type: "image", src: "/images/brgy/paunang-handog.jpg", duration: 4000 },
-    { type: "image", src: "/images/brgy/feeding-program.jpg", duration: 3000 },
-  ];
+  const mediaList = useMemo(
+    () => [
+      { type: "video", src: "/videos/brgy-culiat-hall.mp4" },
+      { type: "video", src: "/videos/qc-drone-shot.mp4" },
+      {
+        type: "image",
+        src: "/images/brgy/elderly-community.jpg",
+        duration: 4000,
+      },
+      { type: "image", src: "/images/brgy/paunang-handog.jpg", duration: 4000 },
+      {
+        type: "image",
+        src: "/images/brgy/feeding-program.jpg",
+        duration: 3000,
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
     const currentMedia = mediaList[currentIndex];
@@ -54,7 +61,7 @@ const MediaSequence = () => {
       }, currentMedia.duration || 3000);
       return () => clearTimeout(timer);
     }
-  }, [currentIndex]);
+  }, [currentIndex, mediaList]);
 
   const currentMedia = mediaList[currentIndex];
 
