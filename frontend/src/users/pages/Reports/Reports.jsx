@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import { reportAPI } from "../../services/api";
 
 const Reports = () => {
@@ -69,7 +69,7 @@ const Reports = () => {
           <h1>{isAdmin ? "All Reports" : "My Reports"}</h1>
           {!isAdmin && (
             <button
-              onClick={() => navigate("/reports/new")}
+              onClick={() => navigate("/reports/newReport")}
               style={styles.newButton}
             >
               + New Report
@@ -111,7 +111,7 @@ const Reports = () => {
             <p>No reports found.</p>
             {!isAdmin && (
               <button
-                onClick={() => navigate("/reports/new")}
+                onClick={() => navigate("/reports/newReport")}
                 style={styles.newButton}
               >
                 Submit Your First Report
