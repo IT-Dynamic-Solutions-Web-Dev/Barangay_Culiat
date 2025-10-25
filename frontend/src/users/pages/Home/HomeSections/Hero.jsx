@@ -1,10 +1,11 @@
 import React from "react";
+import MediaSequence from "../../../../components/MediaSequence";
+import Button from "../../../../tailadminsrc/components/ui/button/Button";
+import TextChangeShadcn from "../../../../components/Animation/TextChangeShadcn";
+import Stat from "../HomeSections/Stat";
+import Header from "../../../../components/Header";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import MediaSequence from "../../../components/MediaSequence";
-import TextChangeShadcn from "../../../components/Animation/TextChangeShadcn";
-import Stat from "../HomeSections/Stat";
-import Header from "../../../components/Header";
 
 // Animation Variants
 const fadeUp = {

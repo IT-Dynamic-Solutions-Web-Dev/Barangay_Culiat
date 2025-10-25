@@ -8,16 +8,17 @@ import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./tailadminsrc/pages/AuthPages/SignIn";
 import Register from "./tailadminsrc/pages/AuthPages/SignUp";
-import Dashboard from "./pages/Home/Dashboard";
-import Reports from "./pages/Reports/Reports";
-import NewReport from "./pages/Reports/NewReport";
-import Announcements from "./pages/Announcement/Announcements";
-import AnnouncementDetail from "./pages/Announcement/AnnouncementDetail";
-import Services from "./pages/Services/Services";
+import Dashboard from "./users/pages/Home/Dashboard";
+import Reports from "./users/pages/Reports/Reports";
+import NewReport from "./users/pages/Reports/NewReport";
+import Announcements from "./users/pages/Announcement/Announcements";
+import AnnouncementDetail from "./users/pages/Announcement/AnnouncementDetail";
+import Services from "./users/pages/Services/Services";
 import MainLayout from "./MainLayout/MainLayout";
-import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
-import PolicyPopup from "./components/PolicyPopup";
+import Home from "./users/pages/Home/Home";
+import About from "./users/pages/About/About";
+import PolicyPopup from "./components/PolicyPopup"; // 👈 import popup
+import NotFound from "./tailadminsrc/pages/OtherPage/NotFound";
 
 function App() {
   return (
@@ -51,7 +52,18 @@ function App() {
           />
 
           <Route
-            path="/reports/new"
+            path="/reports"
+            element={
+              <PrivateRoute>
+                <MainLayout>
+                  <Reports />
+                </MainLayout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/reports/newreport"
             element={
               <PrivateRoute>
                 <MainLayout>
@@ -100,6 +112,9 @@ function App() {
               </MainLayout>
             }
           />
+
+          {/* Catch-all route for 404 Not Found */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </Router>

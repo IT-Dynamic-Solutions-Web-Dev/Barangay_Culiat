@@ -1,7 +1,7 @@
 import React from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { CountingNumber } from "../../../components/ui/shadcn-io/counting-number/index";
+import { CountingNumber } from "../../../../components/ui/shadcn-io/counting-number/index";
 import { Users, MapIcon, House, Hammer } from "lucide-react";
 
 const stats = [

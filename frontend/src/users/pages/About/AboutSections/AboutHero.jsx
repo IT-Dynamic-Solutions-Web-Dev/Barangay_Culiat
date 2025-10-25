@@ -1,5 +1,5 @@
 import React from "react";
-import MediaSequence from "../../../components/MediaSequence";
+import MediaSequence from "../../../../components/MediaSequence";
 
 const AboutHero = () => {
    return (

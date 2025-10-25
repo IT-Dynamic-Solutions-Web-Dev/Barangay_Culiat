@@ -43,7 +43,7 @@ const Navbar = () => {
           }`}
         >
           {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2 sm:gap-3">
+          <Link to="/login" className="flex items-center gap-2 sm:gap-3">
             <div className="rounded-full bg-light">
               <img
                 src="/images/logo/brgy-culiat-logo.png"

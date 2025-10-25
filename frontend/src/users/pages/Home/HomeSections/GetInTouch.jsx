@@ -2,7 +2,7 @@ import React from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { MapPin, Clock, FileText } from "lucide-react";
-import Button from "../../../tailadminsrc/components/ui/button/Button";
+import Button from "../../../../tailadminsrc/components/ui/button/Button";
 
 // Animation variants
 const fadeUp = {
