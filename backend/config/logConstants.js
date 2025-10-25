@@ -1,8 +1,6 @@
 // Structured log constants (clean separate file)
 // Prefer importing this (`require('../config/logConstants')`) from controllers.
 
-const { report } = require("../routes/auth");
-
 const LOGCONSTANTS = {
   actions: {
     user: {
@@ -42,13 +40,13 @@ const LOGCONSTANTS = {
       CREATE_RECORD: "CREATE RECORD",
       UPDATE_RECORD: "UPDATE RECORD",
     },
-  },
-  reports: {
-    CREATE_REPORT: "CREATE REPORT",
-    UPDATE_REPORT: "UPDATE REPORT",
-    DELETE_REPORT: "DELETE REPORT",
-    ADD_COMMENTS: "ADD COMMENTS",
-    UPDATE_REPORT_STATUS: "UPDATE REPORT STATUS",
+    reports: {
+      CREATE_REPORT: "CREATE REPORT",
+      UPDATE_REPORT: "UPDATE REPORT",
+      DELETE_REPORT: "DELETE REPORT",
+      ADD_COMMENTS: "ADD COMMENTS",
+      UPDATE_REPORT_STATUS: "UPDATE REPORT STATUS",
+    },
   },
 };
 

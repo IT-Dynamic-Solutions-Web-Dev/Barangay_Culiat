@@ -4,17 +4,11 @@ const logSchema = new mongoose.Schema({
     action: {
         type: String,
         required: true,
-        enum: [
-            'CREATE_ACCOUNT',
-            'REPORT',
-            'USER_ACTION',
-            'BACKUP_DATABASE',
-            'DELETE_DATABASE',
-            'BARANGAY_ID_REQUEST',
-            'BARANGAY_ID_REQUEST_STATUS_UPDATE',
-            'BARANGAY_ID_REQUEST_DELETE',
-            'OTHER'
-        ]
+        // Removed strict enum validation so controllers can use structured
+        // LOGCONSTANTS values (e.g. 'CREATE ANNOUNCEMENT') without Mongoose
+        // validation errors. If you prefer strict enums, sync this list with
+        // `backend/config/logConstants.js`.
+        index: true,
     },
     description: {
         type: String,

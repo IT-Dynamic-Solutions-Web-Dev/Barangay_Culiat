@@ -3,6 +3,12 @@ const ROLES = require("../config/roles");
 const Logs = require("../models/Logs");
 const { LOGCONSTANTS } = require("../config/logConstants");
 
+// helper to map numeric role to role name
+const getRoleName = (code) => {
+  const entry = Object.entries(ROLES).find(([k, v]) => v === code);
+  return entry ? entry[0] : 'Unknown';
+};
+
 // @desc    Create a new report
 // @route   POST /api/reports
 // @access  Private (Resident/Admin)

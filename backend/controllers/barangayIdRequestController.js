@@ -1,6 +1,7 @@
 const BarangayIdRequest = require('../models/BarangayIdRequest');
 const Logs = require('../models/Logs');
 const ROLES = require('../config/roles');
+const { LOGCONSTANTS } = require('../config/logConstants');
 
 const getRoleName = (code) => {
   const entry = Object.entries(ROLES).find(([k, v]) => v === code);
@@ -43,7 +44,7 @@ exports.createBarangayIdRequest = async (req, res) => {
       const performerId = req.user?._id;
       const performerRole = req.user ? getRoleName(req.user.role) : undefined;
       await Logs.create({
-        action: 'BARANGAY_ID_REQUEST',
+        action: LOGCONSTANTS.actions.barangayIdRequest.CREATE_BARANGAY_ID_REQUEST,
         description: `Barangay ID request created: ${request._id}`,
         performedBy: performerId,
         performedByRole: performerRole,
@@ -141,7 +142,7 @@ exports.updateBarangayIdStatus = async (req, res) => {
       const performerId = req.user?._id;
       const performerRole = req.user ? getRoleName(req.user.role) : undefined;
       await Logs.create({
-        action: 'BARANGAY_ID_REQUEST_STATUS_UPDATE',
+        action: LOGCONSTANTS.actions.barangayIdRequest.UPDATE_BARANGAY_ID_REQUEST_STATUS,
         description: `Barangay ID request ${request._id} marked as ${status}`,
         performedBy: performerId,
         performedByRole: performerRole,
@@ -184,7 +185,7 @@ exports.deleteBarangayIdRequest = async (req, res) => {
       const performerId = req.user?._id;
       const performerRole = req.user ? getRoleName(req.user.role) : undefined;
       await Logs.create({
-        action: 'BARANGAY_ID_REQUEST_DELETE',
+        action: LOGCONSTANTS.actions.barangayIdRequest.DELETE_BARANGAY_ID_REQUEST,
         description: `Barangay ID request deleted: ${request._id}`,
         performedBy: performerId,
         performedByRole: performerRole,
