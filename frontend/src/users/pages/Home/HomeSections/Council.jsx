@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { User } from "lucide-react";
-import ImageHover from "../../../components/Animation/ImageHover";
+import ImageHover from "../../../../components/Animation/ImageHover";
 
 const kagawads = [
   {
