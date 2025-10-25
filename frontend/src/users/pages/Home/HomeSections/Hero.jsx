@@ -19,8 +19,8 @@ const fadeUp = {
 
 const Hero = () => {
   return (
-    <section id="home-hero" className="lg:mb-20 mb-0 overflow-hidden">
-      <div className="relative min-h-[550px] md:min-h-[768px] flex overflow-hidden">
+    <section id="home-hero" className="relative lg:mb-20 mb-0 ">
+      <div className="relative min-h-[500px] md:min-h-[680px] flex overflow-hidden">
         <MediaSequence />
 
         {/* Overlay */}
@@ -51,9 +51,9 @@ const Hero = () => {
             whileInView="show"
             viewport={{ once: true }}
             custom={0.3}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-2 md:gap-6"
           >
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-text-color-light leading-tight tracking-tight drop-shadow-lg">
+            <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold text-text-color-light leading-tight tracking-tight drop-shadow-lg">
               <TextChangeShadcn />
             </h1>
 
@@ -63,7 +63,7 @@ const Hero = () => {
               whileInView="show"
               viewport={{ once: true }}
               custom={0.5}
-              className="px-4 md:px-0 sm:text-base text-sm leading-7 md:text-lg text-text-color-light max-w-2xl mx-auto "
+              className="px-4 md:px-0 sm:text-base text-sm md:leading-7 md:text-lg text-text-color-light max-w-2xl mx-auto "
             >
               Your official online public service portal. Access barangay
               services, request documents, and stay updated anytime, anywhere.

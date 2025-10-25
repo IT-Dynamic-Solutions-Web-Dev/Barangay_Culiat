@@ -14,7 +14,7 @@ const stats = [
 const Stat = () => {
   return (
     <section
-      className="lg:absolute lg:-bottom-[3%] lg:left-1/2 lg:-translate-x-1/2 lg:py-0 py-6 w-full px-4 z-10"
+      className="lg:absolute lg:-bottom-[50px] lg:left-1/2 lg:-translate-x-1/2 lg:py-0 py-6 w-full px-4 z-10"
       id="home-stat"
     >
       <div className="max-w-6xl mx-auto">
