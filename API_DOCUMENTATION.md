@@ -336,48 +336,8 @@ Endpoints for residents to request a Barangay ID and for admins to manage those 
 }
 ```
 
-### Get Single Barangay ID Request
-- **URL**: `/barangay-id-requests/:id`
-- **Method**: `GET`
-- **Auth**: Required (Admin only)
-- **Success Response** (200):
-```json
-{
-  "success": true,
-  "data": {
-    "_id": "request_id",
-    "firstName": "string",
-    "middleName": "string",
-    "lastName": "string",
-    "suffix": "string",
-    "completeAddress": "string",
-    "sex": "Male|Female|Other",
-    "placeOfBirth": "string",
-    "dateOfBirth": "date",
-    "citizenship": "string",
-    "civilStatus": "string",
-  "barangayIdNumber": "BID-2025-XXXXXX",
-  "emergencyFirstName": "string",
-  "emergencyMiddleName": "string",
-  "emergencyLastName": "string",
-  "emergencySuffix": "string",
-  "emergencyRelationship": "string",
-  "emergencyContactNumber": "string",
-    "status": "Pending|Approved|Rejected",
-    "requestedAt": "date",
-    "reviewedAt": "date (optional)"
-  }
-}
-```
-
-### Update Barangay ID Request Status
-- **URL**: `/barangay-id-requests/:id/status`
-- **Method**: `PUT`
-- **Auth**: Required (Admin only)
-- **Body**:
-```json
-{
-  "status": "Pending|Approved|Rejected"
+### Barangay ID Request endpoints
+These endpoints and their implementation have been removed from this codebase. If you relied on them, please restore from an earlier commit or contact the maintainers.
 }
 ```
 - **Success Response** (200):

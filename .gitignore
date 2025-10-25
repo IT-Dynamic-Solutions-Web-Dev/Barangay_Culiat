@@ -41,3 +41,8 @@ coverage/
 backend/package.json
 backend/config/db.js
 package.json
+
+# Ignore removed/deprecated Barangay ID request files
+backend/controllers/barangayIdRequestController.js
+backend/controllers/generalFormController.js
+backend/models/GeneralForm.js

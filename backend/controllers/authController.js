@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const ROLES = require('../config/roles');
 const Logs = require('../models/Logs');
+const { LOGCONSTANTS } = require('../config/logConstants');
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -60,7 +61,7 @@ exports.register = async (req, res) => {
     // create audit log for account creation (logged in as self)
     try {
       await Logs.create({
-        action: 'CREATE_ACCOUNT',
+        action: LOGCONSTANTS.actions.user.CREATE_USER,
         description: `User registered: ${user._id} (${user.email})`,
         performedBy: user._id,
         performedByRole: getRoleName(user.role),
@@ -229,7 +230,7 @@ exports.adminRegister = async (req, res) => {
       const performerId = req.user?._id || null;
       const performerRole = req.user ? getRoleName(req.user.role) : undefined;
       await Logs.create({
-        action: 'CREATE_ACCOUNT',
+        action: LOGCONSTANTS.actions.user.CREATE_USER,
         description: `Admin registration: ${user._id} (${user.email}) by ${performerId || 'system'}`,
         performedBy: performerId || user._id,
         performedByRole: performerRole || getRoleName(user.role),

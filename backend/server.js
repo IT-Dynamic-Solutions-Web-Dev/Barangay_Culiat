@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/reports', require('./routes/reportsRoute'));
 app.use('/api/announcements', require('./routes/announcementsRoute'));
-app.use('/api/barangay-id-requests', require('./routes/barangayIdRequestRoutes'));
 app.use('/api/logs', require('./routes/logsRoute'));
 
 // Health check route

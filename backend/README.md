@@ -4,7 +4,7 @@ This document covers the backend service for the Barangay Culiat project (Expres
 
 ## Overview
 
-The backend provides RESTful APIs for authentication, reports, announcements, barangay ID requests, and audit logs. It uses JWT for authentication and a small role-based access control system.
+The backend provides RESTful APIs for authentication, reports, announcements, and audit logs. It uses JWT for authentication and a small role-based access control system.
 
 Tech stack
 - Node.js (CommonJS)
@@ -63,8 +63,8 @@ The server starts on the configured `PORT` (default 5000). API base path is `/ap
 
 - `server.js` — Express app and route mounting
 - `config/db.js` — MongoDB connection helper
-- `controllers/` — Route handlers (auth, reports, announcements, barangayIdRequest, logs, etc.)
-- `models/` — Mongoose schemas (User, Report, Logs, BarangayIdRequest, ...)
+- `controllers/` — Route handlers (auth, reports, announcements, logs, etc.)
+- `models/` — Mongoose schemas (User, Report, Logs, ...)
 - `routes/` — Express routers
 - `seed.js` — Seeder to create sample data
 
@@ -78,14 +78,7 @@ Authentication
 
 Logs / Auditing
 - `GET /api/logs` — List logs (admin/superadmin only)
-- `POST /api/logs` — Create log (admin/superadmin only; server also creates logs automatically for actions like CREATE_ACCOUNT and Barangay ID requests)
-
-Barangay ID Requests
-- `POST /api/barangay-id-requests` — Create request (resident)
-- `GET /api/barangay-id-requests` — List requests (admin)
-- `GET /api/barangay-id-requests/:id` — Get a single request (admin/resident)
-- `PUT /api/barangay-id-requests/:id/status` — Update status (admin)
-- `DELETE /api/barangay-id-requests/:id` — Delete request (admin)
+- `POST /api/logs` — Create log (admin/superadmin only; server also creates logs automatically for actions like CREATE_ACCOUNT)
 
 Reports & Announcements
 - See `routes/` for full list — typical paths: `/api/reports`, `/api/announcements`
