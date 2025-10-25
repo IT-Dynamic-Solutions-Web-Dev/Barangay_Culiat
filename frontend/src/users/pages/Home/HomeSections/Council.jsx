@@ -45,22 +45,19 @@ const Council = () => {
     dots: true,
     infinite: true,
     speed: 600,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2800,
     pauseOnHover: true,
-    responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 1 } },
-    ],
+    // responsive: [
+    //   { breakpoint: 1024, settings: { slidesToShow: 2 } },
+    //   { breakpoint: 768, settings: { slidesToShow: 1 } },
+    // ],
   };
 
   return (
-    <section
-      className="py-20 bg-neutral overflow-hidden md:overflow-visible"
-      id="council"
-    >
+    <section className="py-20 bg-neutral overflow-hidden " id="council">
       <div className="max-w-6xl mx-auto  px-4">
         {/* --- Barangay Captain Section --- */}
         <div className="flex flex-wrap-reverse items-center gap-12 md:gap-[5em] justify-between mb-20 ">
@@ -142,7 +139,7 @@ const Council = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="overflow-hidden"
+          className="overflow-hidden max-w-lg mx-auto"
         >
           <h3 className="text-center text-2xl font-bold text-text-color mb-10">
             Our Dedicated Council Members
