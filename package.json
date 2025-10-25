@@ -23,7 +23,9 @@
   "license": "ISC",
   "dependencies": {
     "lucide-react": "^0.546.0",
-    "mongoose": "^8.19.1"
+    "mongoose": "^8.19.1",
+    "react-slick": "^0.31.0",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "vite-plugin-svgr": "^4.5.0"

@@ -15,6 +15,8 @@ type CountingNumberProps = React.ComponentProps<"span"> & {
   inViewMargin?: UseInViewOptions["margin"];
   inViewOnce?: boolean;
   decimalSeparator?: string;
+  thousandSeparator?: string; // ✅ NEW: allows customizing thousands separator (default ",")
+  useThousandsSeparator?: boolean; // ✅ NEW: toggles formatting in thousands
   transition?: SpringOptions;
   decimalPlaces?: number;
 };
@@ -29,6 +31,8 @@ const CountingNumber = React.forwardRef<HTMLSpanElement, CountingNumberProps>(
       inViewMargin = "0px",
       inViewOnce = true,
       decimalSeparator = ".",
+      thousandSeparator = ",",
+      useThousandsSeparator = false, // ✅ default disabled
       transition = { stiffness: 90, damping: 50 },
       decimalPlaces = 0,
       className,
@@ -71,6 +75,18 @@ const CountingNumber = React.forwardRef<HTMLSpanElement, CountingNumberProps>(
             formatted = formatted.replace(".", decimalSeparator);
           }
 
+          // ✅ Format with thousands separator if enabled
+          if (useThousandsSeparator) {
+            const [intPart, fracPart] = formatted.split(decimalSeparator);
+            const formattedInt = intPart.replace(
+              /\B(?=(\d{3})+(?!\d))/g,
+              thousandSeparator
+            );
+            formatted = fracPart
+              ? `${formattedInt}${decimalSeparator}${fracPart}`
+              : formattedInt;
+          }
+
           if (padStart) {
             const finalIntLength = Math.floor(Math.abs(number)).toString()
               .length;
@@ -85,7 +101,15 @@ const CountingNumber = React.forwardRef<HTMLSpanElement, CountingNumberProps>(
         }
       });
       return () => unsubscribe();
-    }, [springVal, decimals, padStart, number, decimalSeparator]);
+    }, [
+      springVal,
+      decimals,
+      padStart,
+      number,
+      decimalSeparator,
+      thousandSeparator,
+      useThousandsSeparator,
+    ]);
 
     const finalIntLength = Math.floor(Math.abs(number)).toString().length;
     const initialText = padStart

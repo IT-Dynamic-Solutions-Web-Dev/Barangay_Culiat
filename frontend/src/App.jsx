@@ -17,7 +17,7 @@ import Services from "./pages/Services/Services";
 import MainLayout from "./MainLayout/MainLayout";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
-import PolicyPopup from "./components/PolicyPopup"; // 👈 import popup
+import PolicyPopup from "./components/PolicyPopup";
 
 function App() {
   return (
