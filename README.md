@@ -114,6 +114,7 @@ npm run dev
 - `GET /api/logs` - Get audit logs (admin/superadmin only)
 - `POST /api/logs` - Create log entry (admin/superadmin only). The backend also writes logs automatically for key actions such as account creation and barangay ID request lifecycle events.
 
+### TEST LANG TO. DON'T LOOK AT THIS MUCH
 ### Barangay ID Requests
 - `POST /api/barangay-id-requests` - Create barangay ID request (resident)
 - `GET /api/barangay-id-requests` - List requests (admin)
