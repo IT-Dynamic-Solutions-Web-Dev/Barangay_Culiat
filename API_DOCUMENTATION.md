@@ -285,92 +285,158 @@ Example log entry created on account registration:
 
 ---
 
-## Barangay ID Request Endpoints
 
-Endpoints for residents to request a Barangay ID and for admins to manage those requests.
+## Document Request Endpoints
 
-### Create Barangay ID Request
-- **URL**: `/barangay-id-requests`
+These are working most of the time.
+
+### Create Document Request
+- **URL**: `/document-requests`
 - **Method**: `POST`
-- **Auth**: Required (Resident)
-- **Body** (example):
+- **Auth**: Required (Resident/Admin)
+- **Body**:
 ```json
 {
+  "lastName": "string",
   "firstName": "string",
   "middleName": "string (optional)",
-  "lastName": "string",
-  "suffix": "string (optional)",
-  "completeAddress": "string",
-  "sex": "Male|Female|Other",
-  "placeOfBirth": "string",
   "dateOfBirth": "YYYY-MM-DD",
-  "citizenship": "string",
-  "civilStatus": "Single|Married|Widowed|Divorced|Separated",
-  "emergencyFirstName": "string",
-  "emergencyMiddleName": "string (optional)",
-  "emergencyLastName": "string",
-  "emergencySuffix": "string (optional)",
-  "emergencyRelationship": "string",
-  "emergencyContactNumber": "string"
+  "placeOfBirth": "string",
+  "gender": "male|female|other|unspecified",
+  "civilStatus": "single|married|widowed|separated|domestic_partner|other",
+  "nationality": "string",
+  "address": "string",
+  "contactNumber": "string",
+  "emergencyContact": { "fullName": "string", "relationship": "string", "contactNumber": "string", "address": "string" },
+  "documentType": "indigency|residency|clearance|ctc|business_permit|building_permit|good_moral",
+  "purposeOfRequest": "string",
+  "preferredPickupDate": "YYYY-MM-DD",
+  "remarks": "string (optional)",
+  "photo1x1": "picture_id (optional)",
+  "validID": "picture_id (optional)",
 }
 ```
+
+### Notes on photo fields (photo1x1 & validID)
+
+- The fields `photo1x1` and `validID` are not file blobs or URLs; they are ObjectId references to a separate `Picture` document stored in the database. Example value: `"photo1x1": "650a1f2b6d9e4c3b2a1f0e9d"`.
+- This keeps `DocumentRequest` documents small and lets the application centralize file metadata (filename, path/url, mime type, size, uploader, createdAt) in the `Picture` model.
+- Typical flow:
+  1. Upload the file(s) to the upload endpoint: `POST /document-requests/upload` (multipart/form-data). The response contains the created `Picture` document including its `_id`.
+  2. Create the DocumentRequest and set `photo1x1` / `validID` to the returned picture `_id` values.
+  3. When reading a DocumentRequest, the server may `populate` these refs so the response includes picture metadata (and URLs) instead of raw ids.
+
+Example upload response (successful):
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "650a1f2b6d9e4c3b2a1f0e9d",
+    "filename": "650a1f2b6d9e4c3b2a1f0e9d.jpg",
+    "url": "/uploads/document-requests/650a1f2b6d9e4c3b2a1f0e9d.jpg",
+    "mimeType": "image/jpeg",
+    "size": 123456
+  }
+}
+```
+
+If you prefer a single-step flow (upload files and create the request in one multipart/form-data request), the server can be extended to accept files on `POST /document-requests` and perform upload -> create atomically. The current API uses the two-step approach (upload then create) for simplicity and clearer file lifecycle management.
 - **Success Response** (201):
 ```json
 {
   "success": true,
-  "message": "Barangay ID request submitted successfully",
-  "data": { ... }
+  "message": "Document request created successfully",
+  "data": { /* document request object */ }
 }
 ```
 
-### Get All Barangay ID Requests
-- **URL**: `/barangay-id-requests`
+### Get All Document Requests
+- **URL**: `/document-requests`
 - **Method**: `GET`
 - **Auth**: Required (Admin only)
+- **Query Parameters**:
+  - `status`: pending|approved|rejected|completed|cancelled
+  - `documentType`: indigency|residency|clearance|ctc|business_permit|building_permit|good_moral|other
+  - `applicant`: user_id
 - **Success Response** (200):
 ```json
 {
   "success": true,
   "count": 10,
-  "data": [ ... ]
+  "data": [ /* requests */ ]
 }
 ```
 
-### Barangay ID Request endpoints
-These endpoints and their implementation have been removed from this codebase. If you relied on them, please restore from an earlier commit or contact the maintainers.
+### Get My Requests
+- **URL**: `/document-requests/my-requests`
+- **Method**: `GET`
+- **Auth**: Required (Resident)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "count": 3,
+  "data": [ /* user's requests */ ]
 }
+```
+
+### Get Single Document Request
+- **URL**: `/document-requests/:id`
+- **Method**: `GET`
+- **Auth**: Required
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "data": { /* document request object */ }
+}
+```
+
+### Update Document Request
+- **URL**: `/document-requests/:id`
+- **Method**: `PUT`
+- **Auth**: Required (Owner/Admin)
+- **Body**: same fields as create (only included fields are updated)
+- **Success Response** (200):
+```json
+{
+  "success": true,
+  "message": "Document request updated successfully",
+  "data": { /* updated request */ }
+}
+```
+
+### Update Document Request Status
+- **URL**: `/document-requests/:id/status`
+- **Method**: `PUT`
+- **Auth**: Required (Admin)
+- **Body**:
+```json
+{ "status": "pending|approved|rejected|completed|cancelled" }
 ```
 - **Success Response** (200):
 ```json
 {
   "success": true,
-  "message": "Barangay ID request marked as Approved",
-  "data": { ... }
+  "message": "Document request status updated",
+  "data": { /* updated request */ }
 }
 ```
 
-### Delete Barangay ID Request
-- **URL**: `/barangay-id-requests/:id`
+### Delete Document Request
+- **URL**: `/document-requests/:id`
 - **Method**: `DELETE`
-- **Auth**: Required (Admin only)
+- **Auth**: Required (Admin or owner)
 - **Success Response** (200):
 ```json
 {
   "success": true,
-  "message": "Barangay ID request deleted successfully"
+  "message": "Document request deleted successfully"
 }
 ```
-
-### Notes & Error Codes
-- `400` - Bad Request (validation errors when creating requests)
-- `401` - Unauthorized (missing or invalid token)
-- `403` - Forbidden (resident trying to access admin-only endpoints)
-- `404` - Barangay ID request not found
-- `500` - Internal Server Error
-
-Image/photo uploads and proof-of-residency fields are currently commented in the model and not enforced by the controller; they may be added later.
 
 ---
+
 
 ## Logs Endpoints
 
