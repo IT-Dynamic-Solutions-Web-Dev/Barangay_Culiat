@@ -1,15 +1,8 @@
-const mongoose = require("mongoose");
 const DocumentRequest = require("../models/DocumentRequest");
 const Picture = require("../models/Picture");
-const Logs = require("../models/Logs");
-const ROLES = require("../config/roles");
 const { LOGCONSTANTS } = require("../config/logConstants");
-
-// helper to map numeric role to role name
-const getRoleName = (code) => {
-  const entry = Object.entries(ROLES).find(([k, v]) => v === code);
-  return entry ? entry[0] : "Unknown";
-};
+const { getRoleName } = require('../utils/roleHelpers');
+const { logAction } = require('../utils/logHelper');
 
 // @desc    Create a new document request
 // @route   POST /api/document-requests
@@ -39,23 +32,13 @@ exports.createDocumentRequest = async (req, res) => {
       validID: payload.validID,
     });
 
-    // Normalize response: populate photo fields if they are ObjectIds, otherwise wrap as { url }
+    // Wrap photo fields as { url }
     let responseObj = newRequest.toObject ? newRequest.toObject() : newRequest;
     if (responseObj.photo1x1) {
-      if (mongoose.Types.ObjectId.isValid(responseObj.photo1x1)) {
-        const pic = await Picture.findById(responseObj.photo1x1);
-        responseObj.photo1x1 = pic || responseObj.photo1x1;
-      } else {
-        responseObj.photo1x1 = { url: responseObj.photo1x1 };
-      }
+      responseObj.photo1x1 = { url: responseObj.photo1x1 };
     }
     if (responseObj.validID) {
-      if (mongoose.Types.ObjectId.isValid(responseObj.validID)) {
-        const pic = await Picture.findById(responseObj.validID);
-        responseObj.validID = pic || responseObj.validID;
-      } else {
-        responseObj.validID = { url: responseObj.validID };
-      }
+      responseObj.validID = { url: responseObj.validID };
     }
 
     res.status(201).json({
@@ -64,19 +47,11 @@ exports.createDocumentRequest = async (req, res) => {
       data: responseObj,
     });
 
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.records.CREATE_RECORD,
-        description: `Document request created: ${newRequest._id}`,
-        performedBy: req.user?._id,
-        performedByRole: getRoleName(req.user?.role),
-      });
-    } catch (logErr) {
-      console.error(
-        "Failed to create log for document request create:",
-        logErr
-      );
-    }
+    await logAction(
+      LOGCONSTANTS.actions.records.CREATE_RECORD,
+      `Document request created: ${newRequest._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -101,28 +76,16 @@ exports.getAllDocumentRequests = async (req, res) => {
       .populate("applicant", "firstName lastName email")
       .sort({ createdAt: -1 });
 
-    const normalized = await Promise.all(
-      requests.map(async (r) => {
-        const obj = r.toObject ? r.toObject() : r;
-        if (obj.photo1x1) {
-          if (mongoose.Types.ObjectId.isValid(obj.photo1x1)) {
-            const pic = await Picture.findById(obj.photo1x1);
-            obj.photo1x1 = pic || obj.photo1x1;
-          } else {
-            obj.photo1x1 = { url: obj.photo1x1 };
-          }
-        }
-        if (obj.validID) {
-          if (mongoose.Types.ObjectId.isValid(obj.validID)) {
-            const pic = await Picture.findById(obj.validID);
-            obj.validID = pic || obj.validID;
-          } else {
-            obj.validID = { url: obj.validID };
-          }
-        }
-        return obj;
-      })
-    );
+    const normalized = requests.map((r) => {
+      const obj = r.toObject ? r.toObject() : r;
+      if (obj.photo1x1) {
+        obj.photo1x1 = { url: obj.photo1x1 };
+      }
+      if (obj.validID) {
+        obj.validID = { url: obj.validID };
+      }
+      return obj;
+    });
 
     res
       .status(200)
@@ -145,28 +108,16 @@ exports.getMyRequests = async (req, res) => {
       applicant: req.user._id,
     }).sort({ createdAt: -1 });
 
-    const normalized = await Promise.all(
-      requests.map(async (r) => {
-        const obj = r.toObject ? r.toObject() : r;
-        if (obj.photo1x1) {
-          if (mongoose.Types.ObjectId.isValid(obj.photo1x1)) {
-            const pic = await Picture.findById(obj.photo1x1);
-            obj.photo1x1 = pic || obj.photo1x1;
-          } else {
-            obj.photo1x1 = { url: obj.photo1x1 };
-          }
-        }
-        if (obj.validID) {
-          if (mongoose.Types.ObjectId.isValid(obj.validID)) {
-            const pic = await Picture.findById(obj.validID);
-            obj.validID = pic || obj.validID;
-          } else {
-            obj.validID = { url: obj.validID };
-          }
-        }
-        return obj;
-      })
-    );
+    const normalized = requests.map((r) => {
+      const obj = r.toObject ? r.toObject() : r;
+      if (obj.photo1x1) {
+        obj.photo1x1 = { url: obj.photo1x1 };
+      }
+      if (obj.validID) {
+        obj.validID = { url: obj.validID };
+      }
+      return obj;
+    });
 
     res
       .status(200)
@@ -212,20 +163,10 @@ exports.getDocumentRequest = async (req, res) => {
 
     const obj = request.toObject ? request.toObject() : request;
     if (obj.photo1x1) {
-      if (mongoose.Types.ObjectId.isValid(obj.photo1x1)) {
-        const pic = await Picture.findById(obj.photo1x1);
-        obj.photo1x1 = pic || obj.photo1x1;
-      } else {
-        obj.photo1x1 = { url: obj.photo1x1 };
-      }
+      obj.photo1x1 = { url: obj.photo1x1 };
     }
     if (obj.validID) {
-      if (mongoose.Types.ObjectId.isValid(obj.validID)) {
-        const pic = await Picture.findById(obj.validID);
-        obj.validID = pic || obj.validID;
-      } else {
-        obj.validID = { url: obj.validID };
-      }
+      obj.validID = { url: obj.validID };
     }
 
     res.status(200).json({ success: true, data: obj });
@@ -297,19 +238,11 @@ exports.updateDocumentRequest = async (req, res) => {
       data: request,
     });
 
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.records.UPDATE_RECORD,
-        description: `Document request updated: ${request._id}`,
-        performedBy: req.user?._id,
-        performedByRole: getRoleName(req.user?.role),
-      });
-    } catch (logErr) {
-      console.error(
-        "Failed to create log for document request update:",
-        logErr
-      );
-    }
+    await logAction(
+      LOGCONSTANTS.actions.records.UPDATE_RECORD,
+      `Document request updated: ${request._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -345,19 +278,11 @@ exports.updateRequestStatus = async (req, res) => {
       data: request,
     });
 
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.records.UPDATE_RECORD,
-        description: `Document request status updated: ${request._id} to ${status}`,
-        performedBy: req.user?._id,
-        performedByRole: getRoleName(req.user?.role),
-      });
-    } catch (logErr) {
-      console.error(
-        "Failed to create log for document request status update:",
-        logErr
-      );
-    }
+    await logAction(
+      LOGCONSTANTS.actions.records.UPDATE_RECORD,
+      `Document request status updated: ${request._id} to ${status}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -401,19 +326,11 @@ exports.deleteDocumentRequest = async (req, res) => {
       message: "Document request deleted successfully",
     });
 
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.records.DELETE_RECORD || "DELETE RECORD",
-        description: `Document request deleted: ${request._id}`,
-        performedBy: req.user?._id,
-        performedByRole: getRoleName(req.user?.role),
-      });
-    } catch (logErr) {
-      console.error(
-        "Failed to create log for document request delete:",
-        logErr
-      );
-    }
+    await logAction(
+      LOGCONSTANTS.actions.records.DELETE_RECORD || "DELETE RECORD",
+      `Document request deleted: ${request._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,

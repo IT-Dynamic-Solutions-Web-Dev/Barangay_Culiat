@@ -1,13 +1,7 @@
 const Announcement = require('../models/Announcement');
-const Logs = require('../models/Logs');
-const ROLES = require('../config/roles');
 const { LOGCONSTANTS } = require('../config/logConstants');
-
-// helper to map numeric role to role name
-const getRoleName = (code) => {
-  const entry = Object.entries(ROLES).find(([k, v]) => v === code);
-  return entry ? entry[0] : 'Unknown';
-};
+const { getRoleName } = require('../utils/roleHelpers');
+const { logAction } = require('../utils/logHelper');
 
 // @desc    Create new announcement
 // @route   POST /api/announcements
@@ -32,16 +26,11 @@ exports.createAnnouncement = async (req, res) => {
       data: announcement,
     });
 
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.announcements.CREATE_ANNOUNCEMENT,
-        description: `Announcement created: ${announcement._id}`,
-        performedBy: req.user._id,
-        performedByRole: getRoleName(req.user.role),
-      });
-    } catch (logErr) {
-      console.error('Failed to create log for announcement create:', logErr);
-    }
+    await logAction(
+      LOGCONSTANTS.actions.announcements.CREATE_ANNOUNCEMENT,
+      `Announcement created: ${announcement._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -171,17 +160,12 @@ exports.updateAnnouncement = async (req, res) => {
       message: 'Announcement updated successfully',
       data: announcement,
     });
-    // create update log
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.announcements.UPDATE_ANNOUNCEMENT,
-        description: `Announcement updated: ${announcement._id}`,
-        performedBy: req.user._id,
-        performedByRole: getRoleName(req.user.role),
-      });
-    } catch (logErr) {
-      console.error('Failed to create log for announcement update:', logErr);
-    }
+    
+    await logAction(
+      LOGCONSTANTS.actions.announcements.UPDATE_ANNOUNCEMENT,
+      `Announcement updated: ${announcement._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -217,17 +201,12 @@ exports.togglePublish = async (req, res) => {
       message: `Announcement ${announcement.isPublished ? 'published' : 'unpublished'} successfully`,
       data: announcement,
     });
-    // create publish toggle log
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.announcements.TOGGLE_PUBLISH_ANNOUNCEMENT,
-        description: `Announcement ${announcement.isPublished ? 'published' : 'unpublished'}: ${announcement._id}`,
-        performedBy: req.user._id,
-        performedByRole: getRoleName(req.user.role),
-      });
-    } catch (logErr) {
-      console.error('Failed to create log for announcement publish toggle:', logErr);
-    }
+    
+    await logAction(
+      LOGCONSTANTS.actions.announcements.TOGGLE_PUBLISH_ANNOUNCEMENT,
+      `Announcement ${announcement.isPublished ? 'published' : 'unpublished'}: ${announcement._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -258,16 +237,11 @@ exports.deleteAnnouncement = async (req, res) => {
       message: 'Announcement deleted successfully',
     });
     // create delete log
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.announcements.DELETE_ANNOUNCEMENT,
-        description: `Announcement deleted: ${announcement._id}`,
-        performedBy: req.user._id,
-        performedByRole: getRoleName(req.user.role),
-      });
-    } catch (logErr) {
-      console.error('Failed to create log for announcement delete:', logErr);
-    }
+    await logAction(
+      LOGCONSTANTS.actions.announcements.DELETE_ANNOUNCEMENT,
+      `Announcement deleted: ${announcement._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,

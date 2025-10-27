@@ -1,20 +1,14 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const ROLES = require('../config/roles');
-const Logs = require('../models/Logs');
 const { LOGCONSTANTS } = require('../config/logConstants');
+const { getRoleName } = require('../utils/roleHelpers');
+const { logAction} = require('../utils/logHelper');
 
 // Generate JWT Token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
-};
-
-// Helper function to get role name from role code
-const getRoleName = (roleCode) => {
-  const roleEntry = Object.entries(ROLES).find(([name, code]) => code === roleCode);
-  return roleEntry ? roleEntry[0] : 'Unknown';
 };
 
 // @desc    Register a new user
@@ -58,17 +52,13 @@ exports.register = async (req, res) => {
         token,
       },
     });
-    // create audit log for account creation (logged in as self)
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.user.CREATE_USER,
-        description: `User registered: ${user._id} (${user.email})`,
-        performedBy: user._id,
-        performedByRole: getRoleName(user.role),
-      });
-    } catch (logErr) {
-      console.error('Failed to create CREATE_ACCOUNT log:', logErr);
-    }
+    
+    // Create audit log for account creation
+    await logAction(
+      LOGCONSTANTS.actions.user.CREATE_USER,
+      `User registered: ${user._id} (${user.email})`,
+      user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -225,19 +215,15 @@ exports.adminRegister = async (req, res) => {
         token,
       },
     });
-    // create audit log for admin-created account (performed sa req.user kung available)
-    try {
-      const performerId = req.user?._id || null;
-      const performerRole = req.user ? getRoleName(req.user.role) : undefined;
-      await Logs.create({
-        action: LOGCONSTANTS.actions.user.CREATE_USER,
-        description: `Admin registration: ${user._id} (${user.email}) by ${performerId || 'system'}`,
-        performedBy: performerId || user._id,
-        performedByRole: performerRole || getRoleName(user.role),
-      });
-    } catch (logErr) {
-      console.error('Failed to create CREATE_ACCOUNT log for adminRegister:', logErr);
-    }
+    
+    // Create audit log for admin-created account
+    // Use req.user min creating account), otherwise use the new user
+    const performer = req.user || user;
+    await logAction(
+      LOGCONSTANTS.actions.user.CREATE_USER,
+      `Admin registration: ${user._id} (${user.email}) by ${req.user?._id || 'system'}`,
+      performer
+    );
   } catch (error) {
     res.status(500).json({
       success: false,

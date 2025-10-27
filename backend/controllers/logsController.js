@@ -1,4 +1,5 @@
 const Logs = require('../models/Logs');
+const { getRoleName } = require('../utils/roleHelpers');
 
 // @desc Get all logs (admin/superadmin)
 // @route GET /api/logs
@@ -19,14 +20,6 @@ exports.getAllLogs = async (req, res) => {
 // @desc Create a log entry (internal use)
 // @route POST /api/logs
 // @access Private (Admin/SuperAdmin) - typically created by server actions
-const ROLES = require('../config/roles');
-
-// Helper to get role name from code
-const getRoleName = (roleCode) => {
-  const entry = Object.entries(ROLES).find(([name, code]) => code === roleCode);
-  return entry ? entry[0] : undefined;
-};
-
 exports.createLog = async (req, res) => {
   try {
     const { action, description } = req.body;

@@ -1,13 +1,7 @@
 const Report = require("../models/Report");
-const ROLES = require("../config/roles");
-const Logs = require("../models/Logs");
 const { LOGCONSTANTS } = require("../config/logConstants");
-
-// helper to map numeric role to role name
-const getRoleName = (code) => {
-  const entry = Object.entries(ROLES).find(([k, v]) => v === code);
-  return entry ? entry[0] : 'Unknown';
-};
+const { getRoleName } = require('../utils/roleHelpers');
+const { logAction } = require('../utils/logHelper');
 
 // @desc    Create a new report
 // @route   POST /api/reports
@@ -30,16 +24,12 @@ exports.createReport = async (req, res) => {
       message: "Report created successfully",
       data: report,
     });
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.reports.CREATE_REPORT,
-        description: `Report created: ${report._id}`,
-        performedBy: req.user._id,
-        performedByRole: getRoleName(req.user.role),
-      });
-    } catch (logErr) {
-      console.error("Failed to create log for report creation:", logErr);
-    }
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.CREATE_REPORT,
+      `Report created: ${report._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -172,12 +162,12 @@ exports.updateReportStatus = async (req, res) => {
       message: "Report updated successfully",
       data: report,
     });
-    await Logs.create({
-      action: LOGCONSTANTS.actions.reports.UPDATE_STATUS,
-      description: `Report status updated: ${report._id} to ${status}`,
-      performedBy: req.user._id,
-      performedByRole: getRoleName(req.user.role),
-    });
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.UPDATE_STATUS,
+      `Report status updated: ${report._id} to ${status}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -227,12 +217,12 @@ exports.addComment = async (req, res) => {
       message: "Comment added successfully",
       data: report,
     });
-      await Logs.create({
-        action: LOGCONSTANTS.actions.reports.ADD_COMMENTS,
-        description: `Comment added to report: ${report._id}`,
-        performedBy: req.user._id,
-        performedByRole: getRoleName(req.user.role),
-      })
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.ADD_COMMENTS,
+      `Comment added to report: ${report._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -262,16 +252,12 @@ exports.deleteReport = async (req, res) => {
       success: true,
       message: "Report deleted successfully",
     });
-    try {
-      await Logs.create({
-        action: LOGCONSTANTS.actions.reports.DELETE_REPORT,
-        description: `Report deleted: ${report._id}`,
-        performedBy: req.user._id,
-        performedByRole: getRoleName(req.user.role),
-      });
-    } catch (logErr) {
-      console.error("Failed to create log for report deletion:", logErr);
-    }
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.DELETE_REPORT,
+      `Report deleted: ${report._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
