@@ -9,7 +9,7 @@ const DEFAULT_WORDS = [
   { text: "#DangalNgLungsod", className: "" },
   {
     text: "#TatakBarangayCuliat",
-    className: "text-2xl sm:text-5xl lg:text-7xl py-2",
+    className: "text-3xl sm:text-5xl lg:text-7xl py-2",
   },
   { text: "#KalingaSaTao", className: "" },
   { text: "#KalidadsaSerbisyo", className: "" },
