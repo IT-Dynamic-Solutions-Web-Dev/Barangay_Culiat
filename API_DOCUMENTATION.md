@@ -288,7 +288,6 @@ Example log entry created on account registration:
 
 ## Document Request Endpoints
 
-These are working most of the time.
 
 ### Create Document Request
 - **URL**: `/document-requests`
