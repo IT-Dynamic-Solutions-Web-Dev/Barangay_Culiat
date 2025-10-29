@@ -1,18 +1,14 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const ROLES = require('../config/roles');
+const { LOGCONSTANTS } = require('../config/logConstants');
+const { getRoleName } = require('../utils/roleHelpers');
+const { logAction} = require('../utils/logHelper');
 
 // Generate JWT Token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
-};
-
-// Helper function to get role name from role code
-const getRoleName = (roleCode) => {
-  const roleEntry = Object.entries(ROLES).find(([name, code]) => code === roleCode);
-  return roleEntry ? roleEntry[0] : 'Unknown';
 };
 
 // @desc    Register a new user
@@ -43,7 +39,6 @@ exports.register = async (req, res) => {
 
     // Generate token
     const token = generateToken(user._id);
-
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
@@ -56,6 +51,13 @@ exports.register = async (req, res) => {
         token,
       },
     });
+    
+    // Create audit log for account creation
+    await logAction(
+      LOGCONSTANTS.actions.user.CREATE_USER,
+      `User registered: ${user._id} (${user.email})`,
+      user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -228,6 +230,15 @@ exports.adminRegister = async (req, res) => {
         token,
       },
     });
+    
+    // Create audit log for admin-created account
+    // Use req.user (admin creating account), otherwise use the new user
+    const performer = req.user || user;
+    await logAction(
+      LOGCONSTANTS.actions.user.CREATE_USER,
+      `Admin registration: ${user._id} (${user.email}) by ${req.user?._id || 'system'}`,
+      performer
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
