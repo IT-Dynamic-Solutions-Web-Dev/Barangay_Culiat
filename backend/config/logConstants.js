@@ -19,7 +19,7 @@ const LOGCONSTANTS = {
       UPDATE_NEWS: "UPDATE NEWS",
       DELETE_NEWS: "DELETE NEWS",
     },
-    // officials: { Hardcoded sya sa frontend kaya tinanggal ko muna dito
+    // officials: { Hardcoded in the frontend, temporarily removed from here
     //   CREATE_OFFICIAL: 'CREATE OFFICIAL',
     //   UPDATE_OFFICIAL: 'UPDATE OFFICIAL',
     //   DELETE_OFFICIAL: 'DELETE OFFICIAL',

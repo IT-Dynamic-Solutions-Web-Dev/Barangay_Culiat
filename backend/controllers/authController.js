@@ -39,7 +39,6 @@ exports.register = async (req, res) => {
 
     // Generate token
     const token = generateToken(user._id);
-    
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
@@ -217,7 +216,7 @@ exports.adminRegister = async (req, res) => {
     });
     
     // Create audit log for admin-created account
-    // Use req.user min creating account), otherwise use the new user
+    // Use req.user (admin creating account), otherwise use the new user
     const performer = req.user || user;
     await logAction(
       LOGCONSTANTS.actions.user.CREATE_USER,

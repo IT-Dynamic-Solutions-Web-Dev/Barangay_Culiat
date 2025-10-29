@@ -15,5 +15,5 @@ async function logAction(action, description, user) {
 }
 
 module.exports = {
-  logAction
+  logAction,
 };
