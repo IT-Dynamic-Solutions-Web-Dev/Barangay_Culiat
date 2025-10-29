@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import { Bell, Search, Menu, Sun, Moon, LogOut, User } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const Header = ({ toggleSidebar, toggleMobileMenu, isSidebarOpen }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
   };
 
   const notifications = [
@@ -138,16 +147,14 @@ const Header = ({ toggleSidebar, toggleMobileMenu, isSidebarOpen }) => {
             className="flex items-center space-x-2"
           >
             <img
-              src="/images/profiles/profile-01.jpg"
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                user ? `${user.firstName} ${user.lastName}` : "Admin"
+              )}&background=3b82f6&color=fff`}
               alt="Profile"
               className="w-8 h-8 rounded-full"
-              onError={(e) => {
-                e.target.src =
-                  "https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff";
-              }}
             />
             <span className="hidden text-sm font-medium text-gray-700 dark:text-gray-200 md:block">
-              Admin
+              {user ? `${user.firstName} ${user.lastName}` : "Admin"}
             </span>
           </button>
 
@@ -156,10 +163,10 @@ const Header = ({ toggleSidebar, toggleMobileMenu, isSidebarOpen }) => {
             <div className="absolute right-0 z-50 w-48 mt-2 bg-white rounded-lg shadow-lg dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  Admin User
+                  {user ? `${user.firstName} ${user.lastName}` : "Admin User"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  admin@barangay.com
+                  {user?.email || "admin@barangay.com"}
                 </p>
               </div>
               <div className="p-2">
@@ -167,7 +174,9 @@ const Header = ({ toggleSidebar, toggleMobileMenu, isSidebarOpen }) => {
                   <User className="w-4 h-4 mr-2" />
                   Profile
                 </button>
-                <button className="flex items-center w-full px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20">
+                <button 
+                  onClick={handleLogout}
+                  className="flex items-center w-full px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20">
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
                 </button>

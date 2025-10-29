@@ -70,18 +70,18 @@ exports.register = async (req, res) => {
 // @access  Public
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     // Validate input
-    if (!email || !password) {
+    if (!username || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide email and password',
+        message: 'Please provide username and password',
       });
     }
 
     // Find user with password field
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ username }).select('+password');
 
     if (!user || !user.isActive) {
       return res.status(401).json({
@@ -107,10 +107,12 @@ exports.login = async (req, res) => {
       message: 'Login successful',
       data: {
         _id: user._id,
+        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         role: getRoleName(user.role),
+        roleCode: user.role,
         token,
       },
     });
@@ -132,7 +134,19 @@ exports.getMe = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: user,
+      data: {
+        _id: user._id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: getRoleName(user.role),
+        roleCode: user.role,
+        address: user.address,
+        phoneNumber: user.phoneNumber,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -148,10 +162,10 @@ exports.getMe = async (req, res) => {
 // @access  Private
 exports.updateProfile = async (req, res) => {
   try {
-    const { firstName, lastName, address, phoneNumber } = req.body;
+    const { username,firstName, lastName, address, phoneNumber } = req.body;
 
     const user = await User.findById(req.user._id);
-
+    if (username) user.username = username;
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
     if (address) user.address = address;
@@ -175,19 +189,20 @@ exports.updateProfile = async (req, res) => {
 
 exports.adminRegister = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role, address, phoneNumber } = req.body;
+    const { username, firstName, lastName, email, password, role, address, phoneNumber } = req.body;
 
     // Check if user already exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ username });
     if (userExists) {
       return res.status(400).json({
         success: false,
-        message: 'User already exists with this email',
+        message: 'User already exists with this username',
       });
     }
 
     // Create user
     const user = await User.create({
+      username,
       firstName,
       lastName,
       email,
@@ -205,6 +220,7 @@ exports.adminRegister = async (req, res) => {
       message: 'New Super Admin/Admin registered successfully',
       data: {
         _id: user._id,
+        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,

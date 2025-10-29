@@ -12,9 +12,11 @@ import {
   Bell,
   X,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = ({ isOpen, isMobileOpen, closeMobileMenu }) => {
   const location = useLocation();
+  const { user } = useAuth();
 
   const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: Home },
@@ -85,20 +87,21 @@ const Sidebar = ({ isOpen, isMobileOpen, closeMobileMenu }) => {
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
               <img
-                src="/images/profiles/profile-01.jpg"
-                alt="Admin"
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  user ? `${user.firstName} ${user.lastName}` : "Admin"
+                )}&background=3b82f6&color=fff`}
+                alt="Profile"
                 className="w-10 h-10 rounded-full"
-                onError={(e) => {
-                  e.target.src =
-                    "https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff";
-                }}
               />
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                  Admin User
+              <div className="ml-3 flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">
+                  {user ? `${user.firstName} ${user.lastName}` : "Admin User"}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  admin@barangay.com
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  @{user?.username || user?.email || "admin"}
+                </p>
+                <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                  {user?.role || "Admin"}
                 </p>
               </div>
             </div>
@@ -158,20 +161,21 @@ const Sidebar = ({ isOpen, isMobileOpen, closeMobileMenu }) => {
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <img
-              src="/images/profiles/profile-01.jpg"
-              alt="Admin"
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                user ? `${user.firstName} ${user.lastName}` : "Admin"
+              )}&background=3b82f6&color=fff`}
+              alt="Profile"
               className="w-10 h-10 rounded-full"
-              onError={(e) => {
-                e.target.src =
-                  "https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff";
-              }}
             />
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                Admin User
+            <div className="ml-3 flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">
+                {user ? `${user.firstName} ${user.lastName}` : "Admin User"}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                admin@barangay.com
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                @{user?.username || user?.email || "admin"}
+              </p>
+              <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                {user?.role || "Admin"}
               </p>
             </div>
           </div>
