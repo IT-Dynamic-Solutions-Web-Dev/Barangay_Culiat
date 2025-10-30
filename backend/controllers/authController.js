@@ -1,18 +1,14 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const ROLES = require('../config/roles');
+const { LOGCONSTANTS } = require('../config/logConstants');
+const { getRoleName } = require('../utils/roleHelpers');
+const { logAction} = require('../utils/logHelper');
 
 // Generate JWT Token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
-};
-
-// Helper function to get role name from role code
-const getRoleName = (roleCode) => {
-  const roleEntry = Object.entries(ROLES).find(([name, code]) => code === roleCode);
-  return roleEntry ? roleEntry[0] : 'Unknown';
 };
 
 // @desc    Register a new user
@@ -43,7 +39,6 @@ exports.register = async (req, res) => {
 
     // Generate token
     const token = generateToken(user._id);
-
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
@@ -56,6 +51,13 @@ exports.register = async (req, res) => {
         token,
       },
     });
+    
+    // Create audit log for account creation
+    await logAction(
+      LOGCONSTANTS.actions.user.CREATE_USER,
+      `User registered: ${user._id} (${user.email})`,
+      user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -70,18 +72,18 @@ exports.register = async (req, res) => {
 // @access  Public
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     // Validate input
-    if (!email || !password) {
+    if (!username || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide email and password',
+        message: 'Please provide username and password',
       });
     }
 
     // Find user with password field
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ username }).select('+password');
 
     if (!user || !user.isActive) {
       return res.status(401).json({
@@ -107,10 +109,12 @@ exports.login = async (req, res) => {
       message: 'Login successful',
       data: {
         _id: user._id,
+        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         role: getRoleName(user.role),
+        roleCode: user.role,
         token,
       },
     });
@@ -132,7 +136,19 @@ exports.getMe = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: user,
+      data: {
+        _id: user._id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: getRoleName(user.role),
+        roleCode: user.role,
+        address: user.address,
+        phoneNumber: user.phoneNumber,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -148,10 +164,10 @@ exports.getMe = async (req, res) => {
 // @access  Private
 exports.updateProfile = async (req, res) => {
   try {
-    const { firstName, lastName, address, phoneNumber } = req.body;
+    const { username,firstName, lastName, address, phoneNumber } = req.body;
 
     const user = await User.findById(req.user._id);
-
+    if (username) user.username = username;
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
     if (address) user.address = address;
@@ -175,19 +191,20 @@ exports.updateProfile = async (req, res) => {
 
 exports.adminRegister = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role, address, phoneNumber } = req.body;
+    const { username, firstName, lastName, email, password, role, address, phoneNumber } = req.body;
 
     // Check if user already exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ username });
     if (userExists) {
       return res.status(400).json({
         success: false,
-        message: 'User already exists with this email',
+        message: 'User already exists with this username',
       });
     }
 
     // Create user
     const user = await User.create({
+      username,
       firstName,
       lastName,
       email,
@@ -205,6 +222,7 @@ exports.adminRegister = async (req, res) => {
       message: 'New Super Admin/Admin registered successfully',
       data: {
         _id: user._id,
+        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -212,6 +230,15 @@ exports.adminRegister = async (req, res) => {
         token,
       },
     });
+    
+    // Create audit log for admin-created account
+    // Use req.user (admin creating account), otherwise use the new user
+    const performer = req.user || user;
+    await logAction(
+      LOGCONSTANTS.actions.user.CREATE_USER,
+      `Admin registration: ${user._id} (${user.email}) by ${req.user?._id || 'system'}`,
+      performer
+    );
   } catch (error) {
     res.status(500).json({
       success: false,

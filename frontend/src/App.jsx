@@ -17,8 +17,16 @@ import Services from "./users/pages/Services/Services";
 import MainLayout from "./MainLayout/MainLayout";
 import Home from "./users/pages/Home/Home";
 import About from "./users/pages/About/About";
-import PolicyPopup from "./components/PolicyPopup"; // 👈 import popup
+import PolicyPopup from "./components/PolicyPopup";
 import NotFound from "./tailadminsrc/pages/OtherPage/NotFound";
+
+// Admin imports
+import AdminLayout from "./admin/layouts/AdminLayout";
+import AdminDashboard from "./admin/pages/Dashboard/AdminDashboard";
+import AdminReports from "./admin/pages/Reports/AdminReports";
+import AdminAnnouncements from "./admin/pages/Announcements/AdminAnnouncements";
+import AdminUsers from "./admin/pages/Users/AdminUsers";
+import SettingsPage from "./admin/pages/Settings/SettingsPage";
 
 function App() {
   return (
@@ -31,6 +39,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
+          {/* User Dashboard Route */}
           <Route
             path="/dashboard"
             element={
@@ -42,6 +51,24 @@ function App() {
             }
           />
 
+          {/* Admin Routes with AdminLayout */}
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute adminOnly={true}>
+                <AdminLayout />
+              </PrivateRoute>
+            }
+          >
+            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="reports" element={<AdminReports />} />
+            <Route path="announcements" element={<AdminAnnouncements />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+
+          {/* User Routes with MainLayout */}
           <Route
             path="/"
             element={
