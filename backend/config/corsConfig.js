@@ -1,7 +1,7 @@
 const allowedOrigins = require('./allowedOrigins');
 
 const corsConfig = {
-  origin: (origin, callback) => {       // Remove this in development
+  origin: (origin, callback) => {     
     if(allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
