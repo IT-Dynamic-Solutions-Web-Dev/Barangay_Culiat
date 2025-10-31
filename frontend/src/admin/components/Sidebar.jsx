@@ -11,6 +11,7 @@ import {
   Calendar,
   Bell,
   X,
+  UserCheck,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -21,6 +22,7 @@ const Sidebar = ({ isOpen, isMobileOpen, closeMobileMenu }) => {
   const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: Home },
     { name: "Users", path: "/admin/users", icon: Users },
+    { name: "Pending Registrations", path: "/admin/pending-registrations", icon: UserCheck },
     { name: "Reports", path: "/admin/reports", icon: FileText },
     { name: "Announcements", path: "/admin/announcements", icon: Megaphone },
     { name: "Analytics", path: "/admin/analytics", icon: BarChart3 },

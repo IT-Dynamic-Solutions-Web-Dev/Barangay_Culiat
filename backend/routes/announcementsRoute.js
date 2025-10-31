@@ -14,8 +14,8 @@ const ROLES = require('../config/roles');
 
 router.post('/', protect, authorize(ROLES.SuperAdmin), createAnnouncement);
 router.get('/all', protect, authorize(ROLES.SuperAdmin, ROLES.Admin), getAllAnnouncements);
-router.get('/', getPublishedAnnouncements);
-router.get('/:id', protect, getAnnouncement);
+router.get('/', getPublishedAnnouncements); // Public - no auth needed
+router.get('/:id', getAnnouncement); // Public - no auth needed
 router.put('/:id', protect, authorize(ROLES.Admin, ROLES.SuperAdmin), updateAnnouncement);
 router.put('/:id/publish', protect, authorize(ROLES.SuperAdmin, ROLES.Admin), togglePublish);
 router.delete('/:id', protect, authorize(ROLES.SuperAdmin, ROLES.Admin), deleteAnnouncement);

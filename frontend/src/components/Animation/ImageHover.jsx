@@ -33,7 +33,7 @@ const ImageHover = () => {
       >
         <div className="relative rounded-xl overflow-hidden shadow-2xl max-h-[550px]">
           <img
-            src="https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-6/481457033_572251952496279_7892937193905517506_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFaK-ibay8cIHBFxkUFcIbhzhiO2cMa6FXOGI7ZwxroVVI1A9G1A9znzggGOFQQX6fHThuXEpK_9tsQaCX11YuY&_nc_ohc=-rF4C6SYRwkQ7kNvwHwHvya&_nc_oc=Adm8DOLnIB5GRfsDEJCnnU69qMNqM0iquiFYZLYNjJAsJcpuThTLQ7ZXWstfZWehpnI&_nc_zt=23&_nc_ht=scontent.fmnl17-5.fna&_nc_gid=m9LXVWFuYpzb7zQHOde-Hg&oh=00_AffyW6R7NNHc8w2fQA8HFyBEQcV-_hvatplm5KmGMSwMVQ&oe=69017FB0"
+            src="/images/brgy/captain-main.jpg"
             alt="Barangay Captain"
             className="w-full object-cover"
           />
@@ -44,7 +44,7 @@ const ImageHover = () => {
       {/* Floating image that follows cursor */}
       {isHovering && (
         <motion.img
-          src="https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-6/480878973_570497736005034_381990214192133786_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHtDp-vrSFno1oeWdhqvswYXQoAJ3f-Q9RdCgAnd_5D1L6HlIQGcFWF1smpTQ-XHYEJbFmeiDuCsLMYI9zFZIw4&_nc_ohc=AXh3JsccRk8Q7kNvwGdN4qc&_nc_oc=Adl8-nnEWQtwdifICXTTH-BdHKB9WfG8SoKCfmoWi0eZafTno_20jJ2Q5YnJqyeE88c&_nc_zt=23&_nc_ht=scontent.fmnl17-5.fna&_nc_gid=GTOJeBmXjGYa_JydCOslkg&oh=00_AfejW7zuaaMWEsduh6WqMUTbZZxlwKpF0b0_0SozmerhOg&oe=69017105"
+          src="/images/brgy/captain-hover.jpg"
           alt="Captain cursor"
           className="absolute w-54 h-54 rounded-md shadow-xl pointer-events-none"
           style={{

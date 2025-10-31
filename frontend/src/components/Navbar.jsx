@@ -1,13 +1,18 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
+import { User, LogOut, LogIn, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolldown, setisScrolldown] = useState(true);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const isHome = location.pathname === "/";
 
@@ -28,6 +33,30 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isHome, location.pathname]);
 
+  useEffect(() => {
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (showUserMenu && !event.target.closest('.user-menu-container')) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showUserMenu]);
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+    navigate('/');
+  };
+
+  const handleLogin = () => {
+    // Store the current path to redirect back after login
+    sessionStorage.setItem('redirectAfterLogin', location.pathname);
+    navigate('/login');
+  };
+
   return (
     <nav className={`fixed top-0 left-0 w-full z-100 h-auto `}>
       <div
@@ -43,7 +72,7 @@ const Navbar = () => {
           }`}
         >
           {/* Logo */}
-          <Link to="/login" className="flex items-center gap-2 sm:gap-3">
+          <Link to="/signin" className="flex items-center gap-2 sm:gap-3">
             <div className="rounded-full bg-light">
               <img
                 src="/images/logo/brgy-culiat-logo.png"
@@ -93,6 +122,55 @@ const Navbar = () => {
             <NavLink to="/about" className="navlink  text-md ">
               About
             </NavLink>
+
+            {/* User Menu / Login */}
+            {user && user.roleCode === 74934 ? (
+              <div className="relative user-menu-container">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-secondary/10 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                    {user.firstName?.[0]}{user.lastName?.[0]}
+                  </div>
+                  <span className="text-sm">{user.firstName}</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                </button>
+
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-3 border-b border-gray-200">
+                      <p className="text-sm font-semibold text-gray-900">{user.firstName} {user.lastName}</p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                      <p className="text-xs text-blue-600 mt-1">Resident</p>
+                    </div>
+                    <Link
+                      to="/profile"
+                      onClick={() => setShowUserMenu(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <User className="w-4 h-4" />
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+              >
+                <LogIn className="w-4 h-4" />
+                Login
+              </button>
+            )}
           </div>
 
           {/* Mobile menu toggle */}
@@ -153,11 +231,25 @@ const Navbar = () => {
       <div
         className={`absolute top-full w-full md:hidden bg-light shadow-md px-4 space-y-4 font-medium overflow-hidden transition-all duration-600 ${
           isOpen
-            ? "max-h-[400px] py-4 border-t border-text-color/30"
+            ? "max-h-[500px] py-4 border-t border-text-color/30"
             : "max-h-0"
         }
         `}
       >
+        {user && user.roleCode === 74934 && (
+          <div className="pb-3 mb-3 border-b border-gray-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                {user.firstName?.[0]}{user.lastName?.[0]}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{user.firstName} {user.lastName}</p>
+                <p className="text-xs text-gray-500">Resident</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <NavLink
           to="/"
           onClick={() => setIsOpen(false)}
@@ -194,6 +286,40 @@ const Navbar = () => {
         >
           About
         </NavLink>
+
+        {user && user.roleCode === 74934 ? (
+          <>
+            <NavLink
+              to="/profile"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-2 mobile-navlink text-text-color hover:text-secondary pt-3 border-t border-gray-300"
+            >
+              <User className="w-4 h-4" />
+              My Profile
+            </NavLink>
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                handleLogout();
+              }}
+              className="w-full flex items-center gap-2 mobile-navlink text-red-600 hover:text-red-700"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              handleLogin();
+            }}
+            className="w-full flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm mt-3"
+          >
+            <LogIn className="w-4 h-4" />
+            Login
+          </button>
+        )}
       </div>
     </nav>
   );

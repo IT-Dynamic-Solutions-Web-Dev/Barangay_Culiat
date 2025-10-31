@@ -92,6 +92,21 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Check if resident registration is approved
+    if (user.role === 74934 && user.registrationStatus === 'pending') {
+      return res.status(403).json({
+        success: false,
+        message: 'Your registration is pending admin approval. Please wait for approval before logging in.',
+      });
+    }
+
+    if (user.role === 74934 && user.registrationStatus === 'rejected') {
+      return res.status(403).json({
+        success: false,
+        message: `Your registration was rejected. Reason: ${user.rejectionReason || 'Please contact admin for more information.'}`,
+      });
+    }
+
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
@@ -189,6 +204,50 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+// @desc    Change user password
+// @route   PUT /api/auth/change-password
+// @access  Private
+exports.changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    // Validate input
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide current and new password',
+      });
+    }
+
+    // Get user with password
+    const user = await User.findById(req.user._id).select('+password');
+
+    // Check current password
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect',
+      });
+    }
+
+    // Update password
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password changed successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error changing password',
+      error: error.message,
+    });
+  }
+};
+
 exports.adminRegister = async (req, res) => {
   try {
     const { username, firstName, lastName, email, password, role, address, phoneNumber } = req.body;
@@ -243,6 +302,203 @@ exports.adminRegister = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error registering user',
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Register a new resident with proof of residency
+// @route   POST /api/auth/resident-register
+// @access  Public
+exports.residentRegister = async (req, res) => {
+  try {
+    const { firstName, lastName, username, email, password, address, phoneNumber } = req.body;
+
+    // Check if user already exists
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
+    if (userExists) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already exists with this email or username',
+      });
+    }
+
+    // Check if proof of residency was uploaded
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'Proof of residency image is required',
+      });
+    }
+
+    // Create user with pending status
+    const user = await User.create({
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      address,
+      phoneNumber,
+      role: 74934, // Resident
+      registrationStatus: 'pending',
+      proofOfResidency: req.file.path || req.file.filename,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Registration submitted successfully. Please wait for admin approval.',
+      data: {
+        _id: user._id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        registrationStatus: user.registrationStatus,
+      },
+    });
+
+    // Create audit log
+    await logAction(
+      LOGCONSTANTS.actions.user.CREATE_USER,
+      `Resident registration pending: ${user._id} (${user.email})`,
+      user
+    );
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error registering resident',
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Get pending registrations
+// @route   GET /api/auth/pending-registrations
+// @access  Private/Admin
+exports.getPendingRegistrations = async (req, res) => {
+  try {
+    const pendingUsers = await User.find({
+      registrationStatus: 'pending',
+      role: 74934
+    }).select('-password').sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: pendingUsers.length,
+      data: pendingUsers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching pending registrations',
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Approve resident registration
+// @route   PUT /api/auth/approve-registration/:userId
+// @access  Private/Admin
+exports.approveRegistration = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (user.registrationStatus !== 'pending') {
+      return res.status(400).json({
+        success: false,
+        message: 'User registration is not pending',
+      });
+    }
+
+    user.registrationStatus = 'approved';
+    user.isActive = true;
+    user.approvedBy = req.user._id;
+    user.approvedAt = Date.now();
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Registration approved successfully',
+      data: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        registrationStatus: user.registrationStatus,
+      },
+    });
+
+    // Create audit log
+    await logAction(
+      LOGCONSTANTS.actions.user.UPDATE_USER,
+      `Approved resident registration: ${user._id} (${user.email})`,
+      req.user
+    );
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error approving registration',
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Reject resident registration
+// @route   PUT /api/auth/reject-registration/:userId
+// @access  Private/Admin
+exports.rejectRegistration = async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (user.registrationStatus !== 'pending') {
+      return res.status(400).json({
+        success: false,
+        message: 'User registration is not pending',
+      });
+    }
+
+    user.registrationStatus = 'rejected';
+    user.rejectionReason = reason || 'Registration rejected by admin';
+    user.isActive = false;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Registration rejected successfully',
+      data: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        registrationStatus: user.registrationStatus,
+        rejectionReason: user.rejectionReason,
+      },
+    });
+
+    // Create audit log
+    await logAction(
+      LOGCONSTANTS.actions.user.UPDATE_USER,
+      `Rejected resident registration: ${user._id} (${user.email}) - Reason: ${reason}`,
+      req.user
+    );
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error rejecting registration',
       error: error.message,
     });
   }
