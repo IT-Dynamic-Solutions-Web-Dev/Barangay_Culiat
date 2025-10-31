@@ -46,3 +46,5 @@ package.json
 backend/controllers/barangayIdRequestController.js
 backend/controllers/generalFormController.js
 backend/models/GeneralForm.js
+
+docs/
