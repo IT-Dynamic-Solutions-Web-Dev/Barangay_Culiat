@@ -48,6 +48,32 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  // Resident Registration Approval Fields
+  registrationStatus: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: function() {
+      // Auto-approve admins, pending for residents
+      return this.role === 74934 ? 'pending' : 'approved';
+    }
+  },
+  proofOfResidency: {
+    type: String, // URL/path to uploaded image
+    default: null,
+  },
+  rejectionReason: {
+    type: String,
+    default: null,
+  },
+  approvedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null,
+  },
+  approvedAt: {
+    type: Date,
+    default: null,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

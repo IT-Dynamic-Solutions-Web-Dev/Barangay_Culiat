@@ -26,7 +26,12 @@ import AdminDashboard from "./admin/pages/Dashboard/AdminDashboard";
 import AdminReports from "./admin/pages/Reports/AdminReports";
 import AdminAnnouncements from "./admin/pages/Announcements/AdminAnnouncements";
 import AdminUsers from "./admin/pages/Users/AdminUsers";
+import PendingRegistrations from "./admin/pages/Users/PendingRegistrations";
 import SettingsPage from "./admin/pages/Settings/SettingsPage";
+
+// Resident Auth
+import ResidentAuth from "./users/pages/Auth/ResidentAuth";
+import Profile from "./users/pages/Profile/Profile";
 
 function App() {
   return (
@@ -36,8 +41,12 @@ function App() {
         {typeof window !== "undefined" && <PolicyPopup />}
 
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* Admin Login */}
+          <Route path="/signin" element={<Login />} />
+          
+          {/* Resident Login/Registration */}
+          <Route path="/login" element={<ResidentAuth />} />
+          <Route path="/register" element={<ResidentAuth />} />
 
           {/* User Dashboard Route */}
           <Route
@@ -46,6 +55,18 @@ function App() {
               <PrivateRoute>
                 <MainLayout>
                   <Dashboard />
+                </MainLayout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* User Profile Route */}
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <MainLayout>
+                  <Profile />
                 </MainLayout>
               </PrivateRoute>
             }
@@ -65,6 +86,7 @@ function App() {
             <Route path="reports" element={<AdminReports />} />
             <Route path="announcements" element={<AdminAnnouncements />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="pending-registrations" element={<PendingRegistrations />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
 
@@ -81,43 +103,35 @@ function App() {
           <Route
             path="/reports"
             element={
-              <PrivateRoute>
-                <MainLayout>
-                  <Reports />
-                </MainLayout>
-              </PrivateRoute>
+              <MainLayout>
+                <Reports />
+              </MainLayout>
             }
           />
 
           <Route
             path="/reports/newreport"
             element={
-              <PrivateRoute>
-                <MainLayout>
-                  <NewReport />
-                </MainLayout>
-              </PrivateRoute>
+              <MainLayout>
+                <NewReport />
+              </MainLayout>
             }
           />
 
           <Route
             path="/announcements"
             element={
-              <PrivateRoute>
-                <MainLayout>
-                  <Announcements />
-                </MainLayout>
-              </PrivateRoute>
+              <MainLayout>
+                <Announcements />
+              </MainLayout>
             }
           />
           <Route
             path="/announcements/:slug"
             element={
-              <PrivateRoute>
-                <MainLayout>
-                  <AnnouncementDetail />
-                </MainLayout>
-              </PrivateRoute>
+              <MainLayout>
+                <AnnouncementDetail />
+              </MainLayout>
             }
           />
           <Route

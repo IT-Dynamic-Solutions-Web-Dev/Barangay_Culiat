@@ -4,7 +4,7 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 // API URL from environment variables
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           
           // Verify token is still valid by fetching user data
-          const response = await axios.get(`${API_URL}/api/auth/me`);
+          const response = await axios.get(`${API_URL}/auth/me`);
           const currentUser = response.data.data;
           
           // Update user data with fresh data from server
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/login`, {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         username,
         password,
       });
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, userData);
+      const response = await axios.post(`${API_URL}/auth/register`, userData);
       const { data } = response.data;
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data));
@@ -110,6 +110,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    setUser,
     loading,
     login,
     register,
