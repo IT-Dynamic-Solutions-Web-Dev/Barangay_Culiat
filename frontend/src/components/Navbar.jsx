@@ -10,12 +10,13 @@ const Navbar = () => {
   const location = useLocation();
 
   const isHome = location.pathname === "/";
+  const isAbout = location.pathname === "/about";
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      if (isHome && currentScrollY < 250) {
+      if ((isHome || isAbout) && currentScrollY < 250) {
         setisScrolldown(false);
       } else {
         setisScrolldown(true);
@@ -26,7 +27,7 @@ const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHome, location.pathname]);
+  }, [isHome, isAbout, location.pathname]);
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-100 h-auto `}>
