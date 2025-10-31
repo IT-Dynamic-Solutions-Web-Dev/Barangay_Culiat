@@ -7,7 +7,8 @@ import {
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./tailadminsrc/pages/AuthPages/SignIn";
-import Register from "./tailadminsrc/pages/AuthPages/SignUp";
+import Register from "./users/pages/Auth/Register";
+import RegistrationPending from "./users/pages/Auth/RegistrationPending";
 import Dashboard from "./users/pages/Home/Dashboard";
 import Reports from "./users/pages/Reports/Reports";
 import NewReport from "./users/pages/Reports/NewReport";
@@ -28,6 +29,7 @@ import AdminAnnouncements from "./admin/pages/Announcements/AdminAnnouncements";
 import AdminUsers from "./admin/pages/Users/AdminUsers";
 import PendingRegistrations from "./admin/pages/Users/PendingRegistrations";
 import SettingsPage from "./admin/pages/Settings/SettingsPage";
+import AdminDocuments from "./admin/pages/Documents/AdminDocuments";
 
 // Resident Auth
 import ResidentAuth from "./users/pages/Auth/ResidentAuth";
@@ -46,7 +48,8 @@ function App() {
           
           {/* Resident Login/Registration */}
           <Route path="/login" element={<ResidentAuth />} />
-          <Route path="/register" element={<ResidentAuth />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/registration-pending" element={<RegistrationPending />} />
 
           {/* User Dashboard Route */}
           <Route
@@ -85,6 +88,7 @@ function App() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="reports" element={<AdminReports />} />
             <Route path="announcements" element={<AdminAnnouncements />} />
+            <Route path="documents" element={<AdminDocuments />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="pending-registrations" element={<PendingRegistrations />} />
             <Route path="settings" element={<SettingsPage />} />

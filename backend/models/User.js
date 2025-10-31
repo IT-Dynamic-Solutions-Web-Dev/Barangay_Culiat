@@ -90,6 +90,184 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  // Additional Personal Information (from application form)
+  middleName: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  suffix: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  dateOfBirth: {
+    type: Date,
+    default: null,
+  },
+  placeOfBirth: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  gender: {
+    type: String,
+    enum: ['Male', 'Female', 'Other', null],
+    default: null,
+  },
+  civilStatus: {
+    type: String,
+    enum: ['Single', 'Married', 'Widowed', 'Separated', 'Divorced', null],
+    default: null,
+  },
+  nationality: {
+    type: String,
+    default: 'Filipino',
+    trim: true,
+  },
+  tinNumber: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  sssGsisNumber: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  precinctNumber: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  religion: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  heightWeight: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  colorOfHairEyes: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  occupation: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  // Spouse Information
+  spouseInfo: {
+    name: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    occupation: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    contactNumber: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+  },
+  // Emergency Contact Information with Atomic Address
+  emergencyContact: {
+    fullName: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    relationship: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    contactNumber: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    address: {
+      country: {
+        type: String,
+        default: 'Philippines',
+      },
+      region: {
+        type: String,
+        default: 'National Capital Region',
+      },
+      province: {
+        type: String,
+        default: 'Metro Manila',
+      },
+      city: {
+        type: String,
+        default: 'Quezon City',
+      },
+      barangay: {
+        type: String,
+        default: 'Culiat',
+      },
+      postalCode: {
+        type: String,
+        default: '1128',
+      },
+      subdivision: {
+        type: String,
+        trim: true,
+        default: null,
+      },
+      street: {
+        type: String,
+        trim: true,
+        default: null,
+      },
+      houseNumber: {
+        type: String,
+        trim: true,
+        default: null,
+      },
+    },
+  },
+  // Valid ID Upload (for registration verification)
+  validID: {
+    url: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    filename: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    originalName: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    mimeType: {
+      type: String,
+      enum: ['image/jpeg', 'image/jpg', 'image/png', null],
+      default: null,
+    },
+    fileSize: {
+      type: Number,
+      default: null,
+    },
+    uploadedAt: {
+      type: Date,
+      default: null,
+    },
+  },
   isActive: {
     type: Boolean,
     default: true,
@@ -104,7 +282,7 @@ const userSchema = new mongoose.Schema({
     }
   },
   proofOfResidency: {
-    type: String, // URL/path to uploaded image
+    type: String, // URL/path to uploaded image (deprecated - use validID instead)
     default: null,
   },
   rejectionReason: {

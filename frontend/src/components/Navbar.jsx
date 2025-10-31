@@ -130,7 +130,7 @@ const Navbar = () => {
                      About
                   </NavLink>
 
-                  {/* User Menu / Login */}
+                  {/* User Menu / Login & Register */}
                   {user && user.roleCode === 74934 ? (
                      <div className="relative user-menu-container">
                         <button
@@ -181,13 +181,21 @@ const Navbar = () => {
                         )}
                      </div>
                   ) : (
-                     <button
-                        onClick={handleLogin}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                     >
-                        <LogIn className="w-4 h-4" />
-                        Login
-                     </button>
+                     <div className="flex items-center gap-3">
+                        <button
+                           onClick={handleLogin}
+                           className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors text-sm font-semibold"
+                        >
+                           <LogIn className="w-4 h-4" />
+                           Login
+                        </button>
+                        <Link
+                           to="/register"
+                           className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
+                        >
+                           Register
+                        </Link>
+                     </div>
                   )}
                </div>
 
@@ -330,16 +338,25 @@ const Navbar = () => {
                   </button>
                </>
             ) : (
-               <button
-                  onClick={() => {
-                     setIsOpen(false);
-                     handleLogin();
-                  }}
-                  className="w-full flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm mt-3"
-               >
-                  <LogIn className="w-4 h-4" />
-                  Login
-               </button>
+               <div className="flex flex-col gap-3 pt-3 border-t border-gray-300">
+                  <button
+                     onClick={() => {
+                        setIsOpen(false);
+                        handleLogin();
+                     }}
+                     className="w-full flex items-center justify-center gap-2 px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm font-semibold"
+                  >
+                     <LogIn className="w-4 h-4" />
+                     Login
+                  </button>
+                  <Link
+                     to="/register"
+                     onClick={() => setIsOpen(false)}
+                     className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
+                  >
+                     Register
+                  </Link>
+               </div>
             )}
          </div>
       </nav>

@@ -18,7 +18,14 @@ const Login = () => {
     const result = await login(email, password);
 
     if (result.success) {
-      navigate("/dashboard");
+      // Check for redirect path, otherwise go to home
+      const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+      if (redirectPath && redirectPath !== '/login' && redirectPath !== '/register') {
+        sessionStorage.removeItem('redirectAfterLogin');
+        navigate(redirectPath);
+      } else {
+        navigate("/");
+      }
     } else {
       setError(result.message);
     }

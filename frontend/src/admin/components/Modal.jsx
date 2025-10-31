@@ -28,10 +28,12 @@ const Modal = ({
     lg: "max-w-lg",
     xl: "max-w-xl",
     "2xl": "max-w-2xl",
+    "3xl": "max-w-3xl",
+    "4xl": "max-w-4xl",
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/30">
       <div
         className={`w-full ${sizeClasses[size]} bg-white rounded-lg shadow-xl dark:bg-gray-800 max-h-[90vh] flex flex-col`}
       >
