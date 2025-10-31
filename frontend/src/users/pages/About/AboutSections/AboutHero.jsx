@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import MediaSequence from "../../../../components/MediaSequence";
 
 import TextChangeAbout from "../../../../components/Animation/TextChangeAbout";
@@ -18,8 +19,15 @@ const fadeUp = {
 };
 
 const Hero = () => {
+   const location = useLocation();
+   const [resetKey, setResetKey] = React.useState(0);
+
+   React.useEffect(() => {
+      setResetKey((prev) => prev + 1);
+   }, [location.pathname]);
+
    return (
-      <section id="home-hero" className="relative lg:mb-0 mb-0 ">
+      <section id="home-hero" className="relative lg:mb-0 mb-0 " key={resetKey}>
          <div className="relative min-h-[500px] md:min-h-[680px] flex overflow-hidden">
             <MediaSequence />
 
@@ -37,8 +45,7 @@ const Hero = () => {
                <motion.div
                   variants={fadeUp}
                   initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
+                  animate="show"
                   custom={0.1}
                >
                   <Header />
@@ -48,8 +55,7 @@ const Hero = () => {
                <motion.div
                   variants={fadeUp}
                   initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
+                  animate="show"
                   custom={0.3}
                   className="flex flex-col gap-2 md:gap-6"
                >
@@ -60,8 +66,7 @@ const Hero = () => {
                   <motion.p
                      variants={fadeUp}
                      initial="hidden"
-                     whileInView="show"
-                     viewport={{ once: true }}
+                     animate="show"
                      custom={0.5}
                      className="px-4 md:px-0 sm:text-base text-sm md:leading-7 md:text-lg text-text-color-light max-w-2xl mx-auto "
                   >

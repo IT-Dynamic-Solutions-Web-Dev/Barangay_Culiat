@@ -1,4 +1,20 @@
 import React from "react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+
+const container = {
+   hidden: {},
+   show: {
+      transition: {
+         staggerChildren: 0.2,
+      },
+   },
+};
+
+const item = {
+   hidden: { opacity: 0, y: 40 },
+   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
 
 const barangayData = {
    vision: {
@@ -21,9 +37,17 @@ const MissionAndVision = () => {
    return (
       <section id="about-missionvision" className="py-16 px-6 bg-neutral">
          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-               {/* Our Vision Card */}
-               <div className="bg-white rounded-xl p-6 md:p-8 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col">
+            <motion.div
+               variants={container}
+               initial="hidden"
+               whileInView="show"
+               viewport={{ once: true, amount: 0.2 }}
+               className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
+            >
+               <motion.div
+                  variants={item}
+                  className="bg-white rounded-xl p-6 md:p-8 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
+               >
                   <div className="mb-3">
                      <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
                         {vision.header}
@@ -39,10 +63,12 @@ const MissionAndVision = () => {
                         {vision.content}
                      </p>
                   </div>
-               </div>
+               </motion.div>
 
-               {/* Our Mission Card */}
-               <div className="bg-white rounded-xl p-6 md:p-8 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col">
+               <motion.div
+                  variants={item}
+                  className="bg-white rounded-xl p-6 md:p-8 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
+               >
                   <div className="mb-3">
                      <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
                         {mission.header}
@@ -58,8 +84,8 @@ const MissionAndVision = () => {
                         {mission.content}
                      </p>
                   </div>
-               </div>
-            </div>
+               </motion.div>
+            </motion.div>
          </div>
       </section>
    );

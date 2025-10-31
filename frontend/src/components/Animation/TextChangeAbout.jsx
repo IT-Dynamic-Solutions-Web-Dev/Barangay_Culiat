@@ -12,7 +12,8 @@ const DEFAULT_WORDS = [
       className: "text-3xl sm:text-5xl lg:text-7xl py-2",
    },
    { text: "#KilalaninAngCuliat", className: "" },
-   { text: "#OurCoreValues", className: "" },
+   { text: "#KnowOurVision", className: "" },
+   { text: "#KnowOurMission", className: "" },
 ];
 
 export default function TextChangeShadcn({

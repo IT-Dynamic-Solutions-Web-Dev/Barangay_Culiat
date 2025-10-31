@@ -1,6 +1,7 @@
 import React from "react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
-// Static contents
 const historyData = {
    title: "The Rich History of Barangay Culiat",
    paragraph1:
@@ -21,8 +22,13 @@ const History = () => {
       >
          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-               {/* Text Content */}
-               <div className="order-2 lg:order-1 flex flex-col space-y-5 lg:pr-10">
+               <motion.div
+                  initial={{ opacity: 0, y: 60 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  className="order-2 lg:order-1 flex flex-col space-y-5 lg:pr-10"
+               >
                   <h2 className="text-3xl md:text-4xl font-bold text-text-color-light leading-tight">
                      {title}
                   </h2>
@@ -35,16 +41,21 @@ const History = () => {
                   <p className="text-neutral/90 leading-relaxed">
                      {paragraph3}
                   </p>
-               </div>
+               </motion.div>
 
-               {/*Image */}
-               <div className="order-1 lg:order-2 w-full h-80 md:h-96 lg:h-[500px] rounded-lg overflow-hidden shadow-xl">
+               <motion.div
+                  initial={{ opacity: 0, x: 60 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  className="order-1 lg:order-2 w-full h-80 md:h-96 lg:h-[500px] rounded-lg overflow-hidden shadow-xl"
+               >
                   <img
                      src="https://picsum.photos/seed/historyculiat/800/600"
                      alt="Historical image of Barangay Culiat"
                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   />
-               </div>
+               </motion.div>
             </div>
          </div>
 

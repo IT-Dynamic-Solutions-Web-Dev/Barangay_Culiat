@@ -1,7 +1,22 @@
 import React, { useState } from "react";
 import { Facebook, Mail, Phone } from "lucide-react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
-// Reusable function for the click-to-copy logic
+const container = {
+   hidden: {},
+   show: {
+      transition: {
+         staggerChildren: 0.1,
+      },
+   },
+};
+
+const item = {
+   hidden: { opacity: 0, y: 40 },
+   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+
 const handleCopy = (value, type) => {
    if (navigator.clipboard && value) {
       navigator.clipboard.writeText(value);
@@ -109,8 +124,8 @@ const organizationMembersData = {
       "Leadership and key personnel driving Barangay Culiat's initiatives forward.",
    members: [
       {
-         name: "Hon. Juan Dela Cruz",
-         position: "Punong Barangay (Village Chief)",
+         name: "Hon. Cristina V. Bernardino",
+         position: "Punong Barangay (Barangay Captain)",
          image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
          isMain: true,
          fb: "https://facebook.com/juan.delacruz.official",
@@ -213,28 +228,42 @@ const OrganizationMembers = () => {
    return (
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Section Header */}
-
-            <div className="text-center mb-8">
+            <motion.div
+               initial={{ opacity: 0, y: 40 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.6, ease: "easeOut" }}
+               viewport={{ once: true }}
+               className="text-center mb-8"
+            >
                <h2 className="text-3xl font-bold text-[#262626] mb-4">
                   {organizationMembersData.title}
                </h2>
                <p className="text-[#6c6c6c]">
                   {organizationMembersData.description}
                </p>
-            </div>
+            </motion.div>
 
-            {/* Main Member (Punong Barangay) */}
             {mainMember && (
-               <div className="flex justify-center mb-10 md:mb-16">
+               <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  viewport={{ once: true }}
+                  className="flex justify-center mb-10 md:mb-16"
+               >
                   <div className="w-full sm:w-2/3 lg:w-1/3 text-center">
                      <MemberCard member={mainMember} />
                   </div>
-               </div>
+               </motion.div>
             )}
 
-            {/* Other Members*/}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            <motion.div
+               variants={container}
+               initial="hidden"
+               whileInView="show"
+               viewport={{ once: true, amount: 0.1 }}
+               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
+            >
                {otherMembers.map((member, index) => {
                   const isSingleLastItem = otherMembers.length % 3 === 1;
                   const isLastItemInPartialRow =
@@ -246,15 +275,16 @@ const OrganizationMembers = () => {
                   }
 
                   return (
-                     <div
+                     <motion.div
                         key={member.name}
+                        variants={item}
                         className={`w-full ${centeringClass}`}
                      >
                         <MemberCard member={member} />
-                     </div>
+                     </motion.div>
                   );
                })}
-            </div>
+            </motion.div>
          </div>
       </section>
    );
