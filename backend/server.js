@@ -27,6 +27,8 @@ app.use('/api/reports', require('./routes/reportsRoute'));
 app.use('/api/announcements', require('./routes/announcementsRoute'));
 app.use('/api/logs', require('./routes/logsRoute'));
 app.use('/api/document-requests', require('./routes/documentRequestRoute'));
+// V2 routes with atomic address and file validation
+app.use('/api/v2/document-requests', require('./routes/documentRequestRoute_v2'));
 
 // Health check route
 app.get('/api/health', (req, res) => {

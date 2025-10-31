@@ -36,9 +36,55 @@ const userSchema = new mongoose.Schema({
     default: 74934, // Default to Resident
     enum: [74932, 74933, 74934] // Valid role codes (SuperAdmin, Admin, Resident)
   },
+  // Atomic Address Structure
   address: {
-    type: String,
-    trim: true,
+    // Fixed Barangay Culiat Location
+    country: {
+      type: String,
+      default: 'Philippines',
+      immutable: true,
+    },
+    region: {
+      type: String,
+      default: 'National Capital Region',
+      immutable: true,
+    },
+    province: {
+      type: String,
+      default: 'Metro Manila',
+      immutable: true,
+    },
+    city: {
+      type: String,
+      default: 'Quezon City',
+      immutable: true,
+    },
+    barangay: {
+      type: String,
+      default: 'Culiat',
+      immutable: true,
+    },
+    postalCode: {
+      type: String,
+      default: '1128',
+      immutable: true,
+    },
+    // User-specific address details
+    subdivision: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    street: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    houseNumber: {
+      type: String,
+      trim: true,
+      default: null,
+    },
   },
   phoneNumber: {
     type: String,
@@ -96,5 +142,36 @@ userSchema.pre('save', async function(next) {
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
+
+// Virtual for full formatted address
+userSchema.virtual('fullAddress').get(function() {
+  const parts = [];
+  
+  if (this.address.houseNumber) parts.push(this.address.houseNumber);
+  if (this.address.street) parts.push(this.address.street);
+  if (this.address.subdivision) parts.push(this.address.subdivision);
+  if (this.address.barangay) parts.push(`Barangay ${this.address.barangay}`);
+  if (this.address.city) parts.push(this.address.city);
+  if (this.address.province) parts.push(this.address.province);
+  if (this.address.postalCode) parts.push(this.address.postalCode);
+  if (this.address.country) parts.push(this.address.country);
+  
+  return parts.join(', ');
+});
+
+// Method to get short address (user-specific part only)
+userSchema.methods.getShortAddress = function() {
+  const parts = [];
+  
+  if (this.address.houseNumber) parts.push(this.address.houseNumber);
+  if (this.address.street) parts.push(this.address.street);
+  if (this.address.subdivision) parts.push(this.address.subdivision);
+  
+  return parts.length > 0 ? parts.join(', ') : 'Address not provided';
+};
+
+// Ensure virtuals are included in JSON
+userSchema.set('toJSON', { virtuals: true });
+userSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model('User', userSchema);
