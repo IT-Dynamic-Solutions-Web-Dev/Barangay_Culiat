@@ -223,7 +223,6 @@ const OrganizationMembers = () => {
       (member) => !member.isMain
    );
 
-   const lastRowItemsCount = otherMembers.length % 3;
 
    return (
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
