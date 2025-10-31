@@ -17,7 +17,7 @@ const layuninData = [
       items: [
          "Pagpapatupad ng mabilis at makabagong proseso sa pagkuha ng mga permit at lisensya.",
          "Pag-oorganisa ng mga seminar at pagsasanay kasama ang mga negosyante, NGO, at iba pang organisasyon.",
-         'Pagbuo ng database ng mga "underemployed" para for mas mahusay na pagtutugma ng trabaho.',
+         'Pagbuo ng database ng mga "underemployed" para sa mas mahusay na pagtutugma ng trabaho.',
       ],
     },
     {
