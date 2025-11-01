@@ -2,33 +2,56 @@
 const path = require('path');
 const fs = require('fs');
 
-// Ensure uploads directory exists
-const uploadDir = 'uploads/proofs';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Ensure upload directories exist
+const uploadDirs = {
+  proofs: 'uploads/proofs',
+  validIDs: 'uploads/validIDs',
+  documents: 'uploads/documents',
+  photos: 'uploads/photos',
+};
 
-// Configure storage
+// Create directories if they don't exist
+Object.values(uploadDirs).forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
+// Configure storage with dynamic destination
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    let uploadDir = uploadDirs.proofs; // default
+    
+    // Determine directory based on field name
+    if (file.fieldname === 'validID') {
+      uploadDir = uploadDirs.validIDs;
+    } else if (file.fieldname === 'photo1x1') {
+      uploadDir = uploadDirs.photos;
+    } else if (file.fieldname === 'supportingDocuments') {
+      uploadDir = uploadDirs.documents;
+    } else if (file.fieldname === 'proofOfResidency') {
+      uploadDir = uploadDirs.proofs;
+    }
+    
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'proof-' + uniqueSuffix + path.extname(file.originalname));
+    const prefix = file.fieldname || 'file';
+    cb(null, prefix + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-// File filter to accept only images
+// File filter to accept only images (JPG, JPEG, PNG only for strict validation)
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif|webp/;
+  const allowedTypes = /jpeg|jpg|png/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = allowedTypes.test(file.mimetype);
 
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(new Error('Only image files are allowed'));
+    cb(new Error('Only JPG, JPEG, and PNG files are allowed'));
   }
 };
 
@@ -36,7 +59,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024
+    fileSize: 5 * 1024 * 1024 // 5MB
   },
   fileFilter: fileFilter
 });

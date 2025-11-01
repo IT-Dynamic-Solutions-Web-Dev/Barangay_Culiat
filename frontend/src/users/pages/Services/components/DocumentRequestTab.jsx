@@ -1,6 +1,5 @@
 import React from "react";
-import { FileText, Building } from "lucide-react";
-import DatePicker from "../../../../tailadminsrc/components/form/date-picker";
+import { FileText, Building, Calendar } from "lucide-react";
 
 const DOCUMENT_TYPES = [
   { value: "indigency", label: "Certificate of Indigency" },
@@ -223,18 +222,22 @@ export default function DocumentRequestTab({ formData, setField, errors, isBusin
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
-            <label className="block text-sm font-medium text-[var(--color-text-color)]">
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
               Preferred Date of Pickup
             </label>
-            <DatePicker
-              id="preferredPickupDate"
-              name="preferredPickupDate"
-              placeholder="Select a date"
-              value={formData.preferredPickupDate}
-              onChange={onChange}
-              variant="preferDate"
-              className="mt-1 block w-full rounded-md border px-3 py-2 outline-none transition border-[var(--color-neutral-active)]"
-            />
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Calendar className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+              </div>
+              <input
+                type="date"
+                id="preferredPickupDate"
+                name="preferredPickupDate"
+                value={formData.preferredPickupDate}
+                onChange={onChange}
+                className="block w-full pl-10 pr-3 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-600 focus:bg-white transition-all duration-200 outline-none text-slate-900 text-sm"
+              />
+            </div>
           </div>
 
           <div>

@@ -4,7 +4,7 @@ import axios from "axios";
 import Modal from "../../components/Modal";
 import Alert from "../../components/Alert";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function PendingRegistrations() {
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -23,8 +23,9 @@ export default function PendingRegistrations() {
   const fetchPendingRegistrations = async () => {
     setLoading(true);
     try {
+      console.log('Fetching pending registrations from:', `${API_URL}/api/auth/pending-registrations`);
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${API_URL}/auth/pending-registrations`, {
+      const response = await axios.get(`${API_URL}/api/auth/pending-registrations`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -55,7 +56,7 @@ export default function PendingRegistrations() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${API_URL}/auth/approve-registration/${selectedUser._id}`,
+        `${API_URL}/api/auth/approve-registration/${selectedUser._id}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -94,7 +95,7 @@ export default function PendingRegistrations() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${API_URL}/auth/reject-registration/${selectedUser._id}`,
+        `${API_URL}/api/auth/reject-registration/${selectedUser._id}`,
         { reason: rejectionReason },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -170,50 +171,52 @@ export default function PendingRegistrations() {
           </div>
         </div>
       ) : !pendingUsers || pendingUsers.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-          <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No Pending Registrations</h3>
-          <p className="text-gray-600">There are currently no pending resident registration requests.</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
+          <AlertCircle className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">No Pending Registrations</h3>
+          <p className="text-gray-600 dark:text-gray-400">There are currently no pending resident registration requests.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {pendingUsers.map((user) => (
             <div
               key={user._id}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
             >
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                      <User className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                      <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                         {user.firstName} {user.lastName}
                       </h3>
-                      <p className="text-sm text-gray-500">@{user.username}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">@{user.username}</p>
                     </div>
                   </div>
-                  <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                  <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-medium rounded-full">
                     Pending
                   </span>
                 </div>
 
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Mail className="w-4 h-4 flex-shrink-0" />
                     <span className="truncate">{user.email}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Phone className="w-4 h-4 flex-shrink-0" />
                     <span>{user.phoneNumber}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <MapPin className="w-4 h-4 flex-shrink-0" />
-                    <span className="truncate">{user.address}</span>
+                    <span className="truncate">
+                      {user.address?.houseNumber} {user.address?.street} {user.address?.subdivision}, Brgy. Culiat, Quezon City
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-500">
                     <Calendar className="w-4 h-4 flex-shrink-0" />
                     <span>{formatDate(user.createdAt)}</span>
                   </div>
@@ -221,7 +224,7 @@ export default function PendingRegistrations() {
 
                 <button
                   onClick={() => handleViewDetails(user)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors"
                 >
                   <Eye className="w-4 h-4" />
                   View Details & Decide
@@ -242,56 +245,166 @@ export default function PendingRegistrations() {
             setActionType(null);
             setRejectionReason("");
           }}
-          title="Registration Details"
-          size="large"
+          title={`${selectedUser.firstName} ${selectedUser.lastName}`}
+          size="3xl"
         >
-          <div className="space-y-6">
-            {/* User Information */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h4 className="font-semibold text-gray-900 mb-3">Personal Information</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2.5 max-h-[65vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+            {/* Account Information */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-2.5">
+              <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-1.5 text-xs">Account Credentials</h4>
+              <div className="grid grid-cols-2 gap-2.5 text-xs">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Full Name</label>
-                  <p className="text-gray-900">
-                    {selectedUser.firstName} {selectedUser.lastName}
-                  </p>
+                  <label className="text-blue-700 dark:text-blue-300 font-medium text-[10px]">Username</label>
+                  <p className="text-blue-900 dark:text-blue-100">@{selectedUser.username}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Username</label>
-                  <p className="text-gray-900">@{selectedUser.username}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Email</label>
-                  <p className="text-gray-900">{selectedUser.email}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Phone Number</label>
-                  <p className="text-gray-900">{selectedUser.phoneNumber}</p>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="text-sm font-medium text-gray-600">Address</label>
-                  <p className="text-gray-900">{selectedUser.address}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Registered On</label>
-                  <p className="text-gray-900">{formatDate(selectedUser.createdAt)}</p>
+                  <label className="text-blue-700 dark:text-blue-300 font-medium text-[10px]">Email</label>
+                  <p className="text-blue-900 dark:text-blue-100">{selectedUser.email}</p>
                 </div>
               </div>
             </div>
 
-            {/* Proof of Residency */}
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Proof of Residency</h4>
-              {selectedUser.proofOfResidency ? (
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
+            {/* Personal Information */}
+            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1.5 text-xs">Personal Information</h4>
+              <div className="grid grid-cols-3 gap-2.5 text-xs">
+                <div className="col-span-3">
+                  <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Full Name</label>
+                  <p className="text-gray-900 dark:text-gray-100">
+                    {selectedUser.firstName} {selectedUser.middleName} {selectedUser.lastName}{selectedUser.suffix ? ` ${selectedUser.suffix}` : ''}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Date of Birth</label>
+                  <p className="text-gray-900 dark:text-gray-100">{selectedUser.dateOfBirth ? new Date(selectedUser.dateOfBirth).toLocaleDateString() : 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Gender</label>
+                  <p className="text-gray-900 dark:text-gray-100">{selectedUser.gender || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Civil Status</label>
+                  <p className="text-gray-900 dark:text-gray-100">{selectedUser.civilStatus || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Phone</label>
+                  <p className="text-gray-900 dark:text-gray-100">{selectedUser.phoneNumber}</p>
+                </div>
+                <div>
+                  <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Occupation</label>
+                  <p className="text-gray-900 dark:text-gray-100">{selectedUser.occupation || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Religion</label>
+                  <p className="text-gray-900 dark:text-gray-100">{selectedUser.religion || 'N/A'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Address Information */}
+            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1.5 text-xs">Address</h4>
+              <div className="text-xs">
+                <p className="text-gray-900 dark:text-gray-100">
+                  {selectedUser.address?.houseNumber} {selectedUser.address?.street} {selectedUser.address?.subdivision}, Barangay Culiat, Quezon City
+                </p>
+              </div>
+            </div>
+
+            {/* Spouse Information (if married) */}
+            {selectedUser.spouseInfo && selectedUser.spouseInfo.name && (
+              <div className="bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 rounded-lg p-2.5">
+                <h4 className="font-semibold text-pink-900 dark:text-pink-100 mb-1.5 text-xs">Spouse Information</h4>
+                <div className="grid grid-cols-3 gap-2.5 text-xs">
+                  <div>
+                    <label className="text-pink-700 dark:text-pink-300 font-medium text-[10px]">Name</label>
+                    <p className="text-pink-900 dark:text-pink-100">{selectedUser.spouseInfo.name}</p>
+                  </div>
+                  <div>
+                    <label className="text-pink-700 dark:text-pink-300 font-medium text-[10px]">Occupation</label>
+                    <p className="text-pink-900 dark:text-pink-100">{selectedUser.spouseInfo.occupation || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="text-pink-700 dark:text-pink-300 font-medium text-[10px]">Contact</label>
+                    <p className="text-pink-900 dark:text-pink-100">{selectedUser.spouseInfo.contactNumber || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Emergency Contact */}
+            {selectedUser.emergencyContact && (
+              <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-2.5">
+                <h4 className="font-semibold text-orange-900 dark:text-orange-100 mb-1.5 text-xs">Emergency Contact</h4>
+                <div className="grid grid-cols-2 gap-2.5 text-xs">
+                  <div>
+                    <label className="text-orange-700 dark:text-orange-300 font-medium text-[10px]">Name</label>
+                    <p className="text-orange-900 dark:text-orange-100">{selectedUser.emergencyContact.fullName}</p>
+                  </div>
+                  <div>
+                    <label className="text-orange-700 dark:text-orange-300 font-medium text-[10px]">Relationship</label>
+                    <p className="text-orange-900 dark:text-orange-100">{selectedUser.emergencyContact.relationship || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="text-orange-700 dark:text-orange-300 font-medium text-[10px]">Contact</label>
+                    <p className="text-orange-900 dark:text-orange-100">{selectedUser.emergencyContact.contactNumber}</p>
+                  </div>
+                  <div>
+                    <label className="text-orange-700 dark:text-orange-300 font-medium text-[10px]">Address</label>
+                    <p className="text-orange-900 dark:text-orange-100">
+                      {selectedUser.emergencyContact.address?.houseNumber} {selectedUser.emergencyContact.address?.street} {selectedUser.emergencyContact.address?.subdivision}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Additional Information */}
+            {(selectedUser.tinNumber || selectedUser.sssGsisNumber || selectedUser.precinctNumber) && (
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1.5 text-xs">Additional Information</h4>
+                <div className="grid grid-cols-3 gap-2.5 text-xs">
+                  {selectedUser.tinNumber && (
+                    <div>
+                      <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">TIN</label>
+                      <p className="text-gray-900 dark:text-gray-100">{selectedUser.tinNumber}</p>
+                    </div>
+                  )}
+                  {selectedUser.sssGsisNumber && (
+                    <div>
+                      <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">SSS/GSIS</label>
+                      <p className="text-gray-900 dark:text-gray-100">{selectedUser.sssGsisNumber}</p>
+                    </div>
+                  )}
+                  {selectedUser.precinctNumber && (
+                    <div>
+                      <label className="text-gray-600 dark:text-gray-400 font-medium text-[10px]">Precinct</label>
+                      <p className="text-gray-900 dark:text-gray-100">{selectedUser.precinctNumber}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Valid ID / Proof of Residency */}
+            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2.5">
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1.5 text-xs">
+                {selectedUser.validID ? 'Valid ID' : 'Proof of Residency'}
+              </h4>
+              {(selectedUser.validID?.url || selectedUser.proofOfResidency) ? (
+                <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
                   <img
-                    src={`${API_URL.replace("/api", "")}/${selectedUser.proofOfResidency}`}
-                    alt="Proof of Residency"
-                    className="w-full h-auto"
+                    src={
+                      selectedUser.validID?.url 
+                        ? `${API_URL}${selectedUser.validID.url}` 
+                        : `${API_URL}/${selectedUser.proofOfResidency}`
+                    }
+                    alt={selectedUser.validID ? "Valid ID" : "Proof of Residency"}
+                    className="w-full h-auto max-h-48 object-contain bg-white dark:bg-gray-800"
                   />
                 </div>
               ) : (
-                <p className="text-gray-500 italic">No proof uploaded</p>
+                <p className="text-gray-500 dark:text-gray-400 italic text-xs">No ID/proof uploaded</p>
               )}
             </div>
 

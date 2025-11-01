@@ -3,17 +3,19 @@ import PersonalInfoTab from "./components/PersonalInfoTab";
 import EmergencyContactTab from "./components/EmergencyContactTab";
 import DocumentRequestTab from "./components/DocumentRequestTab";
 import FileUploadTab from "./components/FileUploadTab";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import MyRequestsTab from "./components/MyRequestsTab";
+import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const tabs = [
   { id: "personal", label: "Personal Information" },
   { id: "emergency", label: "Emergency Contact" },
   { id: "files", label: "Upload Documents" },
   { id: "request", label: "Document Request" },
+  { id: "my-requests", label: "My Requests" },
 ];
 
 const initialForm = {
@@ -21,6 +23,7 @@ const initialForm = {
   lastName: "",
   firstName: "",
   middleName: "",
+  suffix: "",
   dateOfBirth: "",
   placeOfBirth: "",
   gender: "",
@@ -80,25 +83,175 @@ export default function Services() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [autoFilling, setAutoFilling] = useState(true);
-  const { user } = useAuth();
+  const [showLoadingToast, setShowLoadingToast] = useState(true); // Start with loading visible
+  const [hasLoadedData, setHasLoadedData] = useState(false);
+  const { user, loading: authLoading } = useAuth();
 
-  // Auto-fill form from user data
+  // Load form data from localStorage on mount
   useEffect(() => {
+    console.log('💾 Checking localStorage for saved form data...');
+    const savedFormData = localStorage.getItem('documentRequestForm');
+    
+    if (savedFormData) {
+      console.log('📦 Found saved form data in localStorage');
+      try {
+        const parsedData = JSON.parse(savedFormData);
+        console.log('📄 Parsed saved data:', parsedData);
+        
+        // Check if saved data has meaningful content (not just empty strings)
+        const hasContent = parsedData.firstName || parsedData.lastName || parsedData.email;
+        
+        if (hasContent) {
+          // Don't restore file objects, only text data
+          const { photo1x1File, validIDFile, ...restData } = parsedData;
+          setFormData((prev) => ({
+            ...prev,
+            ...restData
+          }));
+          setAutoFilling(false); // Skip auto-fill if we have saved data
+          setHasLoadedData(true);
+          setShowLoadingToast(false); // Hide loading immediately
+          console.log('✅ Restored form data from localStorage');
+        } else {
+          console.log('📭 Saved data is empty, will auto-fill from user');
+          localStorage.removeItem('documentRequestForm'); // Clear empty data
+          setShowLoadingToast(true);
+        }
+      } catch (error) {
+        console.error('❌ Error loading saved form data:', error);
+        setShowLoadingToast(true); // Keep showing loading on error
+      }
+    } else {
+      console.log('📭 No saved form data in localStorage');
+      // Keep loading visible until user data arrives
+      setShowLoadingToast(true);
+      console.log('⏳ Waiting for user data to load...');
+    }
+  }, []);
+
+  // Auto-fill form from user data (only if no saved data and haven't auto-filled yet)
+  useEffect(() => {
+    console.log('🔄 Auto-fill useEffect triggered');
+    console.log('📊 User object:', user);
+    console.log('🔐 Auth loading:', authLoading);
+    console.log('🎯 AutoFilling state:', autoFilling);
+    console.log('📍 Has loaded data:', hasLoadedData);
+    
+    // If we already have loaded data, hide loading and exit
+    if (hasLoadedData) {
+      console.log('✓ Data already loaded from localStorage or previous auto-fill');
+      setShowLoadingToast(false);
+      return;
+    }
+    
+    // Wait for auth to finish loading
+    if (authLoading) {
+      console.log('⏳ Auth still loading, keeping loading overlay visible...');
+      setShowLoadingToast(true);
+      return;
+    }
+    
+    // If auth finished but no user, something went wrong - hide loading
+    if (!authLoading && !user) {
+      console.log('❌ Auth finished but no user available');
+      setShowLoadingToast(false);
+      return;
+    }
+    
     if (user && autoFilling) {
-      setFormData((prev) => ({
-        ...prev,
+      console.log('✅ Starting auto-fill process...');
+      console.log('🔍 Full user object:', JSON.stringify(user, null, 2));
+      setShowLoadingToast(true);
+      
+      // Format date of birth to YYYY-MM-DD for HTML date input
+      const formatDate = (dateString) => {
+        if (!dateString) return "";
+        try {
+          const date = new Date(dateString);
+          if (isNaN(date.getTime())) return "";
+          return date.toISOString().split('T')[0];
+        } catch (error) {
+          console.error('Error formatting date:', error);
+          return "";
+        }
+      };
+
+      const formattedDate = formatDate(user.dateOfBirth);
+      console.log('📅 Date of Birth:', user.dateOfBirth, '→ Formatted:', formattedDate);
+      console.log('👤 Name fields:', {
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        suffix: user.suffix
+      });
+      console.log('🏠 Address:', user.address);
+      console.log('🆘 Emergency Contact:', user.emergencyContact);
+
+      const newFormData = {
+        ...formData,
         lastName: user.lastName || "",
         firstName: user.firstName || "",
+        middleName: user.middleName || "",
+        suffix: user.suffix || "",
+        dateOfBirth: formattedDate,
+        placeOfBirth: user.placeOfBirth || "",
+        gender: user.gender || "",
+        civilStatus: user.civilStatus || "",
+        nationality: user.nationality || "Filipino",
         contactNumber: user.phoneNumber || "",
         emailAddress: user.email || "",
         // Address
         subdivision: user.address?.subdivision || "",
         street: user.address?.street || "",
         houseNumber: user.address?.houseNumber || "",
-      }));
+        // Additional fields from user registration
+        tinNumber: user.tinNumber || "",
+        sssGsisNumber: user.sssGsisNumber || "",
+        precinctNumber: user.precinctNumber || "",
+        religion: user.religion || "",
+        heightWeight: user.heightWeight || "",
+        colorOfHairEyes: user.colorOfHairEyes || "",
+        occupation: user.occupation || "",
+        // Spouse info
+        spouseName: user.spouseInfo?.name || "",
+        spouseOccupation: user.spouseInfo?.occupation || "",
+        spouseContact: user.spouseInfo?.contactNumber || "",
+        // Emergency contact
+        emergencyName: user.emergencyContact?.fullName || "",
+        emergencyRelationship: user.emergencyContact?.relationship || "",
+        emergencyContact: user.emergencyContact?.contactNumber || "",
+        emergencySubdivision: user.emergencyContact?.address?.subdivision || "",
+        emergencyStreet: user.emergencyContact?.address?.street || "",
+        emergencyHouseNumber: user.emergencyContact?.address?.houseNumber || "",
+      };
+
+      console.log('📝 New form data being set:', newFormData);
+      setFormData(newFormData);
       setAutoFilling(false);
+      setHasLoadedData(true);
+      
+      console.log('✅ Auto-fill completed!');
+      console.log('📊 Form data after auto-fill:', newFormData);
+      
+      // Hide loading toast after a short delay to show completion
+      setTimeout(() => {
+        setShowLoadingToast(false);
+        console.log('🎉 Loading overlay hidden');
+      }, 800);
+    } else {
+      console.log('⏭️ Auto-fill condition not met');
     }
-  }, [user, autoFilling]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, autoFilling, hasLoadedData, authLoading]);
+
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    if (!autoFilling && formData !== initialForm) {
+      // Save to localStorage (excluding file objects)
+      const { photo1x1File, validIDFile, ...dataToSave } = formData;
+      localStorage.setItem('documentRequestForm', JSON.stringify(dataToSave));
+    }
+  }, [formData, autoFilling]);
 
   const setField = (name, value) =>
     setFormData((p) => ({ ...p, [name]: value }));
@@ -230,7 +383,7 @@ export default function Services() {
 
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${API_URL}/document-requests`,
+        `${API_URL}/api/document-requests`,
         formDataToSend,
         {
           headers: {
@@ -240,10 +393,23 @@ export default function Services() {
         }
       );
 
+      console.log('✅ Document request submitted successfully!', response.data);
+      
+      // Show success message
       setShowSuccess(true);
+      setShowError(false);
+      
+      // Reset form
       setFormData(initialForm);
       setAutoFilling(true); // Re-enable auto-fill for next request
-      setTimeout(() => setShowSuccess(false), 5000);
+      setHasLoadedData(false); // Allow auto-fill on next visit
+      localStorage.removeItem('documentRequestForm'); // Clear saved form data
+      
+      // Scroll to top to show success message
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Hide success message after 7 seconds
+      setTimeout(() => setShowSuccess(false), 7000);
       
     } catch (error) {
       console.error('Submit error:', error);
@@ -334,7 +500,34 @@ export default function Services() {
         )}
 
         {/* Card */}
-        <div className="bg-[var(--color-light)] rounded-lg shadow-md border border-[var(--color-neutral-active)] ">
+        <div className="bg-[var(--color-light)] rounded-lg shadow-md border border-[var(--color-neutral-active)] relative">
+          {/* Loading Overlay */}
+          {showLoadingToast && (
+            <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-lg z-50 flex items-center justify-center">
+              <div className="text-center">
+                <div className="relative inline-block">
+                  {/* Animated spinner rings */}
+                  <div className="w-20 h-20 relative">
+                    <div className="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-transparent border-t-blue-600 rounded-full animate-spin"></div>
+                    <div className="absolute inset-2 border-4 border-transparent border-t-blue-400 rounded-full animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}></div>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Loading Your Information</h3>
+                  <p className="text-sm text-gray-600 max-w-sm">
+                    Please wait while we auto-fill your personal details from your profile...
+                  </p>
+                  <div className="flex items-center justify-center gap-1 mt-4">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
           {/* Tabs */}
           <div className="px-2 md:px-6 py-4 border-b border-[var(--color-neutral-active)] flex ">
             <nav
@@ -410,12 +603,16 @@ export default function Services() {
                   isBusinessDocument={isBusinessDocument()}
                 />
               )}
+
+              {active === "my-requests" && (
+                <MyRequestsTab />
+              )}
             </div>
 
             {/* Navigation Buttons */}
             <div className="px-6 py-4 border-t border-[var(--color-neutral-active)] flex justify-between items-center">
               <div>
-                {active !== "personal" && (
+                {active !== "personal" && active !== "my-requests" && (
                   <button
                     type="button"
                     onClick={() => {
@@ -435,7 +632,7 @@ export default function Services() {
               </div>
 
               <div className="flex items-center gap-3">
-                {active !== "request" && (
+                {active !== "request" && active !== "my-requests" && (
                   <button
                     type="button"
                     onClick={() => {

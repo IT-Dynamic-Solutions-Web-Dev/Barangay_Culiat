@@ -56,7 +56,7 @@ export default function PersonalInfoTab({ formData, setField, errors, setErrors 
 
         <div>
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
-            Middle Name
+            Middle Name <span className="text-red-500">*</span>
           </label>
           <input
             name="middleName"
@@ -64,19 +64,23 @@ export default function PersonalInfoTab({ formData, setField, errors, setErrors 
             onChange={onChange}
             className="mt-1 block w-full rounded-md border px-3 py-2 outline-none transition border-[var(--color-neutral-active)]"
             placeholder="Santos"
+            readOnly
+            style={{ backgroundColor: 'var(--color-neutral)' }}
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
-            Qualifier
+            Suffix <span className="text-red-500">*</span>
           </label>
           <input
-            name="qualifier"
-            value={formData.qualifier || ""}
+            name="suffix"
+            value={formData.suffix || ""}
             onChange={onChange}
             className="mt-1 block w-full rounded-md border px-3 py-2 outline-none transition border-[var(--color-neutral-active)]"
             placeholder="Jr."
+            readOnly
+            style={{ backgroundColor: 'var(--color-neutral)' }}
           />
         </div>
       </div>
@@ -124,23 +128,23 @@ export default function PersonalInfoTab({ formData, setField, errors, setErrors 
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
             Date of Birth <span className="text-red-500">*</span>
           </label>
-          <DatePicker
-            id="dateOfBirth"
+          <input
             name="dateOfBirth"
-            placeholder="Select date"
-            value={formData.dateOfBirth}
+            type="date"
+            value={formData.dateOfBirth ? formData.dateOfBirth.split('T')[0] : ''}
             onChange={onChange}
-            variant="dob"
             className={`mt-1 block w-full rounded-md border px-3 py-2 outline-none transition ${
               errors.dateOfBirth ? "border-red-500" : "border-[var(--color-neutral-active)]"
             }`}
+            readOnly
+            style={{ backgroundColor: 'var(--color-neutral)' }}
           />
           {errors.dateOfBirth && <p className="text-xs text-red-500 mt-1">{errors.dateOfBirth}</p>}
         </div>
 
         <div>
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
-            Place of Birth
+            Place of Birth <span className="text-red-500">*</span>
           </label>
           <input
             name="placeOfBirth"
@@ -148,6 +152,8 @@ export default function PersonalInfoTab({ formData, setField, errors, setErrors 
             onChange={onChange}
             className="mt-1 block w-full rounded-md border px-3 py-2 outline-none transition border-[var(--color-neutral-active)]"
             placeholder="Quezon City"
+            readOnly
+            style={{ backgroundColor: 'var(--color-neutral)' }}
           />
         </div>
 
@@ -155,19 +161,17 @@ export default function PersonalInfoTab({ formData, setField, errors, setErrors 
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
             Gender <span className="text-red-500">*</span>
           </label>
-          <select
+          <input
             name="gender"
             value={formData.gender}
             onChange={onChange}
             className={`mt-1 block w-full rounded-md border px-3 py-2 outline-none transition ${
               errors.gender ? "border-red-500" : "border-[var(--color-neutral-active)]"
             }`}
-          >
-            <option value="">Select</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
+            placeholder="Gender"
+            readOnly
+            style={{ backgroundColor: 'var(--color-neutral)' }}
+          />
           {errors.gender && <p className="text-xs text-red-500 mt-1">{errors.gender}</p>}
         </div>
       </div>
@@ -175,25 +179,22 @@ export default function PersonalInfoTab({ formData, setField, errors, setErrors 
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div>
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
-            Civil Status
+            Civil Status <span className="text-red-500">*</span>
           </label>
-          <select
+          <input
             name="civilStatus"
             value={formData.civilStatus}
             onChange={onChange}
             className="mt-1 block w-full rounded-md border px-3 py-2 outline-none transition border-[var(--color-neutral-active)]"
-          >
-            <option value="">Select</option>
-            <option value="single">Single</option>
-            <option value="married">Married</option>
-            <option value="widowed">Widowed</option>
-            <option value="separated">Separated</option>
-          </select>
+            placeholder="Civil Status"
+            readOnly
+            style={{ backgroundColor: 'var(--color-neutral)' }}
+          />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
-            Nationality
+            Nationality <span className="text-red-500">*</span>
           </label>
           <input
             name="nationality"
@@ -201,6 +202,8 @@ export default function PersonalInfoTab({ formData, setField, errors, setErrors 
             onChange={onChange}
             className="mt-1 block w-full rounded-md border px-3 py-2 outline-none transition border-[var(--color-neutral-active)]"
             placeholder="Filipino"
+            readOnly
+            style={{ backgroundColor: 'var(--color-neutral)' }}
           />
         </div>
 

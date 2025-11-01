@@ -16,6 +16,8 @@ const PrivateRoute = ({ children, adminOnly = false }) => {
 
   // Redirect to login if not authenticated
   if (!user) {
+    // Store the current path to redirect back after login
+    sessionStorage.setItem('redirectAfterLogin', location.pathname);
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
