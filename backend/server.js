@@ -30,6 +30,12 @@ app.use('/api/document-requests', require('./routes/documentRequestRoute'));
 // V2 routes with atomic address and file validation
 app.use('/api/v2/document-requests', require('./routes/documentRequestRoute_v2'));
 
+// New model routes
+app.use('/api/officials', require('./routes/officialsRoute'));
+app.use('/api/barangay-info', require('./routes/barangayInfoRoute'));
+app.use('/api/services', require('./routes/servicesRoute'));
+app.use('/api/faqs', require('./routes/faqsRoute'));
+
 // Health check route
 app.get('/api/health', (req, res) => {
   res.status(200).json({
