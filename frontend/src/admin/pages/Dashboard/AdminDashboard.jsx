@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   FileText,
@@ -6,10 +7,62 @@ import {
   Clock,
   TrendingUp,
   TrendingDown,
-  Activity,
+  Plus,
+  UserPlus,
+  Bell,
+  Calendar,
+  BarChart3,
+  FolderOpen,
 } from "lucide-react";
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+
+  const quickActions = [
+    {
+      name: "New Announcement",
+      icon: Plus,
+      path: "/admin/announcements",
+      color: "blue",
+      description: "Create announcement",
+    },
+    {
+      name: "View Reports",
+      icon: FileText,
+      path: "/admin/reports",
+      color: "green",
+      description: "Manage reports",
+    },
+    {
+      name: "Pending Users",
+      icon: UserPlus,
+      path: "/admin/pending-registrations",
+      color: "yellow",
+      description: "Review registrations",
+    },
+    {
+      name: "View Calendar",
+      icon: Calendar,
+      path: "/admin/calendar",
+      color: "purple",
+      description: "Manage events",
+    },
+    {
+      name: "Analytics",
+      icon: BarChart3,
+      path: "/admin/analytics",
+      color: "indigo",
+      description: "View insights",
+    },
+    {
+      name: "Documents",
+      icon: FolderOpen,
+      path: "/admin/documents",
+      color: "orange",
+      description: "Document requests",
+    },
+  ];
+
   const stats = [
     {
       name: "Total Users",
@@ -104,13 +157,54 @@ const AdminDashboard = () => {
             Welcome back! Here's what's happening today.
           </p>
         </div>
-        <div className="flex space-x-3">
-          <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
-            Download Report
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => navigate("/admin/analytics")}
+            className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+          >
+            <BarChart3 className="w-4 h-4 mr-2" />
+            View Analytics
           </button>
-          <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-            Create New
+          <button
+            onClick={() => navigate("/admin/announcements")}
+            className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            New Announcement
           </button>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Quick Actions
+        </h2>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {quickActions.map((action, index) => {
+            const Icon = action.icon;
+            return (
+              <button
+                key={index}
+                onClick={() => navigate(action.path)}
+                className="flex flex-col items-center p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all hover:shadow-md group"
+              >
+                <div
+                  className={`flex items-center justify-center w-12 h-12 rounded-full bg-${action.color}-100 dark:bg-${action.color}-900/20 group-hover:scale-110 transition-transform`}
+                >
+                  <Icon
+                    className={`w-6 h-6 text-${action.color}-600 dark:text-${action.color}-400`}
+                  />
+                </div>
+                <span className="mt-2 text-sm font-medium text-gray-900 dark:text-white text-center">
+                  {action.name}
+                </span>
+                <span className="mt-1 text-xs text-gray-500 dark:text-gray-400 text-center">
+                  {action.description}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -121,16 +215,26 @@ const AdminDashboard = () => {
           const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
 
           return (
-            <div
+            <button
               key={index}
-              className="p-6 bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg transition-shadow"
+              onClick={() => {
+                // Navigate to relevant page based on stat name
+                if (stat.name === "Total Users") navigate("/admin/users");
+                else if (stat.name === "Total Reports")
+                  navigate("/admin/reports");
+                else if (stat.name === "Announcements")
+                  navigate("/admin/announcements");
+                else if (stat.name === "Pending Requests")
+                  navigate("/admin/pending-registrations");
+              }}
+              className="p-6 bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg transition-all text-left group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     {stat.name}
                   </p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+                  <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {stat.value}
                   </p>
                   <div className="flex items-center mt-2">
@@ -158,7 +262,7 @@ const AdminDashboard = () => {
                 <div
                   className={`flex items-center justify-center w-12 h-12 rounded-full ${getColorClass(
                     stat.color
-                  )} bg-opacity-10`}
+                  )} bg-opacity-10 group-hover:scale-110 transition-transform`}
                 >
                   <Icon
                     className={`w-6 h-6 ${getColorClass(stat.color).replace(
@@ -168,7 +272,7 @@ const AdminDashboard = () => {
                   />
                 </div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
@@ -189,9 +293,10 @@ const AdminDashboard = () => {
             <div className="p-6">
               <div className="space-y-4">
                 {recentReports.map((report) => (
-                  <div
+                  <button
                     key={report.id}
-                    className="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => navigate("/admin/reports")}
+                    className="w-full flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all hover:shadow-md text-left"
                   >
                     <div className="flex items-start space-x-4">
                       <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg dark:bg-blue-900/20">
@@ -216,7 +321,7 @@ const AdminDashboard = () => {
                     >
                       {report.status}
                     </span>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -295,24 +400,6 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Analytics Chart Placeholder */}
-      <div className="bg-white rounded-lg shadow dark:bg-gray-800">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Analytics Overview
-          </h2>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-center h-64 bg-gray-100 rounded-lg dark:bg-gray-700">
-            <div className="text-center">
-              <Activity className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500" />
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                Chart component will be displayed here
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

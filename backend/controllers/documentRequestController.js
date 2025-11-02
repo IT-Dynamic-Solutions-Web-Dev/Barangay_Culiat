@@ -10,27 +10,62 @@ const { logAction } = require('../utils/logHelper');
 exports.createDocumentRequest = async (req, res) => {
   try {
     const payload = req.body || {};
+    console.log('📥 Document Request Payload:', payload);
+    console.log('📎 Uploaded Files:', req.files);
+    
+    // Handle uploaded files - build proper file objects for the model
+    let photo1x1 = null;
+    if (req.files?.photo1x1) {
+      const file = req.files.photo1x1[0];
+      // Normalize path to use forward slashes for URL
+      const normalizedPath = file.path.replace(/\\/g, '/');
+      photo1x1 = {
+        url: `/${normalizedPath}`,
+        filename: file.filename,
+        originalName: file.originalname,
+        mimeType: file.mimetype,
+        fileSize: file.size
+      };
+    }
 
-    const newRequest = await DocumentRequest.create({
+    let validID = null;
+    if (req.files?.validID) {
+      const file = req.files.validID[0];
+      // Normalize path to use forward slashes for URL
+      const normalizedPath = file.path.replace(/\\/g, '/');
+      validID = {
+        url: `/${normalizedPath}`,
+        filename: file.filename,
+        originalName: file.originalname,
+        mimeType: file.mimetype,
+        fileSize: file.size
+      };
+    }
+
+    // Prepare data for document request
+    const documentData = {
       applicant: req.user?._id,
       lastName: payload.lastName,
       firstName: payload.firstName,
       middleName: payload.middleName,
       dateOfBirth: payload.dateOfBirth,
       placeOfBirth: payload.placeOfBirth,
-      gender: payload.gender,
-      civilStatus: payload.civilStatus,
+      gender: payload.gender?.toLowerCase(),
+      civilStatus: payload.civilStatus?.toLowerCase().replace(/\s+/g, '_'),
       nationality: payload.nationality,
-      address: payload.address,
+      address: payload.address || {},
       contactNumber: payload.contactNumber,
       emergencyContact: payload.emergencyContact || {},
       documentType: payload.documentType,
       purposeOfRequest: payload.purposeOfRequest,
       preferredPickupDate: payload.preferredPickupDate,
       remarks: payload.remarks,
-      photo1x1: payload.photo1x1,
-      validID: payload.validID,
-    });
+      photo1x1: photo1x1,
+      validID: validID,
+    };
+
+    console.log('💾 Creating document request with data:', documentData);
+    const newRequest = await DocumentRequest.create(documentData);
 
     // Wrap photo fields as { url }
     let responseObj = newRequest.toObject ? newRequest.toObject() : newRequest;
@@ -53,6 +88,8 @@ exports.createDocumentRequest = async (req, res) => {
       req.user
     );
   } catch (error) {
+    console.error('❌ Error creating document request:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
       message: "Error creating document request",

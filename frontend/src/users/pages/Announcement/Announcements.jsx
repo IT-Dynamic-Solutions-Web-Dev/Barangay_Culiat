@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { CalendarDays, MapPin, Filter } from "lucide-react";
+import { CalendarDays, MapPin, Filter, Megaphone } from "lucide-react";
+import { motion } from "framer-motion";
 // import Header from "../../components/Header";
 import { Link } from "react-router";
 
@@ -144,41 +145,109 @@ const Announcement = () => {
       ? announcements
       : announcements.filter((a) => a.category === activeFilter);
 
+  // Animation variants
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
+    show: { opacity: 1, y: 0 },
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
   return (
-    <section id="announcements" className="min-h-screen bg-neutral py-16 mt-10">
+    <div className="min-h-screen" style={{ backgroundColor: "var(--color-neutral)" }}>
       {/* <Header variant="black" /> */}
 
-      {/* Page Header */}
-      <div
-        className="max-w-6xl mx-auto rounded-lg overflow-hidden mb-6"
-        style={{
-          background:
-            "linear-gradient(90deg,var(--color-primary), var(--color-primary-glow))",
-          color: "var(--color-text-color-light)",
-        }}
+      {/* Hero Section */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="relative bg-gradient-to-br from-[#1e3a8a] via-[#3b82f6] to-[#60a5fa] text-white overflow-hidden"
       >
-        <div className="px-6 py-8">
-          <h1 className="text-2xl md:text-3xl font-bold">
-            {" "}
-            Barangay Announcements
-          </h1>
-          <p className="mt-1 text-sm opacity-90">
-            Stay updated with our latest barangay events, programs, and notices.
-          </p>
+        {/* Decorative Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }}></div>
         </div>
-      </div>
+
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
+          {/* Animated Icon Badge */}
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-sm rounded-full mb-6"
+          >
+            <Megaphone className="w-8 h-8 md:w-10 md:h-10" />
+          </motion.div>
+
+          {/* Title */}
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 max-w-3xl"
+          >
+            Barangay Announcements
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed"
+          >
+            Stay updated with our latest barangay events, programs, and notices. Your community, your stories.
+          </motion.p>
+        </div>
+
+        {/* Wave Divider */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none" style={{ transform: 'rotate(180deg)' }}>
+          <svg
+            className="relative block w-full h-12 md:h-20"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+              fill="var(--color-neutral)"
+            ></path>
+          </svg>
+        </div>
+      </motion.section>
 
       {/* Filter Bar */}
-      <div className="max-w-6xl mx-auto px-4 mb-8 flex flex-wrap justify-center gap-3">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.7 }}
+        className="max-w-6xl mx-auto px-4 mb-8 pt-8 flex flex-wrap justify-center gap-3"
+      >
         <div className="flex items-center gap-2 text-gray-700">
           <Filter className="w-4 h-4" />
           <span className="text-sm font-medium">Filter by Category:</span>
         </div>
         <div className="flex flex-wrap justify-center gap-2">
           {categories.map((cat) => (
-            <button
+            <motion.button
               key={cat}
               onClick={() => setActiveFilter(cat)}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 activeFilter === cat
                   ? "bg-primary text-white shadow-md"
@@ -186,70 +255,104 @@ const Announcement = () => {
               }`}
             >
               {cat}
-            </button>
+            </motion.button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Announcements Grid */}
-      <div className="max-w-6xl mx-auto px-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        animate="show"
+        className="max-w-6xl mx-auto px-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+      >
         {filteredAnnouncements.length > 0 ? (
-          filteredAnnouncements.map((item) => (
-            <Link
-              to={`/announcements/${item.slug}`}
+          filteredAnnouncements.map((item, index) => (
+            <motion.div
               key={item.id}
-              className="bg-white shadow-sm flex flex-col border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all duration-300"
+              variants={fadeUp}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-white shadow-lg flex flex-col border border-gray-100 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300"
             >
-              <div className="relative h-48 w-full">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="p-6 flex flex-col justify-between flex-1">
-                <p className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide">
-                  {item.category}
-                </p>
-                <h3 className="text-lg font-bold text-text-color mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-text-secondary mb-4 leading-snug">
-                  {item.description}
-                </p>
-
-                <div className="flex flex-wrap gap-3 text-sm text-gray-500">
-                  <span className="flex items-center gap-1">
-                    <CalendarDays className="w-4 h-4 text-primary" />
-                    {item.date}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    {item.location}
-                  </span>
+              <Link
+                to={`/announcements/${item.slug}`}
+                className="flex flex-col h-full"
+              >
+                <div className="relative h-48 w-full overflow-hidden">
+                  <motion.img
+                    initial={{ scale: 1.2, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.05 }}
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  {/* Category Badge Overlay */}
+                  <div className="absolute top-3 right-3">
+                    <span className="px-3 py-1 bg-white/95 backdrop-blur-sm text-xs font-semibold text-primary rounded-full shadow-md uppercase tracking-wide">
+                      {item.category}
+                    </span>
+                  </div>
                 </div>
-                <p className="text-xs pt-4 text-primary font-medium">
-                  Read more →
-                </p>
-              </div>
-            </Link>
+
+                <div className="p-6 flex flex-col justify-between flex-1">
+                  <div>
+                    <h3 className="text-lg font-bold text-text-color mb-2 line-clamp-2 hover:text-primary transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-text-secondary mb-4 leading-relaxed line-clamp-3">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap gap-3 text-sm text-gray-500">
+                      <span className="flex items-center gap-1.5">
+                        <CalendarDays className="w-4 h-4 text-primary" />
+                        <span className="text-xs">{item.date}</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-4 h-4 text-primary" />
+                        <span className="text-xs line-clamp-1">{item.location}</span>
+                      </span>
+                    </div>
+                    <div className="pt-2 flex items-center gap-2 text-primary font-medium text-sm group">
+                      <span>Read more</span>
+                      <motion.span
+                        initial={{ x: 0 }}
+                        whileHover={{ x: 5 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        →
+                      </motion.span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
           ))
         ) : (
-          <div className="col-span-full text-center py-10 text-gray-500">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="col-span-full text-center py-10 text-gray-500"
+          >
             No announcements available for this category.
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
 
       {/* Footer */}
-      <div className="text-center text-sm text-text-secondary mt-12">
+      <div className="text-center text-sm text-text-secondary mt-12 pb-16">
         <p>
           For more details, visit the Barangay Hall or follow our official
           social media pages.
         </p>
       </div>
-    </section>
+    </div>
   );
 };
 
