@@ -170,7 +170,10 @@ const Announcement = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative bg-gradient-to-br from-[#1e3a8a] via-[#3b82f6] to-[#60a5fa] text-white overflow-hidden"
+         className="relative text-white overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-glow) 100%)",
+        }}
       >
         {/* Decorative Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -197,7 +200,7 @@ const Announcement = () => {
             initial="hidden"
             animate="show"
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 max-w-3xl"
+            className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 "
           >
             Barangay Announcements
           </motion.h1>
@@ -217,7 +220,7 @@ const Announcement = () => {
         {/* Wave Divider */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none" style={{ transform: 'rotate(180deg)' }}>
           <svg
-            className="relative block w-full h-12 md:h-20"
+            className="relative block w-full h-12 "
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
@@ -263,6 +266,7 @@ const Announcement = () => {
       {/* Announcements Grid */}
       <motion.div
         variants={staggerContainer}
+         viewport={{ once: true, amount: 0.5 }}
         initial="hidden"
         animate="show"
         className="max-w-6xl mx-auto px-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3"

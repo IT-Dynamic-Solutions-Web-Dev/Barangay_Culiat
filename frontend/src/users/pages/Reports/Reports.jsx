@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import { reportAPI } from "../../services/api";
 import { motion } from "framer-motion";
@@ -101,7 +101,7 @@ const Reports = () => {
           }}></div>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 py-16 md:py-20">
+       <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
           {/* Animated Icon Badge */}
           <motion.div
             initial={{ scale: 0, rotate: -180 }}
@@ -133,7 +133,7 @@ const Reports = () => {
           >
             {isAdmin 
               ? "Manage and review all community reports submitted by residents."
-              : "Track the status of your submitted reports and concerns."
+              : "Easily monitor the progress and current status of your submitted reports and concerns through the system’s tracking feature."
             }
           </motion.p>
         </div>
@@ -141,7 +141,7 @@ const Reports = () => {
         {/* Wave Divider */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none" style={{ transform: 'rotate(180deg)' }}>
           <svg
-            className="relative block w-full h-12 md:h-20"
+            className="relative block w-full h-12 "
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
@@ -163,13 +163,18 @@ const Reports = () => {
           transition={{ duration: 0.5 }}
           className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6"
         >
-          <button
+          {/* <button
             onClick={() => navigate("/dashboard")}
-            className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+            className="flex items-center gap-2 "
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="font-medium">Back to Dashboard</span>
-          </button>
+          </button> */}
+
+             <Link to="/dashboard" className="inline-flex items-center gap-2 mb-12  font-medium group w-fit">
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Home
+          </Link>
 
           {!isAdmin && (
             <motion.button

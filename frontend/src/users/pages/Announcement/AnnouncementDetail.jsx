@@ -142,13 +142,13 @@ const AnnouncementDetail = () => {
     <section className="min-h-screen bg-neutral py-16 mt-10">
       {/* <Header /> */}
       <div className="max-w-6xl mx-auto px-4">
-        <Link
-          to="/announcements"
-          className="inline-flex items-center text-text-color text-lg font-medium mb-6"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2 text-xl mt-1" /> Back to
+      
+
+            <Link to="/announcements" className="inline-flex items-center gap-2 my-8  font-medium group w-fit">
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back to
           Announcements
-        </Link>
+          </Link>
 
         <div className=" ">
           <img

@@ -37,7 +37,7 @@ export default function TextChangeShadcn({
   const current = words[index];
 
   return (
-    <div className={`inline-block overflow-hidden py-2 ${className}`}>
+    <div className={`inline-block overflow-hidden py-2.5 ${className}`}>
       <AnimatePresence mode="wait">
         <motion.div
           key={current.text}

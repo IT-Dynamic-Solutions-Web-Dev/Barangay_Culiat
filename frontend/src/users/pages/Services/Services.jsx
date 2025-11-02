@@ -445,25 +445,23 @@ export default function Services() {
           }}></div>
         </div>
         
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-center"
           >
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="inline-block p-3 rounded-full mb-6"
-              style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+              className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-sm rounded-full mb-6"
             >
-              <FileText className="w-8 h-8" style={{ color: "var(--color-text-color-light)" }} />
+              <FileText className="w-8 h-8 md:w-10 md:h-10" style={{ color: "var(--color-text-color-light)" }} />
             </motion.div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight"
-                style={{ color: "var(--color-text-color-light)" }}>
+            <h1   className="text-4xl text-text-color-light md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 max-w-3xl"
+               >
               Barangay Services
             </h1>
             
@@ -471,8 +469,7 @@ export default function Services() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-lg md:text-xl max-w-3xl mx-auto opacity-90"
-              style={{ color: "var(--color-text-color-light)" }}
+              className="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed"
             >
               Request your official barangay documents online quickly and securely.
               Fill out the form below and track your request status.
@@ -482,7 +479,7 @@ export default function Services() {
         
         {/* Wave Divider */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
-          <svg className="relative block w-full h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+          <svg className="relative block w-full h-30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
             <path
               fill="var(--color-neutral)"
               d="M0,64 C480,120 960,0 1440,64 L1440,100 L0,100 Z"

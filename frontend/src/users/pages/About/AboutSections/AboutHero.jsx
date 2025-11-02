@@ -28,7 +28,7 @@ const Hero = () => {
 
    return (
       <section id="home-hero" className="relative lg:mb-0 mb-0 " key={resetKey}>
-         <div className="relative min-h-[500px] md:min-h-[680px] flex overflow-hidden">
+         <div className="relative  min-h-[600px] md:min-h-[800px] flex overflow-hidden">
             <MediaSequence />
 
             {/* Overlay */}
@@ -40,7 +40,7 @@ const Hero = () => {
             ></motion.div>
 
             {/* Content */}
-            <div className="mx-auto text-center flex flex-col pt-[7.5em] gap-[3em] z-5 relative">
+            <div className="mx-auto text-center flex flex-col pt-[9em] gap-[5em] z-5 relative">
                {/* Animated Header */}
                <motion.div
                   variants={fadeUp}

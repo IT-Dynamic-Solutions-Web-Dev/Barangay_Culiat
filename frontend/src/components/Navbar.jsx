@@ -67,7 +67,7 @@ const Navbar = () => {
          <div
             className={`relative w-full py-2 backdrop-blur-[2px]  ${
                (isScrolldown || isOpen) && "bg-light shadow-md"
-            } transition-background ease-in-out duration-400`}
+            } transition-background ease-in-out duration-400 delays-400`}
          >
             <div
                className={`flex justify-between max-w-6xl mx-auto items-center h-16  px-4  ${
