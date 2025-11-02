@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./tailadminsrc/pages/AuthPages/SignIn";
@@ -28,8 +29,13 @@ import AdminReports from "./admin/pages/Reports/AdminReports";
 import AdminAnnouncements from "./admin/pages/Announcements/AdminAnnouncements";
 import AdminUsers from "./admin/pages/Users/AdminUsers";
 import PendingRegistrations from "./admin/pages/Users/PendingRegistrations";
+import RegistrationHistory from "./admin/pages/Users/RegistrationHistory";
 import SettingsPage from "./admin/pages/Settings/SettingsPage";
 import AdminDocuments from "./admin/pages/Documents/AdminDocuments";
+import AdminAnalytics from "./admin/pages/Analytics/AdminAnalytics";
+import AdminCalendar from "./admin/pages/Calendar/AdminCalendar";
+import AdminNotifications from "./admin/pages/Notifications/AdminNotifications";
+import AdminTermsAcceptances from "./admin/pages/TermsAcceptances/AdminTermsAcceptances";
 
 // Resident Auth
 import ResidentAuth from "./users/pages/Auth/ResidentAuth";
@@ -39,6 +45,45 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+        {/* Toast Notifications */}
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          gutter={8}
+          toastOptions={{
+            duration: 5000,
+            style: {
+              background: '#1F2937',
+              color: '#F3F4F6',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+              fontSize: '0.875rem',
+              maxWidth: '500px',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            },
+            success: {
+              duration: 4000,
+              iconTheme: {
+                primary: '#10B981',
+                secondary: '#F3F4F6',
+              },
+            },
+            error: {
+              duration: 5000,
+              iconTheme: {
+                primary: '#EF4444',
+                secondary: '#F3F4F6',
+              },
+            },
+            loading: {
+              iconTheme: {
+                primary: '#3B82F6',
+                secondary: '#F3F4F6',
+              },
+            },
+          }}
+        />
+        
         {/* 👇 Render only on client side */}
         {typeof window !== "undefined" && <PolicyPopup />}
 
@@ -86,11 +131,16 @@ function App() {
           >
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="calendar" element={<AdminCalendar />} />
+            <Route path="notifications" element={<AdminNotifications />} />
+            <Route path="terms-acceptances" element={<AdminTermsAcceptances />} />
             <Route path="reports" element={<AdminReports />} />
             <Route path="announcements" element={<AdminAnnouncements />} />
             <Route path="documents" element={<AdminDocuments />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="pending-registrations" element={<PendingRegistrations />} />
+            <Route path="registration-history" element={<RegistrationHistory />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
 

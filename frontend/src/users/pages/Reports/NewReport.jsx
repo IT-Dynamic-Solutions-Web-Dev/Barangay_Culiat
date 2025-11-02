@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import { reportAPI } from "../../services/api";
+import { motion } from "framer-motion";
+import { AlertTriangle, ArrowLeft, CheckCircle } from "lucide-react";
 
 const NewReport = () => {
   const { user, logout } = useAuth();
@@ -38,70 +40,176 @@ const NewReport = () => {
     }
   };
 
+  // Animation variants
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
+    show: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div style={styles.container}>
-      <nav style={styles.nav}>
-        <h2 style={styles.navTitle}>Barangay Culiat</h2>
-        <div style={styles.navRight}>
-          <span style={styles.userName}>
-            {user?.firstName} {user?.lastName}
-          </span>
-          <button onClick={() => logout()} style={styles.logoutButton}>
-            Logout
-          </button>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--color-neutral)" }}>
+      {/* Hero Section */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="relative text-white overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-glow) 100%)",
+        }}
+      >
+        {/* Decorative Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }}></div>
         </div>
-      </nav>
 
-      <div style={styles.content}>
-        <button onClick={() => navigate("/reports")} style={styles.backButton}>
-          ← Back to Reports
-        </button>
+        <div className="relative max-w-4xl mx-auto px-6 py-16 md:py-20">
+          {/* Animated Icon Badge */}
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-sm rounded-full mb-6"
+          >
+            <AlertTriangle className="w-8 h-8 md:w-10 md:h-10" />
+          </motion.div>
 
-        <div style={styles.formContainer}>
-          <h1>Submit New Report</h1>
-          <p style={styles.subtitle}>
-            Report issues or concerns to the barangay administration. Your
-            report will be reviewed and addressed accordingly.
-          </p>
+          {/* Title */}
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6"
+          >
+            Submit New Report
+          </motion.h1>
 
-          {error && <div style={styles.error}>{error}</div>}
+          {/* Description */}
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed"
+          >
+            Report issues or concerns to the barangay administration. Your report will be reviewed and addressed accordingly.
+          </motion.p>
+        </div>
 
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Title *</label>
+        {/* Wave Divider */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none" style={{ transform: 'rotate(180deg)' }}>
+          <svg
+            className="relative block w-full h-12 md:h-20"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+              fill="var(--color-neutral)"
+            ></path>
+          </svg>
+        </div>
+      </motion.section>
+
+      {/* Form Section */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Back Button */}
+        <motion.button
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          onClick={() => navigate("/reports")}
+          whileHover={{ x: -5 }}
+          className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="font-medium">Back to Reports</span>
+        </motion.button>
+
+        {/* Form Card */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-[var(--color-light)] rounded-lg shadow-xl border border-[var(--color-neutral-active)] p-6 md:p-8"
+        >
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6 flex items-start gap-3"
+            >
+              <AlertTriangle className="w-5 h-5 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-medium">Error</p>
+                <p className="text-sm mt-1">{error}</p>
+              </div>
+            </motion.div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Title Field */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <label className="block text-sm font-semibold text-[var(--color-text-color)] mb-2">
+                Title <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
                 required
-                style={styles.input}
+                className="w-full px-4 py-3 border border-[var(--color-neutral-active)] rounded-lg focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all outline-none"
                 placeholder="Brief title of your report"
               />
-            </div>
+            </motion.div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Description *</label>
+            {/* Description Field */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <label className="block text-sm font-semibold text-[var(--color-text-color)] mb-2">
+                Description <span className="text-red-500">*</span>
+              </label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 required
                 rows="6"
-                style={styles.textarea}
+                className="w-full px-4 py-3 border border-[var(--color-neutral-active)] rounded-lg focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all outline-none resize-vertical"
                 placeholder="Detailed description of the issue"
               />
-            </div>
+            </motion.div>
 
-            <div style={styles.row}>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Category *</label>
+            {/* Category and Priority Row */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              <div>
+                <label className="block text-sm font-semibold text-[var(--color-text-color)] mb-2">
+                  Category <span className="text-red-500">*</span>
+                </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
                   required
-                  style={styles.select}
+                  className="w-full px-4 py-3 border border-[var(--color-neutral-active)] rounded-lg focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all outline-none"
                 >
                   <option value="infrastructure">Infrastructure</option>
                   <option value="safety">Safety</option>
@@ -111,14 +219,16 @@ const NewReport = () => {
                 </select>
               </div>
 
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Priority *</label>
+              <div>
+                <label className="block text-sm font-semibold text-[var(--color-text-color)] mb-2">
+                  Priority <span className="text-red-500">*</span>
+                </label>
                 <select
                   name="priority"
                   value={formData.priority}
                   onChange={handleChange}
                   required
-                  style={styles.select}
+                  className="w-full px-4 py-3 border border-[var(--color-neutral-active)] rounded-lg focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all outline-none"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -126,181 +236,84 @@ const NewReport = () => {
                   <option value="urgent">Urgent</option>
                 </select>
               </div>
-            </div>
+            </motion.div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Location</label>
+            {/* Location Field */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <label className="block text-sm font-semibold text-[var(--color-text-color)] mb-2">
+                Location
+              </label>
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                style={styles.input}
+                className="w-full px-4 py-3 border border-[var(--color-neutral-active)] rounded-lg focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all outline-none"
                 placeholder="Specific location or address"
               />
-            </div>
+            </motion.div>
 
-            <div style={styles.privacyNote}>
-              <strong>Privacy Notice:</strong> Your report will be kept private
-              and will only be visible to you and barangay administrators.
-            </div>
+            {/* Privacy Notice */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3"
+            >
+              <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="text-sm text-blue-800">
+                <strong>Privacy Notice:</strong> Your report will be kept private and will only be visible to you and barangay administrators.
+              </div>
+            </motion.div>
 
-            <div style={styles.buttonGroup}>
+            {/* Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-3 pt-4"
+            >
               <button
                 type="button"
                 onClick={() => navigate("/reports")}
-                style={styles.cancelButton}
+                className="px-6 py-3 bg-white border-2 border-[var(--color-neutral-active)] text-[var(--color-text-secondary)] rounded-lg font-medium hover:bg-[var(--color-neutral)] transition-all"
               >
                 Cancel
               </button>
-              <button
+              <motion.button
                 type="submit"
                 disabled={loading}
-                style={styles.submitButton}
+                whileHover={{ scale: loading ? 1 : 1.02 }}
+                whileTap={{ scale: loading ? 1 : 0.98 }}
+                className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed text-white"
+                    : "hover:shadow-lg"
+                }`}
+                style={!loading ? {
+                  background: "linear-gradient(to right, var(--color-secondary), var(--color-secondary-glow))",
+                  color: "var(--color-text-color-light)"
+                } : {}}
               >
-                {loading ? "Submitting..." : "Submit Report"}
-              </button>
-            </div>
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Submitting...
+                  </span>
+                ) : (
+                  "Submit Report"
+                )}
+              </motion.button>
+            </motion.div>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    backgroundColor: "#f0f2f5",
-  },
-  nav: {
-    backgroundColor: "#1a73e8",
-    color: "white",
-    padding: "1rem 2rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  navTitle: {
-    margin: 0,
-  },
-  navRight: {
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-  },
-  userName: {
-    fontSize: "0.9rem",
-  },
-  logoutButton: {
-    padding: "0.5rem 1rem",
-    backgroundColor: "white",
-    color: "#1a73e8",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  content: {
-    padding: "2rem",
-    maxWidth: "800px",
-    margin: "0 auto",
-  },
-  backButton: {
-    padding: "0.5rem 1rem",
-    backgroundColor: "white",
-    color: "#1a73e8",
-    border: "1px solid #1a73e8",
-    borderRadius: "4px",
-    cursor: "pointer",
-    marginBottom: "1rem",
-  },
-  formContainer: {
-    backgroundColor: "white",
-    padding: "2rem",
-    borderRadius: "8px",
-    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-  },
-  subtitle: {
-    color: "#666",
-    marginBottom: "1.5rem",
-  },
-  error: {
-    backgroundColor: "#fee",
-    color: "#c33",
-    padding: "0.75rem",
-    borderRadius: "4px",
-    marginBottom: "1rem",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-  },
-  row: {
-    display: "flex",
-    gap: "1rem",
-  },
-  formGroup: {
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
-  },
-  label: {
-    marginBottom: "0.5rem",
-    color: "#333",
-    fontWeight: "500",
-  },
-  input: {
-    padding: "0.75rem",
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    fontSize: "1rem",
-  },
-  textarea: {
-    padding: "0.75rem",
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    fontSize: "1rem",
-    fontFamily: "inherit",
-    resize: "vertical",
-  },
-  select: {
-    padding: "0.75rem",
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    fontSize: "1rem",
-  },
-  privacyNote: {
-    backgroundColor: "#e3f2fd",
-    padding: "1rem",
-    borderRadius: "4px",
-    color: "#1565c0",
-    fontSize: "0.9rem",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "1rem",
-    justifyContent: "flex-end",
-    marginTop: "1rem",
-  },
-  cancelButton: {
-    padding: "0.75rem 1.5rem",
-    backgroundColor: "white",
-    color: "#666",
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "1rem",
-  },
-  submitButton: {
-    padding: "0.75rem 1.5rem",
-    backgroundColor: "#4caf50",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "1rem",
-  },
 };
 
 export default NewReport;

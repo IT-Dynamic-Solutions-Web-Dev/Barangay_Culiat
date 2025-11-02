@@ -4,9 +4,10 @@ import EmergencyContactTab from "./components/EmergencyContactTab";
 import DocumentRequestTab from "./components/DocumentRequestTab";
 import FileUploadTab from "./components/FileUploadTab";
 import MyRequestsTab from "./components/MyRequestsTab";
-import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { CheckCircle, AlertCircle, Loader2, FileText } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -426,29 +427,71 @@ export default function Services() {
   };
 
   return (
-    <div
-      className="min-h-screen mt-6 py-[5em]"
-      style={{ backgroundColor: "var(--color-neutral)" }}
-    >
-      {/* Page Header */}
-      <div
-        className="max-w-6xl mx-auto rounded-lg overflow-hidden mb-6"
+    <div className="min-h-screen" style={{ backgroundColor: "var(--color-neutral)" }}>
+      {/* Hero Section with Animation */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative overflow-hidden"
         style={{
-          background:
-            "linear-gradient(90deg,var(--color-secondary), var(--color-secondary-glow))",
-          color: "var(--color-text-color-light)",
+          background: "linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-glow) 100%)",
         }}
       >
-        <div className="px-6 py-8">
-          <h1 className="text-2xl md:text-3xl font-bold">Barangay Services</h1>
-          <p className="mt-1 text-sm opacity-90">
-            Request your official barangay documents online quickly and
-            securely.
-          </p>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 20px 20px, white 1px, transparent 0)',
+            backgroundSize: '40px 40px',
+          }}></div>
         </div>
-      </div>
+        
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-center"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="inline-block p-3 rounded-full mb-6"
+              style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+            >
+              <FileText className="w-8 h-8" style={{ color: "var(--color-text-color-light)" }} />
+            </motion.div>
+            
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight"
+                style={{ color: "var(--color-text-color-light)" }}>
+              Barangay Services
+            </h1>
+            
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-lg md:text-xl max-w-3xl mx-auto opacity-90"
+              style={{ color: "var(--color-text-color-light)" }}
+            >
+              Request your official barangay documents online quickly and securely.
+              Fill out the form below and track your request status.
+            </motion.p>
+          </motion.div>
+        </div>
+        
+        {/* Wave Divider */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+          <svg className="relative block w-full h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+            <path
+              fill="var(--color-neutral)"
+              d="M0,64 C480,120 960,0 1440,64 L1440,100 L0,100 Z"
+            ></path>
+          </svg>
+        </div>
+      </motion.section>
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         {/* Success Toast */}
         {showSuccess && (
           <div className="mb-4">
@@ -499,8 +542,13 @@ export default function Services() {
           </div>
         )}
 
-        {/* Card */}
-        <div className="bg-[var(--color-light)] rounded-lg shadow-md border border-[var(--color-neutral-active)] relative">
+        {/* Card with Animation */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-[var(--color-light)] rounded-lg shadow-xl border border-[var(--color-neutral-active)] relative overflow-hidden"
+        >
           {/* Loading Overlay */}
           {showLoadingToast && (
             <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-lg z-50 flex items-center justify-center">
@@ -544,10 +592,13 @@ export default function Services() {
                       }
                     : {};
                 return (
-                  <button
+                  <motion.button
                     key={t.id}
                     onClick={() => setActive(t.id)}
-                    className={`md:px-4 md:py-2 px-2 py-1 grow md:grow-0 rounded-md md:font-medium font-semibold whitespace-nowrap text-ellipsis overflow-hidden cursor-pointer  transition-all`}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className={`md:px-4 md:py-2 px-2 py-1 grow md:grow-0 rounded-md md:font-medium font-semibold whitespace-nowrap text-ellipsis overflow-hidden cursor-pointer transition-all`}
                     title={t.label}
                     style={{
                       border:
@@ -560,7 +611,7 @@ export default function Services() {
                     aria-selected={active === t.id}
                   >
                     {t.label}
-                  </button>
+                  </motion.button>
                 );
               })}
             </nav>
@@ -569,44 +620,86 @@ export default function Services() {
           {/* Form Body */}
           <form onSubmit={handleSubmit}>
             <div className="p-6">
-              {active === "personal" && (
-                <PersonalInfoTab
-                  formData={formData}
-                  setField={setField}
-                  errors={errors}
-                  setErrors={setErrors}
-                />
-              )}
+              <AnimatePresence mode="wait">
+                {active === "personal" && (
+                  <motion.div
+                    key="personal"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <PersonalInfoTab
+                      formData={formData}
+                      setField={setField}
+                      errors={errors}
+                      setErrors={setErrors}
+                    />
+                  </motion.div>
+                )}
 
-              {active === "emergency" && (
-                <EmergencyContactTab
-                  formData={formData}
-                  setField={setField}
-                  errors={errors}
-                />
-              )}
+                {active === "emergency" && (
+                  <motion.div
+                    key="emergency"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <EmergencyContactTab
+                      formData={formData}
+                      setField={setField}
+                      errors={errors}
+                    />
+                  </motion.div>
+                )}
 
-              {active === "files" && (
-                <FileUploadTab
-                  formData={formData}
-                  setField={setField}
-                  errors={errors}
-                  documentType={formData.documentType}
-                />
-              )}
+                {active === "files" && (
+                  <motion.div
+                    key="files"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <FileUploadTab
+                      formData={formData}
+                      setField={setField}
+                      errors={errors}
+                      documentType={formData.documentType}
+                    />
+                  </motion.div>
+                )}
 
-              {active === "request" && (
-                <DocumentRequestTab
-                  formData={formData}
-                  setField={setField}
-                  errors={errors}
-                  isBusinessDocument={isBusinessDocument()}
-                />
-              )}
+                {active === "request" && (
+                  <motion.div
+                    key="request"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <DocumentRequestTab
+                      formData={formData}
+                      setField={setField}
+                      errors={errors}
+                      isBusinessDocument={isBusinessDocument()}
+                    />
+                  </motion.div>
+                )}
 
-              {active === "my-requests" && (
-                <MyRequestsTab />
-              )}
+                {active === "my-requests" && (
+                  <motion.div
+                    key="my-requests"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <MyRequestsTab />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Navigation Buttons */}
@@ -667,7 +760,7 @@ export default function Services() {
               </div>
             </div>
           </form>
-        </div>
+        </motion.div>
 
         {/* small help block */}
         <div className="px-2 sm:p-0 text-center sm:text-left mt-4 text-sm text-[var(--color-text-secondary)]">
