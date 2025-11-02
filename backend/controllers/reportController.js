@@ -1,4 +1,7 @@
-const Report = require('../models/Report');
+const Report = require("../models/Report");
+const { LOGCONSTANTS } = require("../config/logConstants");
+const { getRoleName } = require('../utils/roleHelpers');
+const { logAction } = require('../utils/logHelper');
 
 // @desc    Create a new report
 // @route   POST /api/reports
@@ -18,13 +21,19 @@ exports.createReport = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Report created successfully',
+      message: "Report created successfully",
       data: report,
     });
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.CREATE_REPORT,
+      `Report created: ${report._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error creating report',
+      message: "Error creating report",
       error: error.message,
     });
   }
@@ -43,8 +52,8 @@ exports.getAllReports = async (req, res) => {
     if (priority) filter.priority = priority;
 
     const reports = await Report.find(filter)
-      .populate('reportedBy', 'firstName lastName email')
-      .populate('assignedTo', 'firstName lastName')
+      .populate("reportedBy", "firstName lastName email")
+      .populate("assignedTo", "firstName lastName")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -55,7 +64,7 @@ exports.getAllReports = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching reports',
+      message: "Error fetching reports",
       error: error.message,
     });
   }
@@ -67,7 +76,7 @@ exports.getAllReports = async (req, res) => {
 exports.getMyReports = async (req, res) => {
   try {
     const reports = await Report.find({ reportedBy: req.user._id })
-      .populate('assignedTo', 'firstName lastName')
+      .populate("assignedTo", "firstName lastName")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -78,7 +87,7 @@ exports.getMyReports = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching your reports',
+      message: "Error fetching your reports",
       error: error.message,
     });
   }
@@ -90,22 +99,27 @@ exports.getMyReports = async (req, res) => {
 exports.getReport = async (req, res) => {
   try {
     const report = await Report.findById(req.params.id)
-      .populate('reportedBy', 'firstName lastName email phoneNumber')
-      .populate('assignedTo', 'firstName lastName')
-      .populate('comments.user', 'firstName lastName');
+      .populate("reportedBy", "firstName lastName email phoneNumber")
+      .populate("assignedTo", "firstName lastName")
+      .populate("comments.user", "firstName lastName");
 
     if (!report) {
       return res.status(404).json({
         success: false,
-        message: 'Report not found',
+        message: "Report not found",
       });
     }
 
     // Check privacy - only admin or report owner can view
-    if (report.isPrivate && req.user.role !== 'admin' && report.reportedBy._id.toString() !== req.user._id.toString()) {
+    if (
+      report.isPrivate &&
+      req.user.role !== ROLES.Admin &&
+      req.user.role !== ROLES.SuperAdmin &&
+      report.reportedBy._id.toString() !== req.user._id.toString()
+    ) {
       return res.status(403).json({
         success: false,
-        message: 'Not authorized to view this report',
+        message: "Not authorized to view this report",
       });
     }
 
@@ -116,7 +130,7 @@ exports.getReport = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching report',
+      message: "Error fetching report",
       error: error.message,
     });
   }
@@ -134,7 +148,7 @@ exports.updateReportStatus = async (req, res) => {
     if (!report) {
       return res.status(404).json({
         success: false,
-        message: 'Report not found',
+        message: "Report not found",
       });
     }
 
@@ -145,13 +159,19 @@ exports.updateReportStatus = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Report updated successfully',
+      message: "Report updated successfully",
       data: report,
     });
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.UPDATE_STATUS,
+      `Report status updated: ${report._id} to ${status}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error updating report',
+      message: "Error updating report",
       error: error.message,
     });
   }
@@ -169,15 +189,19 @@ exports.addComment = async (req, res) => {
     if (!report) {
       return res.status(404).json({
         success: false,
-        message: 'Report not found',
+        message: "Report not found",
       });
     }
 
     // Check if user has access to this report
-    if (req.user.role !== 'admin' && report.reportedBy.toString() !== req.user._id.toString()) {
+    if (
+      req.user.role !== ROLES.Admin &&
+      req.user.role !== ROLES.SuperAdmin &&
+      report.reportedBy.toString() !== req.user._id.toString()
+    ) {
       return res.status(403).json({
         success: false,
-        message: 'Not authorized to comment on this report',
+        message: "Not authorized to comment on this report",
       });
     }
 
@@ -190,13 +214,19 @@ exports.addComment = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Comment added successfully',
+      message: "Comment added successfully",
       data: report,
     });
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.ADD_COMMENTS,
+      `Comment added to report: ${report._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error adding comment',
+      message: "Error adding comment",
       error: error.message,
     });
   }
@@ -212,7 +242,7 @@ exports.deleteReport = async (req, res) => {
     if (!report) {
       return res.status(404).json({
         success: false,
-        message: 'Report not found',
+        message: "Report not found",
       });
     }
 
@@ -220,12 +250,18 @@ exports.deleteReport = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Report deleted successfully',
+      message: "Report deleted successfully",
     });
+    
+    await logAction(
+      LOGCONSTANTS.actions.reports.DELETE_REPORT,
+      `Report deleted: ${report._id}`,
+      req.user
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error deleting report',
+      message: "Error deleting report",
       error: error.message,
     });
   }

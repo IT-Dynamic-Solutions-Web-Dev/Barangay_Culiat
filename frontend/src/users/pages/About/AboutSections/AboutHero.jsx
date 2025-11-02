@@ -1,0 +1,120 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
+import MediaSequence from "../../../../components/MediaSequence";
+
+import TextChangeAbout from "../../../../components/Animation/TextChangeAbout";
+
+import Header from "../../../../components/Header";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+
+// Animation Variants
+const fadeUp = {
+   hidden: { opacity: 0, y: 40 },
+   show: (delay = 0) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, delay, ease: "easeOut" },
+   }),
+};
+
+const Hero = () => {
+   const location = useLocation();
+   const [resetKey, setResetKey] = React.useState(0);
+
+   React.useEffect(() => {
+      setResetKey((prev) => prev + 1);
+   }, [location.pathname]);
+
+   return (
+      <section id="home-hero" className="relative lg:mb-0 mb-0 " key={resetKey}>
+         <div className="relative min-h-[500px] md:min-h-[680px] flex overflow-hidden">
+            <MediaSequence />
+
+            {/* Overlay */}
+            <motion.div
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 0.9 }}
+               transition={{ duration: 0.3 }}
+               className="absolute inset-0 bg-linear-to-br from-[#141414b7] via-[#000000e3] to-[#1f1f1fd0]"
+            ></motion.div>
+
+            {/* Content */}
+            <div className="mx-auto text-center flex flex-col pt-[7.5em] gap-[3em] z-5 relative">
+               {/* Animated Header */}
+               <motion.div
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="show"
+                  custom={0.1}
+               >
+                  <Header />
+               </motion.div>
+
+               {/* Main Text */}
+               <motion.div
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="show"
+                  custom={0.3}
+                  className="flex flex-col gap-2 md:gap-6"
+               >
+                  <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold text-text-color-light leading-tight tracking-tight drop-shadow-lg">
+                     <TextChangeAbout />
+                  </h1>
+
+                  <motion.p
+                     variants={fadeUp}
+                     initial="hidden"
+                     animate="show"
+                     custom={0.5}
+                     className="px-4 md:px-0 sm:text-base text-sm md:leading-7 md:text-lg text-text-color-light max-w-2xl mx-auto "
+                  >
+                     Learn how Barangay Culiat continues to grow and serve
+                     through our mission, vision, goals, and the people who lead
+                     our community.
+                  </motion.p>
+               </motion.div>
+
+               {/* Optional Buttons (commented out) */}
+               {/* <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            custom={0.7}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Button variant="primary" size="md" className="font-medium px-8">
+              Request a document
+            </Button>
+            <Button
+              variant="outlinesecondary"
+              size="md"
+              className="font-medium"
+            >
+              Learn more →
+            </Button>
+          </motion.div> */}
+            </div>
+
+            {/* Wave Divider */}
+            <motion.svg
+               initial={{ y: 20, opacity: 0.8 }}
+               animate={{ y: 0, opacity: 1 }}
+               transition={{ duration: 0.1 }}
+               className="absolute -bottom-1 left-0 w-full"
+               xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 1440 100"
+            >
+               <path
+                  fill="#f5f5f5"
+                  d="M0,64 C480,120 960,0 1440,64 L1440,100 L0,100 Z"
+               ></path>
+            </motion.svg>
+         </div>
+      </section>
+   );
+};
+
+export default Hero;
