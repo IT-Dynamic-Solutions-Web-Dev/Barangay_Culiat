@@ -43,4 +43,9 @@ export const announcementAPI = {
   delete: (id) => api.delete(`/announcements/${id}`),
 };
 
+// Feedback API
+export const feedbackAPI = {
+  create: (data) => api.post('/feedback', data),
+};
+
 export default api;
