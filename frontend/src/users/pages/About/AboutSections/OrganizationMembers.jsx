@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Facebook, Mail, Phone } from "lucide-react";
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
+// --- Animation Variants for the Grid ---
 const container = {
    hidden: {},
    show: {
@@ -17,116 +17,147 @@ const item = {
    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
+// --- Helper Function ---
 const handleCopy = (value, type) => {
-   if (navigator.clipboard && value) {
+   if (!value) return;
+   if (navigator.clipboard) {
       navigator.clipboard.writeText(value);
-      alert(`${type} copied to clipboard: ${value}`);
-   } else {
-      alert(`Could not copy ${type}. Value: ${value}`);
+      // Optional: You can replace this alert with a toast notification
+      alert(`${type} copied: ${value}`);
    }
 };
 
+// --- Enhanced Card Component ---
 const MemberCard = ({ member }) => {
-   const [showButtons, setShowButtons] = useState(false);
-   const hasFb = !!member.fb;
-   const hasEmail = !!member.email;
-   const hasContact = !!member.contact;
-   const hasAnyContact = hasFb || hasEmail || hasContact;
-
-   const visibleButtonCount =
-      (hasFb ? 1 : 0) + (hasEmail ? 1 : 0) + (hasContact ? 1 : 0);
-   const spacingClass = visibleButtonCount > 0 ? "space-y-3" : "";
-
-   const handleCardClick = (e) => {
-      if (!e.target.closest("button") && !e.target.closest("a")) {
-         setShowButtons(!showButtons);
-      }
-   };
-
    return (
-      <div className="text-center group">
-         {/* image container */}
-         <div
-            className="relative pt-[100%] rounded-lg overflow-hidden mb-4 shadow-md cursor-pointer md:cursor-default"
-            onClick={handleCardClick}
-         >
-            <img
-               src={member.image}
-               alt={member.name}
-               className="absolute inset-0 w-full h-full object-cover transition duration-300 group-hover:scale-105"
-            />
+      <motion.div
+         className="group h-full"
+         whileHover={{ y: -8 }} // Framer Motion lift effect
+         transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      >
+         <div className="relative h-full bg-white rounded-2xl shadow-sm group-hover:shadow-2xl border border-gray-100 overflow-hidden transition-shadow duration-300 flex flex-col">
+            {/* Decorative Top Banner with Shine Effect */}
+            <div className="h-24 bg-gradient-to-r from-blue-900 to-blue-700 relative overflow-hidden">
+               {/* The Shine/Glint Animation */}
+               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out skew-x-12" />
+               <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
+            </div>
 
-            {/* Contact Overlay Wrapper*/}
-            {hasAnyContact && (
-               <div className="absolute inset-0 pointer-events-none">
-                  <div className="absolute right-0 top-0 h-full w-[20%] bg-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                  {/* Button Container */}
-                  <div
-                     className={`absolute right-0 top-0 h-full w-[20%] flex flex-col items-center justify-center ${spacingClass} 
-                        ${showButtons ? "opacity-100" : "opacity-0"} 
-                        md:opacity-0 md:group-hover:opacity-100 
-                        transition-opacity duration-300 p-2 pointer-events-auto`}
-                  >
-                     {/* FB Button*/}
-                     {hasFb && (
-                        <a
-                           href={member.fb}
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="w-10 h-10 flex items-center justify-center text-white rounded-full bg-blue-700 hover:bg-blue-800 transition-colors duration-200 shadow-lg"
-                           title={`Facebook: ${member.name}`}
-                        >
-                           <Facebook size={18} />
-                        </a>
-                     )}
-
-                     {/* Email Button  */}
-                     {hasEmail && (
-                        <button
-                           onClick={() => handleCopy(member.email, "Email")}
-                           className="w-10 h-10 flex items-center justify-center text-white rounded-full bg-red-600 hover:bg-red-700 transition-colors duration-200 shadow-lg"
-                           title={`Email: ${member.email} (Click to Copy)`}
-                        >
-                           <Mail size={18} />
-                        </button>
-                     )}
-
-                     {/* Contact Button */}
-                     {hasContact && (
-                        <button
-                           onClick={() => handleCopy(member.contact, "Contact")}
-                           className="w-10 h-10 flex items-center justify-center text-white rounded-full bg-green-600 hover:bg-green-700 transition-colors duration-200 shadow-lg"
-                           title={`Contact: ${member.contact} (Click to Copy)`}
-                        >
-                           <Phone size={18} />
-                        </button>
-                     )}
-                  </div>
+            {/* Avatar (Overlapping) */}
+            <div className="relative mx-auto -mt-16 w-36 h-36 p-1 bg-white rounded-full z-10">
+               <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-md relative">
+                  <img
+                     src={member.image}
+                     alt={member.name}
+                     className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-3"
+                  />
                </div>
-            )}
+            </div>
+
+            {/* Content Body */}
+            <div className="p-6 pt-3 text-center flex-grow flex flex-col justify-between relative z-10">
+               <div>
+                  <h3 className="text-lg font-bold text-gray-800 leading-tight mb-1 group-hover:text-blue-800 transition-colors duration-300">
+                     {member.name}
+                  </h3>
+                  {/* Position Text - Changed to RED */}
+                  <p className="text-sm font-bold text-red-600 uppercase tracking-wide mb-1">
+                     {member.position}
+                  </p>
+
+                  {/* --- VISIBLE EMAIL DISPLAY --- */}
+                  {member.email && (
+                     <p className="text-xs sm:text-sm text-gray-500 font-medium break-all">
+                        {member.email}
+                     </p>
+                  )}
+               </div>
+
+               {/* Interactive Action Bar with Spring Animations */}
+               <div className="mt-6 pt-4 border-t border-gray-100 flex justify-center gap-4">
+                  {/* Facebook */}
+                  {member.fb ? (
+                     <motion.a
+                        href={member.fb}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 text-gray-400 bg-transparent rounded-full"
+                        whileHover={{
+                           scale: 1.2,
+                           color: "#1877F2",
+                           backgroundColor: "#eff6ff",
+                        }} // Blue hover
+                        whileTap={{ scale: 0.9 }}
+                        title="Visit Facebook Profile"
+                     >
+                        <Facebook size={20} />
+                     </motion.a>
+                  ) : (
+                     <span className="p-2 text-gray-200 cursor-not-allowed">
+                        <Facebook size={20} />
+                     </span>
+                  )}
+
+                  {/* Email Button (Copies to Clipboard) */}
+                  {member.email ? (
+                     <motion.button
+                        onClick={() => handleCopy(member.email, "Email")}
+                        className="p-2 text-gray-400 bg-transparent rounded-full"
+                        whileHover={{
+                           scale: 1.2,
+                           color: "#EA4335",
+                           backgroundColor: "#fef2f2",
+                        }} // Red hover
+                        whileTap={{ scale: 0.9 }}
+                        title="Copy Email to Clipboard"
+                     >
+                        <Mail size={20} />
+                     </motion.button>
+                  ) : (
+                     <span className="p-2 text-gray-200 cursor-not-allowed">
+                        <Mail size={20} />
+                     </span>
+                  )}
+
+                  {/* Phone */}
+                  {member.contact ? (
+                     <motion.button
+                        onClick={() =>
+                           handleCopy(member.contact, "Phone Number")
+                        }
+                        className="p-2 text-gray-400 bg-transparent rounded-full"
+                        whileHover={{
+                           scale: 1.2,
+                           color: "#16a34a",
+                           backgroundColor: "#f0fdf4",
+                        }} // Green hover
+                        whileTap={{ scale: 0.9 }}
+                        title={`Copy Contact: ${member.contact}`}
+                     >
+                        <Phone size={20} />
+                     </motion.button>
+                  ) : (
+                     <span className="p-2 text-gray-200 cursor-not-allowed">
+                        <Phone size={20} />
+                     </span>
+                  )}
+               </div>
+            </div>
          </div>
-         <h3 className="text-lg sm:text-xl font-bold text-[#262626] mb-1">
-            {member.name}
-         </h3>
-         <p className="text-[#6c6c6c] text-sm sm:text-base italic">
-            {member.position}
-         </p>
-      </div>
+      </motion.div>
    );
 };
 
-// --- Data Object and Main Component
-
+// --- Data ---
 const organizationMembersData = {
-   title: "Meet Our Team",
+   title: "Barangay Officials",
    description:
-      "Leadership and key personnel driving Barangay Culiat's initiatives forward.",
+      "Meet the dedicated leaders serving our community with passion and integrity.",
    members: [
       {
          name: "Hon. Cristina V. Bernardino",
          position: "Punong Barangay (Barangay Captain)",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "/images/brgy/captain-main.jpg",
          isMain: true,
          fb: "https://facebook.com/juan.delacruz.official",
          email: "juan.dcruz@culiat.gov.ph",
@@ -135,7 +166,7 @@ const organizationMembersData = {
       {
          name: "Maria Santos",
          position: "Barangay Kagawad (Councilor) I",
-         image: "https://uifaces.co/our-content/donated/6MWH9Xi_.jpg",
+         image: "https://randomuser.me/api/portraits/women/68.jpg",
          fb: null,
          email: "maria.santos@culiat.gov.ph",
          contact: "09177654321",
@@ -143,15 +174,15 @@ const organizationMembersData = {
       {
          name: "Jose Reyes ",
          position: "Barangay Kagawad (Councilor) II",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/men/32.jpg",
          fb: "https://facebook.com/jose.reyes.kagawad",
-         email: null,
+         email: "jose.reyes@culiat.gov.ph",
          contact: null,
       },
       {
          name: "Ana Lim",
          position: "Barangay Kagawad (Councilor) III",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/women/90.jpg",
          fb: "https://facebook.com/ana.lim.kagawad",
          email: "ana.lim@culiat.gov.ph",
          contact: "09191213141",
@@ -159,7 +190,7 @@ const organizationMembersData = {
       {
          name: "Pedro Mendoza",
          position: "Barangay Kagawad (Councilor) IV",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/men/86.jpg",
          fb: "https://facebook.com/pedro.mendoza.kagawad",
          email: "pedro.mendoza@culiat.gov.ph",
          contact: "09205566778",
@@ -167,7 +198,7 @@ const organizationMembersData = {
       {
          name: "Sophia Tan",
          position: "Barangay Kagawad (Councilor) V",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/women/22.jpg",
          fb: "https://facebook.com/sophia.tan.kagawad",
          email: "sophia.tan@culiat.gov.ph",
          contact: "09219988776",
@@ -175,7 +206,7 @@ const organizationMembersData = {
       {
          name: "David Lee",
          position: "Barangay Kagawad (Councilor) VI",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/men/54.jpg",
          fb: "https://facebook.com/david.lee.kagawad",
          email: "david.lee@culiat.gov.ph",
          contact: "09224433221",
@@ -183,7 +214,7 @@ const organizationMembersData = {
       {
          name: "Elena Garcia",
          position: "Barangay Kagawad (Councilor) VII",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/women/48.jpg",
          fb: "https://facebook.com/elena.garcia.kagawad",
          email: "elena.garcia@culiat.gov.ph",
          contact: "09236789012",
@@ -191,7 +222,7 @@ const organizationMembersData = {
       {
          name: "Sangguniang Kabataan (SK) Chairperson",
          position: "SK Chairperson",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/men/11.jpg",
          fb: "https://facebook.com/sk.culiat",
          email: "skchair.culiat@culiat.gov.ph",
          contact: "09241010101",
@@ -199,7 +230,7 @@ const organizationMembersData = {
       {
          name: "Barangay Secretary",
          position: "Barangay Secretary",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/women/60.jpg",
          fb: "https://facebook.com/bgy.secretary.culiat",
          email: "sec.culiat@culiat.gov.ph",
          contact: "09252020202",
@@ -207,7 +238,7 @@ const organizationMembersData = {
       {
          name: "Barangay Treasurer",
          position: "Barangay Treasurer",
-         image: "https://uifaces.co/our-content/donated/generic-avatar.jpg",
+         image: "https://randomuser.me/api/portraits/men/75.jpg",
          fb: "https://facebook.com/bgy.treasurer.culiat",
          email: "tres.culiat@culiat.gov.ph",
          contact: "09263030303",
@@ -215,6 +246,7 @@ const organizationMembersData = {
    ],
 };
 
+// --- Main Section Component ---
 const OrganizationMembers = () => {
    const mainMember = organizationMembersData.members.find(
       (member) => member.isMain
@@ -223,9 +255,8 @@ const OrganizationMembers = () => {
       (member) => !member.isMain
    );
 
-
    return (
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-neutral">
          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
                initial={{ opacity: 0, y: 40 }}
@@ -264,6 +295,7 @@ const OrganizationMembers = () => {
                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
             >
                {otherMembers.map((member, index) => {
+                  // Logic to center the last item if it's a lone orphan in the grid
                   const isSingleLastItem = otherMembers.length % 3 === 1;
                   const isLastItemInPartialRow =
                      isSingleLastItem && index === otherMembers.length - 1;
