@@ -1,9 +1,4 @@
-import {
-   BrowserRouter as Router,
-   Routes,
-   Route,
-   Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
@@ -43,7 +38,7 @@ import Profile from "./users/pages/Profile/Profile";
 
 function App() {
    return (
-      <Router>
+      <>
          <AuthProvider>
             {/* Toast Notifications */}
             <Toaster
@@ -234,7 +229,7 @@ function App() {
                <Route path="*" element={<NotFound />} />
             </Routes>
          </AuthProvider>
-      </Router>
+      </>
    );
 }
 
