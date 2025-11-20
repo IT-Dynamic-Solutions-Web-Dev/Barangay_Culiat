@@ -15,9 +15,11 @@ const Navbar = () => {
    const { user, logout } = useAuth();
 
    const isHome = location.pathname === "/";
-   const isAbout = location.pathname === "/about";
+   // const isAbout = location.pathname === "/about";
 
-   const shouldApplySpecialScroll = isHome || isAbout;
+   // const shouldApplySpecialScroll = isHome || isAbout;
+
+   const shouldApplySpecialScroll = isHome;
 
    useEffect(() => {
       const handleScroll = () => {
