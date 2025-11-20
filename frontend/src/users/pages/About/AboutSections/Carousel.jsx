@@ -1,29 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-   motion,
-   AnimatePresence,
-   useScroll,
-   useTransform,
-} from "framer-motion";
 
 const Carousel = () => {
    const [currentIndex, setCurrentIndex] = useState(0);
    const [isPaused, setIsPaused] = useState(false);
    const timeoutRef = useRef(null);
-   const carouselRef = useRef(null);
-
-   // Parallax effect
-   const { scrollYProgress } = useScroll({
-      target: carouselRef,
-      offset: ["start end", "end start"],
-   });
-
-   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-   const opacity = useTransform(
-      scrollYProgress,
-      [0, 0.2, 0.8, 1],
-      [0.3, 1, 1, 0.3]
-   );
 
    // Carousel images
    const images = [
@@ -89,16 +69,9 @@ const Carousel = () => {
    };
 
    return (
-      <section id="about-goals" className="py-16 px-6 bg-neutral">
+      <section className="py- px-4 bg-neutral">
          <div className="max-w-6xl mx-auto">
-            {/* Animated Header */}
-            <motion.div
-               initial={{ opacity: 0, y: 30 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.6, ease: "easeOut" }}
-               viewport={{ once: true }}
-               className="text-center mb-8"
-            >
+            <div className="text-center mb-8">
                <h2 className="text-3xl font-bold text-[#262626] mb-4">
                   Community Highlights
                </h2>
@@ -106,16 +79,10 @@ const Carousel = () => {
                   Glimpses of our programs, events, and public services that
                   shape Bagong Culiat.
                </p>
-            </motion.div>
+            </div>
 
             {/* Carousel Container */}
-            <motion.div
-               ref={carouselRef}
-               initial={{ opacity: 0, scale: 0.95 }}
-               whileInView={{ opacity: 1, scale: 1 }}
-               transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-               viewport={{ once: true }}
-               style={{ y, opacity }}
+            <div
                className="relative overflow-hidden rounded-lg shadow-lg bg-neutral mx-2 sm:mx-0"
                onMouseEnter={() => setIsPaused(true)}
                onMouseLeave={() => setIsPaused(false)}
@@ -137,33 +104,21 @@ const Carousel = () => {
                            {/* Image Overlay */}
                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
 
-                           {/* Caption with Animation */}
-                           <AnimatePresence mode="wait">
-                              {index === currentIndex && (
-                                 <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.5, delay: 0.2 }}
-                                    className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 lg:p-8"
-                                 >
-                                    <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-semibold drop-shadow-lg leading-tight">
-                                       {image.caption}
-                                    </h3>
-                                 </motion.div>
-                              )}
-                           </AnimatePresence>
+                           {/* Caption */}
+                           <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 lg:p-8">
+                              <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-semibold drop-shadow-lg leading-tight">
+                                 {image.caption}
+                              </h3>
+                           </div>
                         </div>
                      </div>
                   ))}
                </div>
 
                {/* Previous Button */}
-               <motion.button
+               <button
                   onClick={goToPrevious}
-                  whileHover={{ scale: 1.1, x: -3 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-text-color p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-text-color p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label="Previous slide"
                >
                   <svg
@@ -179,14 +134,12 @@ const Carousel = () => {
                         d="M15 19l-7-7 7-7"
                      />
                   </svg>
-               </motion.button>
+               </button>
 
                {/* Next Button */}
-               <motion.button
+               <button
                   onClick={goToNext}
-                  whileHover={{ scale: 1.1, x: 3 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-text-color p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-text-color p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label="Next slide"
                >
                   <svg
@@ -202,16 +155,14 @@ const Carousel = () => {
                         d="M9 5l7 7-7 7"
                      />
                   </svg>
-               </motion.button>
+               </button>
 
                {/* Dots Navigation */}
                <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2">
                   {images.map((_, index) => (
-                     <motion.button
+                     <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        whileHover={{ scale: 1.2 }}
-                        whileTap={{ scale: 0.9 }}
                         className={`transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-white/50 ${
                            index === currentIndex
                               ? "w-6 sm:w-8 md:w-10 h-1.5 sm:h-2 md:h-2.5 bg-white"
@@ -221,7 +172,7 @@ const Carousel = () => {
                      />
                   ))}
                </div>
-            </motion.div>
+            </div>
          </div>
       </section>
    );

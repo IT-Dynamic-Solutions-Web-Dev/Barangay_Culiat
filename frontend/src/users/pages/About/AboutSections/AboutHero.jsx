@@ -1,7 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import MediaSequence from "../../../../components/MediaSequence";
+
+import TextChangeAbout from "../../../../components/Animation/TextChangeAbout";
+
+import Header from "../../../../components/Header";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { Info } from "lucide-react";
 
 // Animation Variants
 const fadeUp = {
@@ -13,7 +18,7 @@ const fadeUp = {
    }),
 };
 
-const AboutHero = () => {
+const Hero = () => {
    const location = useLocation();
    const [resetKey, setResetKey] = React.useState(0);
 
@@ -22,83 +27,94 @@ const AboutHero = () => {
    }, [location.pathname]);
 
    return (
-      <section id="about-hero" className="relative lg:mb-0 mb-0" key={resetKey}>
-         <motion.section
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="relative text-white overflow-hidden"
-            style={{
-               background:
-                  "linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-glow) 100%)",
-            }}
-         >
-            {/* Decorative Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-               <div
-                  className="absolute inset-0"
-                  style={{
-                     backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-                     backgroundSize: "40px 40px",
-                  }}
-               ></div>
-            </div>
+      <section id="home-hero" className="relative lg:mb-0 mb-0 " key={resetKey}>
+         <div className="relative min-h-[500px] md:min-h-[680px] flex overflow-hidden">
+            <MediaSequence />
 
-            <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-16 sm:pt-28 sm:pb-20 md:pt-32 md:pb-28">
-               {/* Animated Icon Badge */}
+            {/* Overlay */}
+            <motion.div
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 0.9 }}
+               transition={{ duration: 0.3 }}
+               className="absolute inset-0 bg-linear-to-br from-[#141414b7] via-[#000000e3] to-[#1f1f1fd0]"
+            ></motion.div>
+
+            {/* Content */}
+            <div className="mx-auto text-center flex flex-col pt-[7.5em] gap-[3em] z-5 relative">
+               {/* Animated Header */}
                <motion.div
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-sm rounded-full mb-6"
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="show"
+                  custom={0.1}
                >
-                  <Info className="w-8 h-8 md:w-10 md:h-10" />
+                  <Header />
                </motion.div>
 
-               {/* Title */}
-               <motion.h1
+               {/* Main Text */}
+               <motion.div
                   variants={fadeUp}
                   initial="hidden"
                   animate="show"
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 max-w-3xl"
+                  custom={0.3}
+                  className="flex flex-col gap-2 md:gap-6"
                >
-                  About Us
-               </motion.h1>
+                  <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold text-text-color-light leading-tight tracking-tight drop-shadow-lg">
+                     <TextChangeAbout />
+                  </h1>
 
-               {/* Description */}
-               <motion.p
-                  variants={fadeUp}
-                  initial="hidden"
-                  animate="show"
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed"
-               >
-                  Discover Barangay Culiat’s mission, vision, goals, and the
-                  leaders who guide our growing community.
-               </motion.p>
+                  <motion.p
+                     variants={fadeUp}
+                     initial="hidden"
+                     animate="show"
+                     custom={0.5}
+                     className="px-4 md:px-0 sm:text-base text-sm md:leading-7 md:text-lg text-text-color-light max-w-2xl mx-auto "
+                  >
+                     Learn how Barangay Culiat continues to grow and serve
+                     through our mission, vision, goals, and the people who lead
+                     our community.
+                  </motion.p>
+               </motion.div>
+
+               {/* Optional Buttons (commented out) */}
+               {/* <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            custom={0.7}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Button variant="primary" size="md" className="font-medium px-8">
+              Request a document
+            </Button>
+            <Button
+              variant="outlinesecondary"
+              size="md"
+              className="font-medium"
+            >
+              Learn more →
+            </Button>
+          </motion.div> */}
             </div>
 
             {/* Wave Divider */}
-            <div
-               className="absolute bottom-0 left-0 w-full overflow-hidden leading-none"
-               style={{ transform: "rotate(180deg)" }}
+            <motion.svg
+               initial={{ y: 20, opacity: 0.8 }}
+               animate={{ y: 0, opacity: 1 }}
+               transition={{ duration: 0.1 }}
+               className="absolute -bottom-1 left-0 w-full"
+               xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 1440 100"
             >
-               <svg
-                  className="relative block w-full h-12 md:h-20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1200 120"
-                  preserveAspectRatio="none"
-               >
-                  <path
-                     d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-                     fill="var(--color-neutral)"
-                  ></path>
-               </svg>
-            </div>
-         </motion.section>
+               <path
+                  fill="#f5f5f5"
+                  d="M0,64 C480,120 960,0 1440,64 L1440,100 L0,100 Z"
+               ></path>
+            </motion.svg>
+         </div>
       </section>
    );
 };
 
-export default AboutHero;
+export default Hero;
