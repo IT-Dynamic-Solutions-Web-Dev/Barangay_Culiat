@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CalendarDays, MapPin, Filter, Megaphone } from "lucide-react";
 import { motion } from "framer-motion";
 // import Header from "../../components/Header";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const announcements = [
    {
