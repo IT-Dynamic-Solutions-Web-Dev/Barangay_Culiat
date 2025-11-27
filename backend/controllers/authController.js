@@ -630,10 +630,17 @@ exports.getAllUsers = async (req, res) => {
       .select('-password')
       .sort({ createdAt: -1 });
 
+    // Add role name to each user for frontend display
+    const usersWithRoleNames = users.map(user => {
+      const userObj = user.toObject();
+      userObj.roleName = getRoleName(user.role);
+      return userObj;
+    });
+
     res.status(200).json({
       success: true,
-      count: users.length,
-      data: users,
+      count: usersWithRoleNames.length,
+      data: usersWithRoleNames,
     });
   } catch (error) {
     res.status(500).json({

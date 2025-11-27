@@ -65,13 +65,11 @@ const Goals = () => {
                   viewport={{ once: true, amount: 0.3 }}
                   className="relative w-full h-80 md:h-96 lg:h-full lg:min-h-[500px] rounded-lg overflow-hidden shadow-xl"
                >
-                  <div
-                     className="absolute inset-0 bg-cover bg-center"
-                     style={{
-                        backgroundImage: `url('https://picsum.photos/seed/barangay/800/600')`,
-                     }}
-                     aria-label="Barangay Culiat Priorities Visual"
-                  ></div>
+                  <img
+                     src="/images/brgy/elderly-community.jpg"
+                     alt="Barangay Culiat Community Meeting"
+                     className="absolute inset-0 w-full h-full object-cover"
+                  />
                </motion.div>
 
                <div className="flex flex-col space-y-8">
