@@ -230,6 +230,14 @@ export default function SignInForm() {
                                  )}
                               </button>
                            </div>
+                           <div className="flex justify-end mt-1">
+                              <Link
+                                 to="/forgot-password"
+                                 className="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                              >
+                                 Forgot Password?
+                              </Link>
+                           </div>
                         </div>
 
                         {/* Submit Button */}

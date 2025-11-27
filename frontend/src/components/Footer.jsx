@@ -11,8 +11,12 @@ const Footer = () => {
           {/* Barangay Info */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-secondary rounded-full"></div>
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/images/logo/brgy-culiat-logo.png" 
+                  alt="Barangay Culiat Logo" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <h3 className="font-bold text-lg">BARANGAY CULIAT</h3>
@@ -245,10 +249,18 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/20 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-white/80 text-center md:text-left">
-              © 2025 Barangay Culiat | Managed by Barangay Culiat Information
-              Office
-            </p>
+            <div className="flex flex-col items-center md:items-start space-y-2">
+              <p className="text-sm text-white/80 text-center md:text-left">
+                © 2025 Barangay Culiat | Managed by Barangay Culiat Information
+                Office
+              </p>
+              <div className="flex items-center space-x-2 text-xs text-white/60">
+                <span>Powered by</span>
+                <span className="font-bold text-white/80">Prince IT Solutions</span>
+                {/* Placeholder for Prince IT Solutions Logo if available */}
+                {/* <img src="/path/to/logo.png" alt="Prince IT Solutions" className="h-4" /> */}
+              </div>
+            </div>
             <div className="flex space-x-6 text-sm">
               <a
                 href="#"

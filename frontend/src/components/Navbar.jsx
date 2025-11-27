@@ -122,6 +122,10 @@ const Navbar = () => {
                      Announcements
                   </NavLink>
 
+                  <NavLink to="/achievements" className="navlink  text-md ">
+                     Achievements
+                  </NavLink>
+
                   <NavLink to="/reports" className="navlink  text-md ">
                      Report
                   </NavLink>
@@ -300,6 +304,13 @@ const Navbar = () => {
                className="block mobile-navlink text-text-color hover:text-secondary"
             >
                Announcements
+            </NavLink>
+            <NavLink
+               to="/achievements"
+               onClick={() => setIsOpen(false)}
+               className="block mobile-navlink text-text-color hover:text-secondary"
+            >
+               Achievements
             </NavLink>
             <NavLink
                to="/reports"

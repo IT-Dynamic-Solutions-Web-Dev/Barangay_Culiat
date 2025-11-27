@@ -14,6 +14,7 @@ import {
   UserCheck,
   FileCheck,
   History,
+  Trophy,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -28,6 +29,7 @@ const Sidebar = ({ isOpen, isMobileOpen, closeMobileMenu }) => {
     { name: "Registration History", path: "/admin/registration-history", icon: History },
     { name: "Reports", path: "/admin/reports", icon: FileText },
     { name: "Announcements", path: "/admin/announcements", icon: Megaphone },
+    { name: "Achievements", path: "/admin/achievements", icon: Trophy },
     { name: "Analytics", path: "/admin/analytics", icon: BarChart3 },
     { name: "Documents", path: "/admin/documents", icon: FolderOpen },
     { name: "Calendar", path: "/admin/calendar", icon: Calendar },

@@ -82,6 +82,26 @@ export default function MyRequestsTab() {
     }
   };
 
+  const handlePayment = async (requestId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${API_URL}/api/payments/create-link`, {
+        requestId
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success && response.data.paymentLink) {
+        window.open(response.data.paymentLink, '_blank');
+      }
+    } catch (err) {
+      console.error('Payment error:', err);
+      alert('Failed to create payment link: ' + (err.response?.data?.message || err.message));
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -183,6 +203,28 @@ export default function MyRequestsTab() {
                   </div>
                 )}
               </div>
+
+              {/* Payment Button */}
+              {request.paymentStatus === 'unpaid' && (request.fees > 0 || true) && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end items-center gap-4">
+                    <div className="text-sm text-gray-600">
+                      Payment Status: <span className="font-semibold text-yellow-600">Unpaid</span>
+                    </div>
+                    <button
+                      onClick={() => handlePayment(request._id)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
+                    >
+                      Pay Now (₱{request.fees || 50})
+                    </button>
+                  </div>
+                )}
+                {request.paymentStatus === 'paid' && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end items-center">
+                     <div className="text-sm text-gray-600">
+                      Payment Status: <span className="font-semibold text-green-600">Paid</span>
+                    </div>
+                  </div>
+                )}
             </div>
           );
         })}

@@ -8,6 +8,7 @@ const uploadDirs = {
   validIDs: 'uploads/validIDs',
   documents: 'uploads/documents',
   photos: 'uploads/photos',
+  achievements: 'uploads/achievements',
 };
 
 // Create directories if they don't exist
@@ -31,6 +32,8 @@ const storage = multer.diskStorage({
       uploadDir = uploadDirs.documents;
     } else if (file.fieldname === 'proofOfResidency') {
       uploadDir = uploadDirs.proofs;
+    } else if (file.fieldname === 'achievementImage') {
+      uploadDir = uploadDirs.achievements;
     }
     
     cb(null, uploadDir);

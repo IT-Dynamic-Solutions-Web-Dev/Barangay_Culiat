@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -63,6 +63,12 @@ const Login = () => {
               style={styles.input}
               placeholder="Enter your password"
             />
+          </div>
+
+          <div style={{textAlign: 'right', marginTop: '0.5rem'}}>
+            <Link to="/forgot-password" style={{color: '#1a73e8', textDecoration: 'none', fontSize: '0.9rem'}}>
+              Forgot Password?
+            </Link>
           </div>
 
           <button type="submit" disabled={loading} style={styles.button}>

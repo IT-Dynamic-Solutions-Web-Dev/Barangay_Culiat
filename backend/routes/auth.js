@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe, updateProfile, changePassword, adminRegister, residentRegister, getPendingRegistrations, approveRegistration, rejectRegistration, getAllUsers } = require('../controllers/authController');
+const { register, login, getMe, updateProfile, changePassword, adminRegister, residentRegister, getPendingRegistrations, approveRegistration, rejectRegistration, getAllUsers, forgotPassword, resetPassword } = require('../controllers/authController');
 const { protect, authorize } = require('../middleware/auth');
 const ROLES = require('../config/roles');
 const upload = require('../middleware/fileUpload');
@@ -8,6 +8,8 @@ const upload = require('../middleware/fileUpload');
 router.post('/register', upload.fields([{ name: 'validID', maxCount: 1 }]), register);
 router.post('/resident-register', upload.single('proofOfResidency'), residentRegister);
 router.post('/login', login);
+router.post('/forgotpassword', forgotPassword);
+router.put('/resetpassword/:resetToken', resetPassword);
 router.post('/adminRegister', adminRegister);
 router.get('/me', protect, getMe);
 router.put('/profile', protect, updateProfile);

@@ -42,6 +42,7 @@ const Register = () => {
     emergencyStreet: "",
     emergencySubdivision: "",
     validIDFile: null,
+    termsAccepted: false,
   });
   
   const [validIDPreview, setValidIDPreview] = useState(null);
@@ -51,9 +52,10 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
@@ -128,6 +130,13 @@ const Register = () => {
         return false;
       }
     }
+
+    if (step === 5) {
+      if (!formData.termsAccepted) {
+        setError("You must accept the Terms and Conditions to register");
+        return false;
+      }
+    }
     
     return true;
   };
@@ -148,7 +157,7 @@ const Register = () => {
     e.preventDefault();
     setError("");
 
-    if (!validateStep(4)) {
+    if (!validateStep(5)) {
       return;
     }
 
@@ -212,7 +221,7 @@ const Register = () => {
 
   const renderStepIndicator = () => (
     <div className="flex items-center justify-between mb-8">
-      {[1, 2, 3, 4].map((step) => (
+      {[1, 2, 3, 4, 5].map((step) => (
         <div key={step} className="flex items-center flex-1">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
             currentStep >= step 
@@ -221,7 +230,7 @@ const Register = () => {
           }`}>
             {step}
           </div>
-          {step < 4 && (
+          {step < 5 && (
             <div className={`flex-1 h-1 mx-2 transition-all ${
               currentStep > step ? "bg-blue-600" : "bg-slate-200"
             }`} />
@@ -721,6 +730,44 @@ const Register = () => {
     </div>
   );
 
+  const renderStep5 = () => (
+    <div className="space-y-4">
+      <div className="bg-white border border-slate-200 rounded-lg p-4 h-64 overflow-y-auto text-sm text-slate-600 mb-4">
+        <h3 className="font-bold text-slate-800 mb-2">Terms and Conditions</h3>
+        <p className="mb-2">
+          Welcome to the Barangay Culiat Online Portal. By registering, you agree to the following terms and conditions:
+        </p>
+        <ul className="list-disc pl-5 space-y-1 mb-2">
+          <li>You certify that all information provided is true and correct.</li>
+          <li>You agree to provide a valid government-issued ID for verification purposes.</li>
+          <li>You understand that your account is subject to approval by the Barangay Administration.</li>
+          <li>You agree to use this portal for legitimate barangay-related transactions only.</li>
+          <li>You consent to the collection and processing of your personal data in accordance with the Data Privacy Act of 2012.</li>
+          <li>Any false information provided may result in the rejection of your application or suspension of your account.</li>
+        </ul>
+        <p>
+          The Barangay Culiat Administration reserves the right to update these terms at any time.
+        </p>
+      </div>
+
+      <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+        <div className="flex items-center h-5">
+          <input
+            id="termsAccepted"
+            name="termsAccepted"
+            type="checkbox"
+            checked={formData.termsAccepted}
+            onChange={handleChange}
+            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          />
+        </div>
+        <label htmlFor="termsAccepted" className="text-sm text-slate-700">
+          I have read and agree to the <span className="font-semibold text-blue-700">Terms and Conditions</span> and <span className="font-semibold text-blue-700">Privacy Policy</span>.
+        </label>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex bg-slate-50 overflow-auto">
       <div className="hidden lg:flex lg:w-1/2 xl:w-2/5 relative bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">
@@ -798,13 +845,14 @@ const Register = () => {
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
             <div className="p-6 md:p-8">
               <div className="mb-6">
-                <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-1.5">Create Your Account</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-1.5">Create Your Account</h2>
                 <p className="text-slate-500 text-sm">
-                  Step {currentStep} of 4: {
+                  Step {currentStep} of 5: {
                     currentStep === 1 ? "Account Credentials" :
                     currentStep === 2 ? "Personal Information" :
                     currentStep === 3 ? "Address & Contact" :
-                    "Valid ID Upload"
+                    currentStep === 4 ? "Valid ID Upload" :
+                    "Terms & Conditions"
                   }
                 </p>
               </div>
@@ -823,6 +871,7 @@ const Register = () => {
                 {currentStep === 2 && renderStep2()}
                 {currentStep === 3 && renderStep3()}
                 {currentStep === 4 && renderStep4()}
+                {currentStep === 5 && renderStep5()}
 
                 <div className="flex gap-3 mt-6">
                   {currentStep > 1 && (
@@ -835,7 +884,7 @@ const Register = () => {
                     </button>
                   )}
                   
-                  {currentStep < 4 ? (
+                  {currentStep < 5 ? (
                     <button
                       type="button"
                       onClick={nextStep}

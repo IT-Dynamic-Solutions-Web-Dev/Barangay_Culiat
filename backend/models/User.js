@@ -36,6 +36,8 @@ const userSchema = new mongoose.Schema({
     default: 74934, // Default to Resident
     enum: [74932, 74933, 74934] // Valid role codes (SuperAdmin, Admin, Resident)
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
   // Atomic Address Structure
   address: {
     // Fixed Barangay Culiat Location

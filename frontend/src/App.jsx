@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
-import Login from "./tailadminsrc/pages/AuthPages/SignIn";
+import AdminLogin from "./tailadminsrc/pages/AuthPages/SignIn";
 import Register from "./users/pages/Auth/Register";
 import RegistrationPending from "./users/pages/Auth/RegistrationPending";
 import Dashboard from "./users/pages/Home/Dashboard";
@@ -31,10 +31,14 @@ import AdminAnalytics from "./admin/pages/Analytics/AdminAnalytics";
 import AdminCalendar from "./admin/pages/Calendar/AdminCalendar";
 import AdminNotifications from "./admin/pages/Notifications/AdminNotifications";
 import AdminTermsAcceptances from "./admin/pages/TermsAcceptances/AdminTermsAcceptances";
+import AdminAchievements from "./admin/pages/Achievements/AdminAchievements";
 
 // Resident Auth
 import ResidentAuth from "./users/pages/Auth/ResidentAuth";
 import Profile from "./users/pages/Profile/Profile";
+import Achievements from "./users/pages/Achievements/Achievements";
+import ForgotPassword from "./users/pages/Auth/ForgotPassword";
+import ResetPassword from "./users/pages/Auth/ResetPassword";
 
 function App() {
    return (
@@ -84,12 +88,12 @@ function App() {
             {typeof window !== "undefined" && <PolicyPopup />}
 
             <Routes>
-               {/* Admin Login */}
-               <Route path="/signin" element={<Login />} />
-
-               {/* Resident Login/Registration */}
+               {/* Public Routes */}
+               <Route path="/signin" element={<AdminLogin />} />
                <Route path="/login" element={<ResidentAuth />} />
                <Route path="/register" element={<Register />} />
+               <Route path="/forgot-password" element={<ForgotPassword />} />
+               <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
                <Route
                   path="/registration-pending"
                   element={<RegistrationPending />}
@@ -148,6 +152,7 @@ function App() {
                      path="announcements"
                      element={<AdminAnnouncements />}
                   />
+                  <Route path="achievements" element={<AdminAchievements />} />
                   <Route path="documents" element={<AdminDocuments />} />
                   <Route path="users" element={<AdminUsers />} />
                   <Route
@@ -202,6 +207,14 @@ function App() {
                   element={
                      <MainLayout>
                         <AnnouncementDetail />
+                     </MainLayout>
+                  }
+               />
+               <Route
+                  path="/achievements"
+                  element={
+                     <MainLayout>
+                        <Achievements />
                      </MainLayout>
                   }
                />

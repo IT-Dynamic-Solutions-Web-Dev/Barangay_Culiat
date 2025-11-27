@@ -31,6 +31,8 @@ app.use('/api/document-requests', require('./routes/documentRequestRoute'));
 app.use('/api/v2/document-requests', require('./routes/documentRequestRoute_v2'));
 app.use('/api/terms', require('./routes/termsRoute'));
 app.use('/api/settings', require('./routes/settingsRoute'));
+app.use('/api/achievements', require('./routes/achievementsRoute'));
+app.use('/api/payments', require('./routes/paymentRoute'));
 
 // New model routes
 app.use('/api/officials', require('./routes/officialsRoute'));

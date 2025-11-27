@@ -199,6 +199,37 @@ export default function DocumentRequestTab({ formData, setField, errors, isBusin
       <div className="border-t pt-4">
         <h2 className="text-lg font-medium mb-3">Request Details</h2>
         
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-[var(--color-text-color)]">
+            Request For <span className="text-red-500">*</span>
+          </label>
+          <input
+            list="requestForOptions"
+            name="requestFor"
+            value={formData.requestFor || ""}
+            onChange={onChange}
+            className={`mt-1 block w-full rounded-md border px-3 py-2 outline-none transition ${
+              errors.requestFor
+                ? "border-red-500"
+                : "border-[var(--color-neutral-active)]"
+            }`}
+            placeholder="Select or type reason..."
+          />
+          <datalist id="requestForOptions">
+            <option value="Employment" />
+            <option value="School Requirement" />
+            <option value="ID Application" />
+            <option value="Loan Application" />
+            <option value="Travel" />
+            <option value="Medical Assistance" />
+            <option value="Financial Assistance" />
+            <option value="Others" />
+          </datalist>
+          {errors.requestFor && (
+            <p className="text-xs text-red-500 mt-1">{errors.requestFor}</p>
+          )}
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-[var(--color-text-color)]">
             Purpose of Request <span className="text-red-500">*</span>

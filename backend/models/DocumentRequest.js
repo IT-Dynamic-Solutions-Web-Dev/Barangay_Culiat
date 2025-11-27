@@ -120,6 +120,8 @@ const documentRequestSchema = new mongoose.Schema(
     occupation: { type: String, trim: true },
     emailAddress: { type: String, trim: true, lowercase: true },
     
+    requestFor: { type: String, trim: true }, // Added field
+    
     // Spouse Information (if married)
     spouseInfo: {
       name: { type: String, trim: true },

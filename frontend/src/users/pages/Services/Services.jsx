@@ -70,6 +70,7 @@ const initialForm = {
   representativeContactNumber: "",
   // Request
   documentType: "",
+  requestFor: "",
   purposeOfRequest: "",
   preferredPickupDate: "",
   remarks: "",
