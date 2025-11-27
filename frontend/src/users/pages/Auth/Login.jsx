@@ -19,9 +19,13 @@ const Login = () => {
 
     if (result.success) {
       // Check for redirect path, otherwise go to home
-      const redirectPath = sessionStorage.getItem('redirectAfterLogin');
-      if (redirectPath && redirectPath !== '/login' && redirectPath !== '/register') {
-        sessionStorage.removeItem('redirectAfterLogin');
+      const redirectPath = sessionStorage.getItem("redirectAfterLogin");
+      if (
+        redirectPath &&
+        redirectPath !== "/login" &&
+        redirectPath !== "/register"
+      ) {
+        sessionStorage.removeItem("redirectAfterLogin");
         navigate(redirectPath);
       } else {
         navigate("/");

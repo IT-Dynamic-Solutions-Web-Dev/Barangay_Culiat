@@ -11,7 +11,7 @@ const RegisterNew = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    
+
     // Personal Information
     firstName: "",
     lastName: "",
@@ -21,13 +21,13 @@ const RegisterNew = () => {
     gender: "",
     civilStatus: "",
     nationality: "Filipino",
-    
+
     // Contact & Address
     phoneNumber: "",
     subdivision: "",
     street: "",
     houseNumber: "",
-    
+
     // Additional Information
     tinNumber: "",
     sssGsisNumber: "",
@@ -36,12 +36,12 @@ const RegisterNew = () => {
     heightWeight: "",
     colorOfHairEyes: "",
     occupation: "",
-    
+
     // Spouse Information (if married)
     spouseName: "",
     spouseOccupation: "",
     spouseContact: "",
-    
+
     // Emergency Contact
     emergencyName: "",
     emergencyRelationship: "",
@@ -49,11 +49,11 @@ const RegisterNew = () => {
     emergencySubdivision: "",
     emergencyStreet: "",
     emergencyHouseNumber: "",
-    
+
     // File Upload
     validIDFile: null,
   });
-  
+
   const [validIDPreview, setValidIDPreview] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,21 +71,21 @@ const RegisterNew = () => {
     const file = e.target.files[0];
     if (file) {
       // Validate file type
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
       if (!allowedTypes.includes(file.type)) {
-        setError('Only JPG, JPEG, and PNG files are allowed');
+        setError("Only JPG, JPEG, and PNG files are allowed");
         return;
       }
-      
+
       // Validate file size (5MB)
       if (file.size > 5242880) {
-        setError('File size must not exceed 5MB');
+        setError("File size must not exceed 5MB");
         return;
       }
-      
+
       setFormData({ ...formData, validIDFile: file });
       setValidIDPreview(URL.createObjectURL(file));
-      setError('');
+      setError("");
     }
   };
 
@@ -99,7 +99,7 @@ const RegisterNew = () => {
 
   const validateStep = (currentStep) => {
     setError("");
-    
+
     if (currentStep === 1) {
       if (!formData.username.trim()) {
         setError("Username is required");
@@ -118,7 +118,7 @@ const RegisterNew = () => {
         return false;
       }
     }
-    
+
     if (currentStep === 2) {
       if (!formData.firstName.trim() || !formData.lastName.trim()) {
         setError("First name and last name are required");
@@ -137,7 +137,7 @@ const RegisterNew = () => {
         return false;
       }
     }
-    
+
     if (currentStep === 3) {
       if (!formData.phoneNumber.trim()) {
         setError("Phone number is required");
@@ -148,14 +148,14 @@ const RegisterNew = () => {
         return false;
       }
     }
-    
+
     if (currentStep === 4) {
       if (!formData.validIDFile) {
         setError("Valid ID is required for registration");
         return false;
       }
     }
-    
+
     return true;
   };
 
@@ -172,7 +172,7 @@ const RegisterNew = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateStep(4)) {
       return;
     }
@@ -183,52 +183,89 @@ const RegisterNew = () => {
     try {
       // Create FormData for file upload
       const formDataToSend = new FormData();
-      
+
       // Account credentials
-      formDataToSend.append('username', formData.username);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('password', formData.password);
-      
+      formDataToSend.append("username", formData.username);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("password", formData.password);
+
       // Personal information
-      formDataToSend.append('firstName', formData.firstName);
-      formDataToSend.append('lastName', formData.lastName);
-      if (formData.middleName) formDataToSend.append('middleName', formData.middleName);
-      formDataToSend.append('dateOfBirth', formData.dateOfBirth);
-      if (formData.placeOfBirth) formDataToSend.append('placeOfBirth', formData.placeOfBirth);
-      formDataToSend.append('gender', formData.gender);
-      formDataToSend.append('civilStatus', formData.civilStatus);
-      formDataToSend.append('nationality', formData.nationality);
-      formDataToSend.append('phoneNumber', formData.phoneNumber);
-      
+      formDataToSend.append("firstName", formData.firstName);
+      formDataToSend.append("lastName", formData.lastName);
+      if (formData.middleName)
+        formDataToSend.append("middleName", formData.middleName);
+      formDataToSend.append("dateOfBirth", formData.dateOfBirth);
+      if (formData.placeOfBirth)
+        formDataToSend.append("placeOfBirth", formData.placeOfBirth);
+      formDataToSend.append("gender", formData.gender);
+      formDataToSend.append("civilStatus", formData.civilStatus);
+      formDataToSend.append("nationality", formData.nationality);
+      formDataToSend.append("phoneNumber", formData.phoneNumber);
+
       // Address
-      formDataToSend.append('address[subdivision]', formData.subdivision || '');
-      formDataToSend.append('address[street]', formData.street || '');
-      formDataToSend.append('address[houseNumber]', formData.houseNumber || '');
-      
+      formDataToSend.append("address[subdivision]", formData.subdivision || "");
+      formDataToSend.append("address[street]", formData.street || "");
+      formDataToSend.append("address[houseNumber]", formData.houseNumber || "");
+
       // Additional information
-      if (formData.tinNumber) formDataToSend.append('tinNumber', formData.tinNumber);
-      if (formData.sssGsisNumber) formDataToSend.append('sssGsisNumber', formData.sssGsisNumber);
-      if (formData.precinctNumber) formDataToSend.append('precinctNumber', formData.precinctNumber);
-      if (formData.religion) formDataToSend.append('religion', formData.religion);
-      if (formData.heightWeight) formDataToSend.append('heightWeight', formData.heightWeight);
-      if (formData.colorOfHairEyes) formDataToSend.append('colorOfHairEyes', formData.colorOfHairEyes);
-      if (formData.occupation) formDataToSend.append('occupation', formData.occupation);
-      
+      if (formData.tinNumber)
+        formDataToSend.append("tinNumber", formData.tinNumber);
+      if (formData.sssGsisNumber)
+        formDataToSend.append("sssGsisNumber", formData.sssGsisNumber);
+      if (formData.precinctNumber)
+        formDataToSend.append("precinctNumber", formData.precinctNumber);
+      if (formData.religion)
+        formDataToSend.append("religion", formData.religion);
+      if (formData.heightWeight)
+        formDataToSend.append("heightWeight", formData.heightWeight);
+      if (formData.colorOfHairEyes)
+        formDataToSend.append("colorOfHairEyes", formData.colorOfHairEyes);
+      if (formData.occupation)
+        formDataToSend.append("occupation", formData.occupation);
+
       // Spouse information
-      if (formData.spouseName) formDataToSend.append('spouseInfo[name]', formData.spouseName);
-      if (formData.spouseOccupation) formDataToSend.append('spouseInfo[occupation]', formData.spouseOccupation);
-      if (formData.spouseContact) formDataToSend.append('spouseInfo[contactNumber]', formData.spouseContact);
-      
+      if (formData.spouseName)
+        formDataToSend.append("spouseInfo[name]", formData.spouseName);
+      if (formData.spouseOccupation)
+        formDataToSend.append(
+          "spouseInfo[occupation]",
+          formData.spouseOccupation
+        );
+      if (formData.spouseContact)
+        formDataToSend.append(
+          "spouseInfo[contactNumber]",
+          formData.spouseContact
+        );
+
       // Emergency contact
-      formDataToSend.append('emergencyContact[fullName]', formData.emergencyName);
-      if (formData.emergencyRelationship) formDataToSend.append('emergencyContact[relationship]', formData.emergencyRelationship);
-      formDataToSend.append('emergencyContact[contactNumber]', formData.emergencyContact);
-      formDataToSend.append('emergencyContact[address][subdivision]', formData.emergencySubdivision || '');
-      formDataToSend.append('emergencyContact[address][street]', formData.emergencyStreet || '');
-      formDataToSend.append('emergencyContact[address][houseNumber]', formData.emergencyHouseNumber || '');
-      
+      formDataToSend.append(
+        "emergencyContact[fullName]",
+        formData.emergencyName
+      );
+      if (formData.emergencyRelationship)
+        formDataToSend.append(
+          "emergencyContact[relationship]",
+          formData.emergencyRelationship
+        );
+      formDataToSend.append(
+        "emergencyContact[contactNumber]",
+        formData.emergencyContact
+      );
+      formDataToSend.append(
+        "emergencyContact[address][subdivision]",
+        formData.emergencySubdivision || ""
+      );
+      formDataToSend.append(
+        "emergencyContact[address][street]",
+        formData.emergencyStreet || ""
+      );
+      formDataToSend.append(
+        "emergencyContact[address][houseNumber]",
+        formData.emergencyHouseNumber || ""
+      );
+
       // Valid ID file
-      formDataToSend.append('validID', formData.validIDFile);
+      formDataToSend.append("validID", formData.validIDFile);
 
       const result = await register(formDataToSend);
 
@@ -247,7 +284,7 @@ const RegisterNew = () => {
   const renderStep1 = () => (
     <>
       <h3 style={styles.stepTitle}>Step 1: Account Information</h3>
-      
+
       <div style={styles.formGroup}>
         <label style={styles.label}>Username *</label>
         <input
@@ -305,7 +342,7 @@ const RegisterNew = () => {
   const renderStep2 = () => (
     <>
       <h3 style={styles.stepTitle}>Step 2: Personal Information</h3>
-      
+
       <div style={styles.row}>
         <div style={styles.formGroup}>
           <label style={styles.label}>First Name *</label>
@@ -437,7 +474,7 @@ const RegisterNew = () => {
             value={formData.heightWeight}
             onChange={handleChange}
             style={styles.input}
-            placeholder="e.g., 5'6\" / 65kg"
+            placeholder="e.g., 5'6 / 65kg"
           />
         </div>
 
@@ -502,7 +539,7 @@ const RegisterNew = () => {
         </div>
       </div>
 
-      {formData.civilStatus === 'Married' && (
+      {formData.civilStatus === "Married" && (
         <>
           <h4 style={styles.subHeading}>Spouse Information</h4>
           <div style={styles.formGroup}>
@@ -547,7 +584,7 @@ const RegisterNew = () => {
   const renderStep3 = () => (
     <>
       <h3 style={styles.stepTitle}>Step 3: Contact & Address</h3>
-      
+
       <div style={styles.formGroup}>
         <label style={styles.label}>Phone Number *</label>
         <input
@@ -561,7 +598,9 @@ const RegisterNew = () => {
         />
       </div>
 
-      <h4 style={styles.subHeading}>Your Address (Barangay Culiat, Quezon City)</h4>
+      <h4 style={styles.subHeading}>
+        Your Address (Barangay Culiat, Quezon City)
+      </h4>
       <div style={styles.row}>
         <div style={styles.formGroup}>
           <label style={styles.label}>House Number</label>
@@ -678,10 +717,10 @@ const RegisterNew = () => {
     <>
       <h3 style={styles.stepTitle}>Step 4: Upload Valid ID</h3>
       <p style={styles.infoText}>
-        Please upload a clear photo of your valid ID for verification. 
-        Your registration will be reviewed by an admin before approval.
+        Please upload a clear photo of your valid ID for verification. Your
+        registration will be reviewed by an admin before approval.
       </p>
-      
+
       <div style={styles.uploadSection}>
         {!validIDPreview ? (
           <label style={styles.uploadBox}>
@@ -689,15 +728,22 @@ const RegisterNew = () => {
               type="file"
               accept="image/jpeg,image/jpg,image/png"
               onChange={handleFileChange}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
-            <Upload size={48} style={{ color: '#4a90e2', marginBottom: '10px' }} />
+            <Upload
+              size={48}
+              style={{ color: "#4a90e2", marginBottom: "10px" }}
+            />
             <p style={styles.uploadText}>Click to upload Valid ID</p>
             <p style={styles.uploadSubtext}>JPG, JPEG, or PNG (Max 5MB)</p>
           </label>
         ) : (
           <div style={styles.previewBox}>
-            <img src={validIDPreview} alt="Valid ID Preview" style={styles.previewImage} />
+            <img
+              src={validIDPreview}
+              alt="Valid ID Preview"
+              style={styles.previewImage}
+            />
             <button
               type="button"
               onClick={removeFile}
@@ -751,21 +797,13 @@ const RegisterNew = () => {
                 Previous
               </button>
             )}
-            
+
             {step < 4 ? (
-              <button
-                type="button"
-                onClick={nextStep}
-                style={styles.button}
-              >
+              <button type="button" onClick={nextStep} style={styles.button}>
                 Next
               </button>
             ) : (
-              <button
-                type="submit"
-                style={styles.button}
-                disabled={loading}
-              >
+              <button type="submit" style={styles.button} disabled={loading}>
                 {loading ? "Submitting..." : "Register"}
               </button>
             )}

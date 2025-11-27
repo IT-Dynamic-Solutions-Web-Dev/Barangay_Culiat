@@ -1,7 +1,23 @@
 ﻿import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
-import { Upload, X, ArrowLeft, Home, Mail, User, Lock, Phone, MapPin, Eye, EyeOff, Calendar, Briefcase, Heart, IdCard } from "lucide-react";
+import {
+  Upload,
+  X,
+  ArrowLeft,
+  Home,
+  Mail,
+  User,
+  Lock,
+  Phone,
+  MapPin,
+  Eye,
+  EyeOff,
+  Calendar,
+  Briefcase,
+  Heart,
+  IdCard,
+} from "lucide-react";
 
 const Register = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -43,7 +59,7 @@ const Register = () => {
     emergencySubdivision: "",
     validIDFile: null,
   });
-  
+
   const [validIDPreview, setValidIDPreview] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -65,12 +81,12 @@ const Register = () => {
         setError("Only JPG, JPEG, and PNG files are allowed");
         return;
       }
-      
+
       if (file.size > 5242880) {
         setError("File size must not exceed 5MB");
         return;
       }
-      
+
       setFormData({ ...formData, validIDFile: file });
       setValidIDPreview(URL.createObjectURL(file));
       setError("");
@@ -87,9 +103,14 @@ const Register = () => {
 
   const validateStep = (step) => {
     setError("");
-    
+
     if (step === 1) {
-      if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+      if (
+        !formData.username ||
+        !formData.email ||
+        !formData.password ||
+        !formData.confirmPassword
+      ) {
         setError("Please fill in all account fields");
         return false;
       }
@@ -102,15 +123,21 @@ const Register = () => {
         return false;
       }
     }
-    
+
     if (step === 2) {
-      if (!formData.firstName || !formData.lastName || !formData.dateOfBirth || 
-          !formData.gender || !formData.civilStatus || !formData.phoneNumber) {
+      if (
+        !formData.firstName ||
+        !formData.lastName ||
+        !formData.dateOfBirth ||
+        !formData.gender ||
+        !formData.civilStatus ||
+        !formData.phoneNumber
+      ) {
         setError("Please fill in all required personal information fields");
         return false;
       }
     }
-    
+
     if (step === 3) {
       if (!formData.houseNumber || !formData.street) {
         setError("Please fill in your address");
@@ -121,14 +148,14 @@ const Register = () => {
         return false;
       }
     }
-    
+
     if (step === 4) {
       if (!formData.validIDFile) {
         setError("Please upload a valid ID");
         return false;
       }
     }
-    
+
     return true;
   };
 
@@ -156,44 +183,81 @@ const Register = () => {
 
     try {
       const formDataToSend = new FormData();
-      
+
       formDataToSend.append("username", formData.username);
       formDataToSend.append("email", formData.email);
       formDataToSend.append("password", formData.password);
       formDataToSend.append("firstName", formData.firstName);
       formDataToSend.append("lastName", formData.lastName);
-      if (formData.middleName) formDataToSend.append("middleName", formData.middleName);
+      if (formData.middleName)
+        formDataToSend.append("middleName", formData.middleName);
       if (formData.suffix) formDataToSend.append("suffix", formData.suffix);
       formDataToSend.append("dateOfBirth", formData.dateOfBirth);
-      if (formData.placeOfBirth) formDataToSend.append("placeOfBirth", formData.placeOfBirth);
+      if (formData.placeOfBirth)
+        formDataToSend.append("placeOfBirth", formData.placeOfBirth);
       formDataToSend.append("gender", formData.gender);
       formDataToSend.append("civilStatus", formData.civilStatus);
       formDataToSend.append("nationality", formData.nationality);
       formDataToSend.append("phoneNumber", formData.phoneNumber);
-      
+
       formDataToSend.append("address[houseNumber]", formData.houseNumber || "");
       formDataToSend.append("address[street]", formData.street || "");
       formDataToSend.append("address[subdivision]", formData.subdivision || "");
-      
-      if (formData.tinNumber) formDataToSend.append("tinNumber", formData.tinNumber);
-      if (formData.sssGsisNumber) formDataToSend.append("sssGsisNumber", formData.sssGsisNumber);
-      if (formData.precinctNumber) formDataToSend.append("precinctNumber", formData.precinctNumber);
-      if (formData.religion) formDataToSend.append("religion", formData.religion);
-      if (formData.heightWeight) formDataToSend.append("heightWeight", formData.heightWeight);
-      if (formData.colorOfHairEyes) formDataToSend.append("colorOfHairEyes", formData.colorOfHairEyes);
-      if (formData.occupation) formDataToSend.append("occupation", formData.occupation);
-      
-      if (formData.spouseName) formDataToSend.append("spouseInfo[name]", formData.spouseName);
-      if (formData.spouseOccupation) formDataToSend.append("spouseInfo[occupation]", formData.spouseOccupation);
-      if (formData.spouseContact) formDataToSend.append("spouseInfo[contactNumber]", formData.spouseContact);
-      
-      formDataToSend.append("emergencyContact[fullName]", formData.emergencyName);
-      if (formData.emergencyRelationship) formDataToSend.append("emergencyContact[relationship]", formData.emergencyRelationship);
-      formDataToSend.append("emergencyContact[contactNumber]", formData.emergencyContact);
-      formDataToSend.append("emergencyContact[address][houseNumber]", formData.emergencyHouseNumber || "");
-      formDataToSend.append("emergencyContact[address][street]", formData.emergencyStreet || "");
-      formDataToSend.append("emergencyContact[address][subdivision]", formData.emergencySubdivision || "");
-      
+
+      if (formData.tinNumber)
+        formDataToSend.append("tinNumber", formData.tinNumber);
+      if (formData.sssGsisNumber)
+        formDataToSend.append("sssGsisNumber", formData.sssGsisNumber);
+      if (formData.precinctNumber)
+        formDataToSend.append("precinctNumber", formData.precinctNumber);
+      if (formData.religion)
+        formDataToSend.append("religion", formData.religion);
+      if (formData.heightWeight)
+        formDataToSend.append("heightWeight", formData.heightWeight);
+      if (formData.colorOfHairEyes)
+        formDataToSend.append("colorOfHairEyes", formData.colorOfHairEyes);
+      if (formData.occupation)
+        formDataToSend.append("occupation", formData.occupation);
+
+      if (formData.spouseName)
+        formDataToSend.append("spouseInfo[name]", formData.spouseName);
+      if (formData.spouseOccupation)
+        formDataToSend.append(
+          "spouseInfo[occupation]",
+          formData.spouseOccupation
+        );
+      if (formData.spouseContact)
+        formDataToSend.append(
+          "spouseInfo[contactNumber]",
+          formData.spouseContact
+        );
+
+      formDataToSend.append(
+        "emergencyContact[fullName]",
+        formData.emergencyName
+      );
+      if (formData.emergencyRelationship)
+        formDataToSend.append(
+          "emergencyContact[relationship]",
+          formData.emergencyRelationship
+        );
+      formDataToSend.append(
+        "emergencyContact[contactNumber]",
+        formData.emergencyContact
+      );
+      formDataToSend.append(
+        "emergencyContact[address][houseNumber]",
+        formData.emergencyHouseNumber || ""
+      );
+      formDataToSend.append(
+        "emergencyContact[address][street]",
+        formData.emergencyStreet || ""
+      );
+      formDataToSend.append(
+        "emergencyContact[address][subdivision]",
+        formData.emergencySubdivision || ""
+      );
+
       formDataToSend.append("validID", formData.validIDFile);
 
       const result = await register(formDataToSend);
@@ -214,17 +278,21 @@ const Register = () => {
     <div className="flex items-center justify-between mb-8">
       {[1, 2, 3, 4].map((step) => (
         <div key={step} className="flex items-center flex-1">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-            currentStep >= step 
-              ? "bg-blue-600 text-white" 
-              : "bg-slate-200 text-slate-500"
-          }`}>
+          <div
+            className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+              currentStep >= step
+                ? "bg-blue-600 text-white"
+                : "bg-slate-200 text-slate-500"
+            }`}
+          >
             {step}
           </div>
           {step < 4 && (
-            <div className={`flex-1 h-1 mx-2 transition-all ${
-              currentStep > step ? "bg-blue-600" : "bg-slate-200"
-            }`} />
+            <div
+              className={`flex-1 h-1 mx-2 transition-all ${
+                currentStep > step ? "bg-blue-600" : "bg-slate-200"
+              }`}
+            />
           )}
         </div>
       ))}
@@ -234,7 +302,9 @@ const Register = () => {
   const renderStep1 = () => (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Username *</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+          Username *
+        </label>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <User className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -252,7 +322,9 @@ const Register = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email *</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+          Email *
+        </label>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Mail className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -270,7 +342,9 @@ const Register = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password *</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+          Password *
+        </label>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -289,13 +363,19 @@ const Register = () => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 transition-colors"
           >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </button>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Confirm Password *</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+          Confirm Password *
+        </label>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -314,7 +394,11 @@ const Register = () => {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 transition-colors"
           >
-            {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {showConfirmPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </button>
         </div>
       </div>
@@ -325,7 +409,9 @@ const Register = () => {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">First Name *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            First Name *
+          </label>
           <input
             type="text"
             name="firstName"
@@ -337,7 +423,9 @@ const Register = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Last Name *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Last Name *
+          </label>
           <input
             type="text"
             name="lastName"
@@ -352,7 +440,9 @@ const Register = () => {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Middle Name</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Middle Name
+          </label>
           <input
             type="text"
             name="middleName"
@@ -363,7 +453,9 @@ const Register = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Suffix (e.g., Jr., Sr., III)</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Suffix (e.g., Jr., Sr., III)
+          </label>
           <input
             type="text"
             name="suffix"
@@ -377,7 +469,9 @@ const Register = () => {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Date of Birth *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Date of Birth *
+          </label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Calendar className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -393,7 +487,9 @@ const Register = () => {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Gender *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Gender *
+          </label>
           <select
             name="gender"
             value={formData.gender}
@@ -409,7 +505,9 @@ const Register = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Place of Birth</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+          Place of Birth
+        </label>
         <input
           type="text"
           name="placeOfBirth"
@@ -422,7 +520,9 @@ const Register = () => {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Civil Status *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Civil Status *
+          </label>
           <select
             name="civilStatus"
             value={formData.civilStatus}
@@ -438,7 +538,9 @@ const Register = () => {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Phone Number *
+          </label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Phone className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -458,7 +560,9 @@ const Register = () => {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Occupation</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Occupation
+          </label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Briefcase className="h-4 w-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -474,7 +578,9 @@ const Register = () => {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Religion</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Religion
+          </label>
           <input
             type="text"
             name="religion"
@@ -527,10 +633,12 @@ const Register = () => {
       <h4 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
         <MapPin className="h-4 w-4 text-blue-600" /> Your Address
       </h4>
-      
+
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">House No. *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            House No. *
+          </label>
           <input
             type="text"
             name="houseNumber"
@@ -542,7 +650,9 @@ const Register = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Street *</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Street *
+          </label>
           <input
             type="text"
             name="street"
@@ -554,7 +664,9 @@ const Register = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">Subdivision</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            Subdivision
+          </label>
           <input
             type="text"
             name="subdivision"
@@ -568,13 +680,16 @@ const Register = () => {
 
       <div className="bg-slate-100 border border-slate-300 rounded-lg p-3">
         <p className="text-xs text-slate-600">
-          <strong>Barangay:</strong> Culiat | <strong>City:</strong> Quezon City | <strong>Region:</strong> NCR
+          <strong>Barangay:</strong> Culiat | <strong>City:</strong> Quezon City
+          | <strong>Region:</strong> NCR
         </p>
       </div>
 
       <div className="pt-4 border-t border-slate-200">
-        <h4 className="text-sm font-semibold text-slate-800 mb-3">Emergency Contact *</h4>
-        
+        <h4 className="text-sm font-semibold text-slate-800 mb-3">
+          Emergency Contact *
+        </h4>
+
         <div className="grid grid-cols-2 gap-3 mb-3">
           <input
             type="text"
@@ -636,7 +751,9 @@ const Register = () => {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">TIN Number</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            TIN Number
+          </label>
           <input
             type="text"
             name="tinNumber"
@@ -647,7 +764,9 @@ const Register = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1.5">SSS/GSIS Number</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            SSS/GSIS Number
+          </label>
           <input
             type="text"
             name="sssGsisNumber"
@@ -669,13 +788,16 @@ const Register = () => {
           Upload Valid ID *
         </label>
         <p className="text-xs text-slate-500 mb-3">
-          Upload a clear photo of your valid ID (Government ID, Driver\'s License, Passport, etc.)
+          Upload a clear photo of your valid ID (Government ID, Driver\'s
+          License, Passport, etc.)
         </p>
 
         {!validIDPreview ? (
           <label className="flex flex-col items-center px-6 py-8 bg-slate-50 text-slate-500 rounded-lg border-2 border-dashed border-slate-300 cursor-pointer hover:bg-slate-100 hover:border-blue-400 transition-all">
             <Upload className="w-12 h-12 mb-3 text-slate-400" />
-            <span className="text-sm font-medium">Click to upload Valid ID</span>
+            <span className="text-sm font-medium">
+              Click to upload Valid ID
+            </span>
             <span className="text-xs mt-1">JPG, JPEG, PNG (Max 5MB)</span>
             <input
               type="file"
@@ -704,79 +826,44 @@ const Register = () => {
       </div>
 
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-blue-900 mb-2">Review Your Information</h4>
+        <h4 className="text-sm font-semibold text-blue-900 mb-2">
+          Review Your Information
+        </h4>
         <div className="text-xs text-blue-800 space-y-1">
-          <p><strong>Name:</strong> {formData.firstName} {formData.middleName} {formData.lastName}</p>
-          <p><strong>Email:</strong> {formData.email}</p>
-          <p><strong>Phone:</strong> {formData.phoneNumber}</p>
-          <p><strong>Address:</strong> {formData.houseNumber} {formData.street} {formData.subdivision}, Brgy. Culiat</p>
+          <p>
+            <strong>Name:</strong> {formData.firstName} {formData.middleName}{" "}
+            {formData.lastName}
+          </p>
+          <p>
+            <strong>Email:</strong> {formData.email}
+          </p>
+          <p>
+            <strong>Phone:</strong> {formData.phoneNumber}
+          </p>
+          <p>
+            <strong>Address:</strong> {formData.houseNumber} {formData.street}{" "}
+            {formData.subdivision}, Brgy. Culiat
+          </p>
         </div>
       </div>
 
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
         <p className="text-xs text-amber-800">
-          <strong>Note:</strong> Your registration will be reviewed by barangay administrators. You will receive an email notification once your account is approved (typically within 1-3 business days).
+          <strong>Note:</strong> Your registration will be reviewed by barangay
+          administrators. You will receive an email notification once your
+          account is approved (typically within 1-3 business days).
         </p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen flex bg-slate-50 overflow-auto">
-      <div className="hidden lg:flex lg:w-1/2 xl:w-2/5 relative bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">
-        <div className="absolute inset-0 bg-[url(\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=\')] opacity-30"></div>
-        <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
-        
-        <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20 text-white">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-12 text-sm font-medium group w-fit">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Home
-          </Link>
-
-          <div className="mb-6">
-            <div className="w-20 h-20 bg-white/95 rounded-2xl flex items-center justify-center shadow-2xl ring-4 ring-blue-500/30 mb-4">
-              <img src="/images/logo/brgy-culiat-logo.svg" alt="Barangay Culiat Logo" className="w-16 h-16 object-contain" />
-            </div>
-          </div>
-
-          <div className="max-w-xl">
-            <h1 className="text-4xl xl:text-5xl font-bold mb-4 leading-tight">
-              Join Barangay Culiat
-              <span className="block text-white/90 text-2xl xl:text-3xl mt-2">Resident Registration</span>
-            </h1>
-            
-            <p className="text-lg text-white/90 mb-6 leading-relaxed">
-              Register now to access barangay services, submit reports, and stay connected with your community.
-            </p>
-
-            <div className="space-y-3">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <h3 className="font-bold text-base mb-1.5 flex items-center gap-2">
-                  <div className="w-7 h-7 bg-blue-500/30 rounded-lg flex items-center justify-center"><Home className="w-4 h-4" /></div>
-                  Quick Access
-                </h3>
-                <p className="text-white/80 text-sm leading-relaxed">
-                  Get instant access to document requests and barangay services once approved.
-                </p>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <h3 className="font-bold text-base mb-1.5 flex items-center gap-2">
-                  <div className="w-7 h-7 bg-blue-500/30 rounded-lg flex items-center justify-center"><Mail className="w-4 h-4" /></div>
-                  Stay Updated
-                </h3>
-                <p className="text-white/80 text-sm leading-relaxed">
-                  Receive important announcements and updates from your barangay.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full lg:w-1/2 xl:w-3/5 flex items-center justify-center p-4 md:p-8 relative overflow-y-auto">
-        <Link to="/" className="lg:hidden absolute top-4 left-4 inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium group z-20">
+    <div className="min-h-screen w-full flex bg-slate-50 overflow-auto ">
+      <div className="w-full flex items-center justify-center p-4 md:p-8 relative overflow-y-auto">
+        <Link
+          to="/"
+          className="lg:hidden absolute top-4 left-4 inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium group z-20"
+        >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back
         </Link>
@@ -786,26 +873,36 @@ const Register = () => {
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-slate-100 rounded-full opacity-20 blur-3xl"></div>
         </div>
 
-        <div className="w-full max-w-2xl relative my-auto">
+        <div className="w-full relative my-auto">
           <div className="lg:hidden text-center mb-6 mt-12">
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xl ring-2 ring-blue-500/30">
-              <img src="/images/logo/brgy-culiat-logo.svg" alt="Barangay Culiat Logo" className="w-12 h-12 object-contain" />
+              <img
+                src="/images/logo/brgy-culiat-logo.svg"
+                alt="Barangay Culiat Logo"
+                className="w-12 h-12 object-contain"
+              />
             </div>
-            <h1 className="text-xl font-bold text-slate-800 mb-1">Barangay Culiat</h1>
+            <h1 className="text-xl font-bold text-slate-800 mb-1">
+              Barangay Culiat
+            </h1>
             <p className="text-slate-600 text-sm">Resident Registration</p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
             <div className="p-6 md:p-8">
               <div className="mb-6">
-                <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-1.5">Create Your Account</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-1.5">
+                  Create Your Account
+                </h2>
                 <p className="text-slate-500 text-sm">
-                  Step {currentStep} of 4: {
-                    currentStep === 1 ? "Account Credentials" :
-                    currentStep === 2 ? "Personal Information" :
-                    currentStep === 3 ? "Address & Contact" :
-                    "Valid ID Upload"
-                  }
+                  Step {currentStep} of 4:{" "}
+                  {currentStep === 1
+                    ? "Account Credentials"
+                    : currentStep === 2
+                    ? "Personal Information"
+                    : currentStep === 3
+                    ? "Address & Contact"
+                    : "Valid ID Upload"}
                 </p>
               </div>
 
@@ -813,7 +910,9 @@ const Register = () => {
 
               {error && (
                 <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-r-lg flex items-start gap-2">
-                  <div className="flex-shrink-0 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">!</div>
+                  <div className="flex-shrink-0 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    !
+                  </div>
                   <p className="text-xs font-medium text-red-800">{error}</p>
                 </div>
               )}
@@ -834,7 +933,7 @@ const Register = () => {
                       Previous
                     </button>
                   )}
-                  
+
                   {currentStep < 4 ? (
                     <button
                       type="button"
@@ -857,13 +956,22 @@ const Register = () => {
 
               <div className="mt-6 pt-4 border-t border-slate-200 text-center">
                 <p className="text-xs text-slate-500">
-                  Already have an account? <Link to="/login" className="text-blue-600 hover:underline font-medium">Sign in here</Link>
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="text-blue-600 hover:underline font-medium"
+                  >
+                    Sign in here
+                  </Link>
                 </p>
               </div>
             </div>
 
             <div className="bg-slate-50/80 px-6 md:px-8 py-3 text-center border-t border-slate-200">
-              <p className="text-xs text-slate-600 font-medium"> 2025 Barangay Culiat. All rights reserved.</p>
+              <p className="text-xs text-slate-600 font-medium">
+                {" "}
+                2025 Barangay Culiat. All rights reserved.
+              </p>
             </div>
           </div>
         </div>

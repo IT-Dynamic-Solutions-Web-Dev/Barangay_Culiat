@@ -162,7 +162,10 @@ const Announcement = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--color-neutral)" }}>
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: "var(--color-neutral)" }}
+    >
       {/* <Header variant="black" /> */}
 
       {/* Hero Section */}
@@ -170,17 +173,21 @@ const Announcement = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-         className="relative text-white overflow-hidden"
+        className="relative text-white overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-glow) 100%)",
+          background:
+            "linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-glow) 100%)",
         }}
       >
         {/* Decorative Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          ></div>
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
@@ -213,12 +220,16 @@ const Announcement = () => {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed"
           >
-            Stay updated with our latest barangay events, programs, and notices. Your community, your stories.
+            Stay updated with our latest barangay events, programs, and notices.
+            Your community, your stories.
           </motion.p>
         </div>
 
         {/* Wave Divider */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none" style={{ transform: 'rotate(180deg)' }}>
+        <div
+          className="absolute bottom-0 left-0 w-full overflow-hidden leading-none"
+          style={{ transform: "rotate(180deg)" }}
+        >
           <svg
             className="relative block w-full h-12 "
             xmlns="http://www.w3.org/2000/svg"
@@ -265,8 +276,8 @@ const Announcement = () => {
 
       {/* Announcements Grid */}
       <motion.div
+        key={activeFilter} // 🔥 this forces re-animation
         variants={staggerContainer}
-         viewport={{ once: true, amount: 0.5 }}
         initial="hidden"
         animate="show"
         className="max-w-6xl mx-auto px-4 grid gap-8 md:grid-cols-2 lg:grid-cols-3"
@@ -320,7 +331,9 @@ const Announcement = () => {
                       </span>
                       <span className="flex items-center gap-1.5">
                         <MapPin className="w-4 h-4 text-primary" />
-                        <span className="text-xs line-clamp-1">{item.location}</span>
+                        <span className="text-xs line-clamp-1">
+                          {item.location}
+                        </span>
                       </span>
                     </div>
                     <div className="pt-2 flex items-center gap-2 text-primary font-medium text-sm group">

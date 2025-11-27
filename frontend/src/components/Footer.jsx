@@ -70,7 +70,9 @@ const Footer = () => {
                 <div>
                   <p className="text-white/90 font-semibold">BARANGAY CULIAT</p>
                   <p className="text-white/90">467 Tandang Sora Ave,</p>
-                  <p className="text-white/90">Quezon City, 1128 Metro Manila</p>
+                  <p className="text-white/90">
+                    Quezon City, 1128 Metro Manila
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -87,7 +89,10 @@ const Footer = () => {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <a href="mailto:brgy.culiat@yahoo.com" className="text-white/90 hover:text-white transition-colors">
+                <a
+                  href="mailto:brgy.culiat@yahoo.com"
+                  className="text-white/90 hover:text-white transition-colors"
+                >
                   brgy.culiat@yahoo.com
                 </a>
               </div>
@@ -199,12 +204,12 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-lg mb-4">Location Map</h4>
             <div className="bg-white/10 rounded-lg overflow-hidden mb-4">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d964.9469179112511!2d121.05602636955277!3d14.667987796511813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b7475e1333fb%3A0xb01b3d6a168686a5!2sCuliat%20Barangay%20Hall!5e0!3m2!1sen!2sph!4v1760884990064!5m2!1sen!2sph" 
-                width="100%" 
-                height="200" 
-                allowFullScreen="" 
-                loading="lazy" 
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d964.9469179112511!2d121.05602636955277!3d14.667987796511813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b7475e1333fb%3A0xb01b3d6a168686a5!2sCuliat%20Barangay%20Hall!5e0!3m2!1sen!2sph!4v1760884990064!5m2!1sen!2sph"
+                width="100%"
+                height="200"
+                allowFullScreen=""
+                loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Barangay Culiat Location"
               ></iframe>
@@ -212,7 +217,7 @@ const Footer = () => {
             <p className="text-sm text-white/90 mb-3">
               Visit our barangay hall for in-person services and assistance.
             </p>
-            <a 
+            <a
               href="https://www.google.com/maps/place/Culiat+Barangay+Hall/@14.667987,121.05667,17z/data=!4m6!3m5!1s0x3397b7475e1333fb:0xb01b3d6a168686a5!8m2!3d14.6679865!4d121.0566701!16s%2Fg%2F11c3tsgbjt?hl=en&entry=ttu&g_ep=EgoyMDI1MTAyMC4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
@@ -245,10 +250,22 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/20 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-white/80 text-center md:text-left">
-              © 2025 Barangay Culiat | Managed by Barangay Culiat Information
-              Office
-            </p>
+            <div className="flex flex-col ">
+              <p className="text-sm text-white/80 text-center md:text-left">
+                © 2025 Barangay Culiat | Managed by Barangay Culiat Information
+                Office
+              </p>
+              <div className="flex gap-2 items-center mt-2">
+                <img
+                  src="../../public/images/logo/princeITLogo.jpg"
+                  alt=""
+                  className="w-5 h-5 opacity-60 rounded-full"
+                />
+                <p className="text-xs text-white/40 text-center md:text-left">
+                  Developed by Prince IT Solutions
+                </p>
+              </div>
+            </div>
             <div className="flex space-x-6 text-sm">
               <a
                 href="#"

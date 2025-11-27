@@ -21,6 +21,7 @@ import Home from "./users/pages/Home/Home";
 import About from "./users/pages/About/About";
 import PolicyPopup from "./components/PolicyPopup";
 import NotFound from "./tailadminsrc/pages/OtherPage/NotFound";
+import AuthLayout from "./users/pages/Auth/AuthLayout/AuthLayout";
 
 // Admin imports
 import AdminLayout from "./admin/layouts/AdminLayout";
@@ -40,6 +41,8 @@ import AdminTermsAcceptances from "./admin/pages/TermsAcceptances/AdminTermsAcce
 // Resident Auth
 import ResidentAuth from "./users/pages/Auth/ResidentAuth";
 import Profile from "./users/pages/Profile/Profile";
+import Achievements from "./users/pages/Achievements/Achievements";
+import AchievementsDetail from "./users/pages/Achievements/AchievementsDetail";
 
 function App() {
   return (
@@ -53,48 +56,54 @@ function App() {
           toastOptions={{
             duration: 5000,
             style: {
-              background: '#1F2937',
-              color: '#F3F4F6',
-              borderRadius: '0.5rem',
-              padding: '1rem',
-              fontSize: '0.875rem',
-              maxWidth: '500px',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              background: "#1F2937",
+              color: "#F3F4F6",
+              borderRadius: "0.5rem",
+              padding: "1rem",
+              fontSize: "0.875rem",
+              maxWidth: "500px",
+              boxShadow:
+                "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
             },
             success: {
               duration: 4000,
               iconTheme: {
-                primary: '#10B981',
-                secondary: '#F3F4F6',
+                primary: "#10B981",
+                secondary: "#F3F4F6",
               },
             },
             error: {
               duration: 5000,
               iconTheme: {
-                primary: '#EF4444',
-                secondary: '#F3F4F6',
+                primary: "#EF4444",
+                secondary: "#F3F4F6",
               },
             },
             loading: {
               iconTheme: {
-                primary: '#3B82F6',
-                secondary: '#F3F4F6',
+                primary: "#3B82F6",
+                secondary: "#F3F4F6",
               },
             },
           }}
         />
-        
+
         {/* 👇 Render only on client side */}
         {typeof window !== "undefined" && <PolicyPopup />}
 
         <Routes>
           {/* Admin Login */}
           <Route path="/signin" element={<Login />} />
-          
+
           {/* Resident Login/Registration */}
-          <Route path="/login" element={<ResidentAuth />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/registration-pending" element={<RegistrationPending />} />
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<ResidentAuth />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+          <Route
+            path="/registration-pending"
+            element={<RegistrationPending />}
+          />
 
           {/* User Dashboard Route */}
           <Route
@@ -134,19 +143,28 @@ function App() {
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="calendar" element={<AdminCalendar />} />
             <Route path="notifications" element={<AdminNotifications />} />
-            <Route path="terms-acceptances" element={<AdminTermsAcceptances />} />
+            <Route
+              path="terms-acceptances"
+              element={<AdminTermsAcceptances />}
+            />
             <Route path="reports" element={<AdminReports />} />
             <Route path="announcements" element={<AdminAnnouncements />} />
             <Route path="documents" element={<AdminDocuments />} />
             <Route path="users" element={<AdminUsers />} />
-            <Route path="pending-registrations" element={<PendingRegistrations />} />
-            <Route path="registration-history" element={<RegistrationHistory />} />
+            <Route
+              path="pending-registrations"
+              element={<PendingRegistrations />}
+            />
+            <Route
+              path="registration-history"
+              element={<RegistrationHistory />}
+            />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
 
           {/* User Routes with MainLayout */}
           <Route
-            path="/"
+            index
             element={
               <MainLayout>
                 <Home />
@@ -177,6 +195,24 @@ function App() {
             element={
               <MainLayout>
                 <Announcements />
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/achievements"
+            element={
+              <MainLayout>
+                <Achievements />
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/achievements/:slug"
+            element={
+              <MainLayout>
+                <AchievementsDetail />
               </MainLayout>
             }
           />
