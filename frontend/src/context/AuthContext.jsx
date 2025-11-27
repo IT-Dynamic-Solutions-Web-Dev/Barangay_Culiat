@@ -99,6 +99,27 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(fullUserData));
         setUser(fullUserData);
         
+        // Check terms acceptance status for Residents
+        if (fullUserData.roleName === 'Resident') {
+          try {
+            const termsResponse = await axios.get(`${API_URL}/api/terms/status`);
+            const hasAccepted = termsResponse.data.data.hasAccepted;
+            console.log('📋 Terms acceptance status:', hasAccepted);
+            
+            // Store terms acceptance status
+            localStorage.setItem('termsAccepted', hasAccepted ? 'true' : 'false');
+            
+            // If not accepted, clear the policy data to force showing popup
+            if (!hasAccepted) {
+              localStorage.removeItem('policyData');
+            }
+          } catch (termsError) {
+            console.error('⚠️ Failed to check terms status:', termsError);
+            // Clear policy data to be safe
+            localStorage.removeItem('policyData');
+          }
+        }
+        
         return { success: true, user: fullUserData };
       } catch (meError) {
         console.error('⚠️ Failed to fetch complete profile, using basic data:', meError);

@@ -17,10 +17,8 @@ import {
   X,
   AlertCircle,
 } from "lucide-react";
-import { useNotifications } from "../../../hooks/useNotifications";
 
 const AdminDocuments = () => {
-  const { notifyDocumentCompleted, notifyDocumentRejected, showPromise } = useNotifications();
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,11 +83,7 @@ const AdminDocuments = () => {
       setError("");
       const token = localStorage.getItem("token");
       
-      // Find the request to get document type for notification
-      const request = requests.find(r => r._id === requestId);
-      const documentType = request?.documentType || "Document";
-      
-      const promise = axios.patch(
+      await axios.patch(
         `${API_URL}/api/document-requests/${requestId}/status`,
         { 
           status: action,
@@ -98,19 +92,8 @@ const AdminDocuments = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      await showPromise(promise, {
-        loading: `${action === 'completed' ? 'Completing' : 'Rejecting'} document request...`,
-        success: `${documentType} request ${action} successfully!`,
-        error: `Failed to ${action} request`
-      });
-      
-      // Show additional notification based on action
-      if (action === 'completed') {
-        notifyDocumentCompleted(documentType);
-      } else if (action === 'rejected') {
-        notifyDocumentRejected(documentType, reason);
-      }
-
+      setSuccess(`Document request ${action} successfully!`);
+      setTimeout(() => setSuccess(""), 3000);
       setShowModal(false);
       setSelectedRequest(null);
       setActionReason("");
