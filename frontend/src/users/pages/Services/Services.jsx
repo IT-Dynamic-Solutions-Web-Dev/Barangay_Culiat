@@ -258,7 +258,7 @@ export default function Services() {
     setFormData((p) => ({ ...p, [name]: value }));
 
   const isBusinessDocument = () => {
-    return ['business_permit', 'business_clearance'].includes(formData.documentType);
+    return ['business_clearance'].includes(formData.documentType);
   };
 
   const validateAll = () => {
@@ -282,7 +282,7 @@ export default function Services() {
     if (!formData.purposeOfRequest.trim()) e.purposeOfRequest = "Purpose is required";
     
     // Photo 1x1 required for specific documents
-    const requiresPhoto = ['clearance', 'business_permit', 'business_clearance'].includes(formData.documentType);
+  const requiresPhoto = ['clearance', 'business_clearance'].includes(formData.documentType);
     if (requiresPhoto && !formData.photo1x1File) {
       e.photo1x1File = "Photo 1x1 is required for this document type";
     }

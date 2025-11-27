@@ -65,7 +65,7 @@ export default function FileUploadTab({ formData, setField, errors, documentType
     if (validIDRef.current) validIDRef.current.value = "";
   };
 
-  const requiresPhoto = ['clearance', 'business_permit', 'business_clearance'].includes(documentType);
+  const requiresPhoto = ['clearance', 'business_clearance'].includes(documentType);
 
   return (
     <div className="space-y-6">

@@ -6,9 +6,6 @@ const DOCUMENT_TYPES = [
   { value: "residency", label: "Certificate of Residency" },
   { value: "clearance", label: "Barangay Clearance" },
   { value: "ctc", label: "Community Tax Certificate" },
-  { value: "business_permit", label: "Business Permit" },
-  { value: "building_permit", label: "Building Permit" },
-  { value: "good_moral", label: "Certificate of Good Moral" },
   { value: "business_clearance", label: "Business Clearance" },
 ];
 

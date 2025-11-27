@@ -3,11 +3,8 @@ import {
   FileText,
   Home,
   BadgeCheck,
-  Building2,
   HandCoins,
-  Hammer,
   AlertCircle,
-  HeartHandshake,
 } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
@@ -48,24 +45,9 @@ const services = [
     desc: "Secure your CTC (Cedula) for identification and tax purposes.",
   },
   {
-    name: "Business Permit",
-    icon: Building2,
-    desc: "Apply for or renew your local business permit online.",
-  },
-  {
-    name: "Building Permit",
-    icon: Hammer,
-    desc: "Submit requirements for residential or commercial construction.",
-  },
-  {
     name: "Complaint Certificate",
     icon: AlertCircle,
     desc: "File and receive documentation for barangay-related complaints.",
-  },
-  {
-    name: "Certificate of Good Moral",
-    icon: HeartHandshake,
-    desc: "Get a certificate confirming your good standing in the community.",
   },
 ];
 
